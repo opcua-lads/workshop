@@ -1,4 +1,29 @@
-import { AddressSpace, DataType, DateTime, INamespace, LocalizedText, ReferenceTypeIds, UAAnalogUnitRange, UAMethod, UAObject, UAObjectType, UAProperty, UAStateMachine, coerceNodeId } from "node-opcua"
+/**
+ *
+ * Copyright (c) 2023 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
+ * Copyright (c) 2023 SPECTARIS - Deutscher Industrieverband für optische, medizinische und mechatronische Technologien e.V. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import assert from "assert"
+
+import {
+    AddressSpace,
+    DataType,
+    DateTime,
+    INamespace,
+    LocalizedText,
+    UAAnalogUnitRange,
+    UAExclusiveDeviationAlarm,
+    UAExclusiveLimitAlarm,
+    UAMethod,
+    UAObject,
+    UAObjectType,
+    UAProperty,
+    UAStateMachine
+} from "node-opcua"
 import { UADevice } from "node-opcua-nodeset-di"
 
 export interface LADSFunctionSet {
@@ -17,7 +42,7 @@ export interface LADSFunctionalUnit extends UAObject {
 
 export interface LADSActiveProgram {
     currentRuntime?: UAProperty<number, DataType.Double>
-    currentPausetime?: UAProperty<number, DataType.Double>
+    currentPauseTime?: UAProperty<number, DataType.Double>
     currentStepName?: UAProperty<LocalizedText, DataType.LocalizedText>
     currentStepRuntime?: UAProperty<number, DataType.Double>
     currentStepNumber?: UAProperty<number, DataType.UInt32>
@@ -25,7 +50,7 @@ export interface LADSActiveProgram {
     estimatedStepRuntime?: UAProperty<number, DataType.Double>
     estimatedStepNumbers?: UAProperty<number, DataType.UInt32>
     deviceProgramRunId?: UAProperty<string, DataType.String>
-    programTemplate?: LADSProgramTemplate  
+    programTemplate?: LADSProgramTemplate
 }
 
 export interface LADSProgramTemplateSet {
@@ -45,8 +70,15 @@ export interface LADSResultSet {
 
 export interface LADSResult extends UAObject {
     name: UAProperty<string, DataType.String>
+    jobId: UAProperty<string, DataType.String>
+    supervisoryTaskId: UAProperty<string, DataType.String>
+    properties: UAProperty<any, DataType.ExtensionObject>
+    samples: UAProperty<any, DataType.ExtensionObject>
+    deviceProgramRunId?: UAProperty<string, DataType.String>
     started: UAProperty<DateTime, DataType.DateTime>
     stopped: UAProperty<DateTime, DataType.DateTime>
+    totalRuntime?: UAProperty<number, DataType.Double>
+    totalPauseTime?: UAProperty<number, DataType.Double>
     variableSet: UAObject
     fileSet: UAObject
     programTemplate: LADSProgramTemplate
@@ -57,7 +89,7 @@ export interface LADSFunctionalUnitSet  {
 }
 
 export interface LADSDevice extends UADevice {
-    functionaUnitSet: LADSFunctionalUnitSet
+    functionalUnitSet: LADSFunctionalUnitSet
 }
 
 export interface LADSCoverStateMachine extends UAStateMachine {
@@ -94,21 +126,25 @@ export interface LADSCoverFunction extends LADSFunction {
     stateMachine: LADSCoverStateMachine
 }
 
-interface LADSBaseSensorFunction extends LADSFunction {} 
+interface LADSBaseSensorFunction extends LADSFunction {
+    alarmMonitor?: UAExclusiveLimitAlarm
+    damping?: UAProperty<number, DataType.Double>
+}
 
 export interface LADSAnalogSensorFunction extends LADSBaseSensorFunction {
-    rawValue: UAAnalogUnitRange<number, DataType.Double>
+    rawValue?: UAAnalogUnitRange<number, DataType.Double>
     sensorValue: UAAnalogUnitRange<number, DataType.Double>
 
 }
 
 export interface LADSAnalogArraySensorFunction extends LADSBaseSensorFunction {
-    rawValue: UAAnalogUnitRange<Float64Array, DataType.Double>
+    rawValue?: UAAnalogUnitRange<Float64Array, DataType.Double>
     sensorValue: UAAnalogUnitRange<Float64Array, DataType.Double>
 
 }
 
 export interface LADSAnalogControlFunction extends LADSFunction {
+    alarmMonitor?: UAExclusiveDeviationAlarm
     currentValue: UAAnalogUnitRange<number, DataType.Double>
     targetValue: UAAnalogUnitRange<number, DataType.Double>
     stateMachine: LADSFunctionalStateMachine
@@ -116,25 +152,16 @@ export interface LADSAnalogControlFunction extends LADSFunction {
 
 export async function sleepMilliSeconds(ms: number): Promise<void> { return new Promise((resolve) => setTimeout(resolve, ms)) }
 
-export function getDeviceSet(addressSpace: AddressSpace): UAObject {
-    const nameSpaceDI = addressSpace.getNamespace('http://opcfoundation.org/UA/DI/')
-    const deviceSet = <UAObject>nameSpaceDI.findNode(coerceNodeId(5001, nameSpaceDI.index))
-    return deviceSet 
-} 
-
-export function getDevices(addressSpace: AddressSpace): UADevice[] {
-    const deviceSet = getDeviceSet(addressSpace)
-    const deviceReferences = deviceSet?.findReferencesExAsObject(coerceNodeId(ReferenceTypeIds.Aggregates, 0))
-    const devices = deviceReferences?.map((device) => {return <UADevice>device})
-    return devices
-}
-
 export function getLADSNamespace(addressSpace: AddressSpace): INamespace {
     return addressSpace.getNamespace('http://opcfoundation.org/UA/LADS/')
-} 
+}
 
 export function getLADSObjectType(addressSpace: AddressSpace, objectType: string): UAObjectType {
     const namespace = getLADSNamespace(addressSpace)
-    return namespace?.findObjectType(objectType)
-}
+    assert(namespace)
 
+    const objectTypeNode = namespace.findObjectType(objectType)
+    assert(objectTypeNode)
+
+    return objectTypeNode
+}
