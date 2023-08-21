@@ -1,6 +1,6 @@
 # LADS workshop - LADS LuminescenceReader &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/opcua-lads/workshop/blob/main/LICENSE) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-This is the LADS Sample Server in nodejs created for workshops and to help people to get an easy start into how to bild your own OPC-UA LADS Server.
+This is the LADS Sample Server in nodejs created for workshops and to help people to get an easy start into how to build your own LADS OPC UA Server.
 
 ## Installation
 
@@ -15,6 +15,10 @@ To run the code just execute `npm start` in the root folder of the project.
 ## Contributing
 
 The main purpose of this repository is to simplify adoption of the LADS standard by providing sample implementations. Development of it happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements.
+
+## Disclaimer
+
+Please note that the LADS specification is still in draft stage. The specification including the provided node set file may still undergo minor or even breaking changes until the final release.
 
 ## License
 
