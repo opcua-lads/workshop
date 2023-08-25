@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-08-21T11:25:49.704Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-08-25T15:24:08.029Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -7,7 +7,7 @@
         <Uri>http://opcfoundation.org/UA/LADS/</Uri>
     </NamespaceUris>
     <Models>
-        <Model ModelUri="http://opcfoundation.org/UA/LADS/" PublicationDate="2023-07-14T00:00:00Z" Version="1.0.0">
+        <Model ModelUri="http://opcfoundation.org/UA/LADS/" PublicationDate="2023-08-30T00:00:00Z" Version="1.0.0">
             <RequiredModel ModelUri="http://opcfoundation.org/UA/" PublicationDate="2022-11-01T00:00:00Z" Version="1.05.02"/>
             <RequiredModel ModelUri="http://opcfoundation.org/UA/DI/" PublicationDate="2022-11-03T00:00:00Z" Version="1.04.0"/>
             <RequiredModel ModelUri="http://opcfoundation.org/UA/AMB/" PublicationDate="2022-11-01T00:00:00Z" Version="1.01.0"/>
@@ -62,7 +62,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="6ad3c1bc1544bedf328304fe0c415f98"/>
+            <si:GeneratorExtension Hash="875a5c63c8833ac877da9a6f55b10d81"/>
         </Extension>
     </Extensions>
     <UADataType NodeId="ns=4;i=3003" BrowseName="4:KeyValueType">
@@ -3023,7 +3023,7 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
         <Value>
-            <uax:DateTime>2023-07-14T00:00:00Z</uax:DateTime>
+            <uax:DateTime>2023-08-30T00:00:00Z</uax:DateTime>
         </Value>
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6055" BrowseName="NamespaceUri" ParentNodeId="ns=4;i=5026">
@@ -4472,8 +4472,8 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
-    <UAObjectType NodeId="ns=4;i=1037" BrowseName="4:MutliStateDiscreteSensorFunctionType">
-        <DisplayName>MutliStateDiscreteSensorFunctionType</DisplayName>
+    <UAObjectType NodeId="ns=4;i=1037" BrowseName="4:MultiStateDiscreteSensorFunctionType">
+        <DisplayName>MultiStateDiscreteSensorFunctionType</DisplayName>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1012</Reference>
         </References>

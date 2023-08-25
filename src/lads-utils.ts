@@ -18,11 +18,13 @@ import {
     UAAnalogUnitRange,
     UAExclusiveDeviationAlarm,
     UAExclusiveLimitAlarm,
+    UAFiniteStateMachine,
     UAMethod,
+    UAMultiStateDiscrete,
     UAObject,
     UAObjectType,
     UAProperty,
-    UAStateMachine
+    UATwoStateDiscrete
 } from "node-opcua"
 import { UADevice } from "node-opcua-nodeset-di"
 
@@ -37,7 +39,7 @@ export interface LADSFunctionalUnit extends UAObject {
         activeProgram: LADSActiveProgram
         resultSet: LADSResultSet
     }
-    stateMachine: LADSFunctionalStateMachine
+    stateMachine: LADSFunctionalUnitStateMachine
 }
 
 export interface LADSActiveProgram {
@@ -92,23 +94,30 @@ export interface LADSDevice extends UADevice {
     functionalUnitSet: LADSFunctionalUnitSet
 }
 
-export interface LADSCoverStateMachine extends UAStateMachine {
+export interface LADSCoverStateMachine extends UAFiniteStateMachine {
     open: UAMethod
     close: UAMethod
     lock: UAMethod
     unlock: UAMethod
 }
 
-export interface LADSFunctionalStateMachine extends UAStateMachine {
+export  interface LADSFunctionalStateMachine extends UAFiniteStateMachine {
     runningStateMachine: LADSRunnnigStateMachine
     start: UAMethod
-    startProgram: UAMethod
     stop: UAMethod
     abort: UAMethod
     clear: UAMethod
 }
 
-export interface LADSRunnnigStateMachine extends UAStateMachine {
+export interface LADSFunctionalUnitStateMachine extends LADSFunctionalStateMachine {
+    startProgram: UAMethod
+}
+
+export interface LADSControlFunctionStateMachine extends LADSFunctionalStateMachine {
+    startWithTargetValue: UAMethod
+}
+
+export interface LADSRunnnigStateMachine extends UAFiniteStateMachine {
     suspend: UAMethod
     unsuspend: UAMethod
     hold: UAMethod
@@ -134,20 +143,31 @@ interface LADSBaseSensorFunction extends LADSFunction {
 export interface LADSAnalogSensorFunction extends LADSBaseSensorFunction {
     rawValue?: UAAnalogUnitRange<number, DataType.Double>
     sensorValue: UAAnalogUnitRange<number, DataType.Double>
-
 }
 
 export interface LADSAnalogArraySensorFunction extends LADSBaseSensorFunction {
     rawValue?: UAAnalogUnitRange<Float64Array, DataType.Double>
     sensorValue: UAAnalogUnitRange<Float64Array, DataType.Double>
-
 }
 
-export interface LADSAnalogControlFunction extends LADSFunction {
+export interface LADSBaseControlFunction extends LADSFunction {
     alarmMonitor?: UAExclusiveDeviationAlarm
+    stateMachine: LADSControlFunctionStateMachine
+}
+
+export interface LADSAnalogControlFunction extends LADSBaseControlFunction {
     currentValue: UAAnalogUnitRange<number, DataType.Double>
     targetValue: UAAnalogUnitRange<number, DataType.Double>
-    stateMachine: LADSFunctionalStateMachine
+}
+
+export interface LADSMultiStateDiscreteControlFunction extends LADSBaseControlFunction {
+    currentValue: UAMultiStateDiscrete<number, DataType.UInt32>
+    targetValue: UAMultiStateDiscrete<number, DataType.UInt32>
+}
+
+export interface LADSTwoStateDiscreteControlFunction extends LADSBaseControlFunction {
+    currentValue: UATwoStateDiscrete<boolean>
+    targetValue: UATwoStateDiscrete<boolean>
 }
 
 export async function sleepMilliSeconds(ms: number): Promise<void> { return new Promise((resolve) => setTimeout(resolve, ms)) }

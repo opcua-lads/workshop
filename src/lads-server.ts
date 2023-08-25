@@ -260,6 +260,10 @@ const workshopStep = 9;
 
         // callback functions associated to OPC UA method calls
         async function onStartTemperatureController(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
+            if (inputArguments.length > 0) {
+                targetTemperature = inputArguments[0].value
+                temperatureController.targetValue.setValueFromSource({value: targetTemperature, dataType: DataType.Double})
+            }
             this.setState("Running")
             console.log("Step 7: changed state machine to Running");
             return { statusCode: StatusCodes.Good }
@@ -278,6 +282,7 @@ const workshopStep = 9;
 
         // second step: bind functions for starting and stopping to OPC UA methods
         temperatureController.stateMachine.start.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
+        temperatureController.stateMachine.startWithTargetValue.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
         temperatureController.stateMachine.stop.bindMethod(onStopTemperatureController.bind(temperatureControllerStateMachine))
 
         // third step: bind internal state variable to OPC UA stateMachine.currentState variable
