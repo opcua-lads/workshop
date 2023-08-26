@@ -92,13 +92,22 @@ export interface LADSFunctionalUnitSet  {
 
 export interface LADSDevice extends UADevice {
     functionalUnitSet: LADSFunctionalUnitSet
+    stateMachine: LADSDeviceStateMachine
+    machineryItemState?: UAFiniteStateMachine
+    machineryOperationMode?: UAFiniteStateMachine
+}
+
+export interface LADSDeviceStateMachine extends UAFiniteStateMachine {
+    gotoOperating?: UAMethod
+    gotoShutdown?: UAMethod
+    gotoSleep?: UAMethod
 }
 
 export interface LADSCoverStateMachine extends UAFiniteStateMachine {
     open: UAMethod
     close: UAMethod
-    lock: UAMethod
-    unlock: UAMethod
+    lock?: UAMethod
+    unlock?: UAMethod
 }
 
 export  interface LADSFunctionalStateMachine extends UAFiniteStateMachine {
@@ -106,15 +115,15 @@ export  interface LADSFunctionalStateMachine extends UAFiniteStateMachine {
     start: UAMethod
     stop: UAMethod
     abort: UAMethod
-    clear: UAMethod
+    clear?: UAMethod
 }
 
 export interface LADSFunctionalUnitStateMachine extends LADSFunctionalStateMachine {
-    startProgram: UAMethod
+    startProgram?: UAMethod
 }
 
 export interface LADSControlFunctionStateMachine extends LADSFunctionalStateMachine {
-    startWithTargetValue: UAMethod
+    startWithTargetValue?: UAMethod
 }
 
 export interface LADSRunnnigStateMachine extends UAFiniteStateMachine {

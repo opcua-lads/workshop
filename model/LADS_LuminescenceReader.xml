@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-08-25T15:51:49.912Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-08-26T09:33:19.375Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -86,7 +86,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="b7ec58e7ec48907727aeb4d1330f5174"/>
+            <si:GeneratorExtension Hash="da8b41f7c4f9f0a295d1bcb760dabf53"/>
         </Extension>
     </Extensions>
     <UAObject SymbolicName="OPCUADINamespaceMetadata" NodeId="ns=1;i=15001" BrowseName="1:http://opcfoundation.org/UA/DI/" ParentNodeId="i=11715">
@@ -13935,6 +13935,52 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
+    <UAObject NodeId="ns=4;i=5098" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1009">
+        <DisplayName>StateMachine</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1009</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAObject>
+    <UAMethod NodeId="ns=4;i=7020" BrowseName="4:StartWithTargetValue" ParentNodeId="ns=4;i=5098">
+        <DisplayName>StartWithTargetValue</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5098</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAMethod>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6279" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=4;i=7020">
+        <DisplayName>InputArguments</DisplayName>
+        <Description>the definition of the input argument of method 4:FunctionStateMachineTypeType.4:Start</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7020</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:ListOfExtensionObject>
+                <uax:ExtensionObject>
+                    <uax:TypeId>
+                        <uax:Identifier>i=297</uax:Identifier>
+                    </uax:TypeId>
+                    <uax:Body>
+                        <uax:Argument>
+                            <uax:Name>TargetValue</uax:Name>
+                            <uax:DataType>
+                                <uax:Identifier>i=26</uax:Identifier>
+                            </uax:DataType>
+                            <uax:ValueRank>-1</uax:ValueRank>
+                            <uax:ArrayDimensions/>
+                            <uax:Description>
+                                <uax:Text>(Optional) The value can use to set the target value parallel with the start method.</uax:Text>
+                            </uax:Description>
+                        </uax:Argument>
+                    </uax:Body>
+                </uax:ExtensionObject>
+            </uax:ListOfExtensionObject>
+        </Value>
+    </UAVariable>
     <UAObject SymbolicName="http___spectaris_de_LuminescenceReader_" NodeId="ns=5;i=5000" BrowseName="5:http://spectaris.de/LuminescenceReader/" ParentNodeId="i=11715">
         <DisplayName>http://spectaris.de/LuminescenceReader/</DisplayName>
         <References>
@@ -18733,6 +18779,79 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAMethod>
+    <UAObject NodeId="ns=5;i=5026" BrowseName="3:MachineryOperationMode" ParentNodeId="ns=5;i=1001">
+        <DisplayName>MachineryOperationMode</DisplayName>
+        <References>
+            <Reference ReferenceType="HasAddIn" IsForward="false">ns=5;i=1001</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1008</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=5;i=5050" BrowseName="3:MachineryItemState" ParentNodeId="ns=5;i=1001">
+        <DisplayName>MachineryItemState</DisplayName>
+        <References>
+            <Reference ReferenceType="HasAddIn" IsForward="false">ns=5;i=1001</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1002</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=5;i=5075" BrowseName="3:MachineryItemState" ParentNodeId="ns=5;i=5023">
+        <DisplayName>MachineryItemState</DisplayName>
+        <References>
+            <Reference ReferenceType="HasAddIn" IsForward="false">ns=5;i=5023</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1002</Reference>
+        </References>
+    </UAObject>
+    <UAVariable DataType="LocalizedText" NodeId="ns=5;i=6101" BrowseName="CurrentState" ParentNodeId="ns=5;i=5075">
+        <DisplayName>CurrentState</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=5;i=5075</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="NodeId" NodeId="ns=5;i=6106" BrowseName="Id" ParentNodeId="ns=5;i=6101">
+        <DisplayName>Id</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=5;i=6101</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+        </References>
+    </UAVariable>
+    <UAObject NodeId="ns=5;i=5084" BrowseName="3:MachineryOperationMode" ParentNodeId="ns=5;i=5023">
+        <DisplayName>MachineryOperationMode</DisplayName>
+        <References>
+            <Reference ReferenceType="HasAddIn" IsForward="false">ns=5;i=5023</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1008</Reference>
+        </References>
+    </UAObject>
+    <UAVariable DataType="LocalizedText" NodeId="ns=5;i=6107" BrowseName="CurrentState" ParentNodeId="ns=5;i=5084">
+        <DisplayName>CurrentState</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=5;i=5084</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="NodeId" NodeId="ns=5;i=6108" BrowseName="Id" ParentNodeId="ns=5;i=6107">
+        <DisplayName>Id</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=5;i=6107</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="DeviceHealthEnumeration" NodeId="ns=5;i=6113" BrowseName="1:DeviceHealth" ParentNodeId="ns=5;i=1001">
+        <DisplayName>DeviceHealth</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=5;i=1001</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="DeviceHealthEnumeration" NodeId="ns=5;i=6114" BrowseName="1:DeviceHealth" ParentNodeId="ns=5;i=5023">
+        <DisplayName>DeviceHealth</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=5;i=5023</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+        </References>
+    </UAVariable>
     <UAMethod NodeId="ns=5;i=7023" BrowseName="4:StartWithTargetValue" ParentNodeId="ns=5;i=5020">
         <DisplayName>StartWithTargetValue</DisplayName>
         <References>
@@ -18746,9 +18865,36 @@
             <Reference ReferenceType="HasComponent" IsForward="false">ns=5;i=5080</Reference>
         </References>
     </UAMethod>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=5;i=6100" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=5;i=7024">
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=5;i=6115" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=5;i=7023" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>InputArguments</DisplayName>
-        <Description>the definition of the input argument of method 4:FunctionStateMachineTypeType.4:Start</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=5;i=7023</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:ListOfExtensionObject>
+                <uax:ExtensionObject>
+                    <uax:TypeId>
+                        <uax:Identifier>i=297</uax:Identifier>
+                    </uax:TypeId>
+                    <uax:Body>
+                        <uax:Argument>
+                            <uax:Name>Value</uax:Name>
+                            <uax:DataType>
+                                <uax:Identifier>i=11</uax:Identifier>
+                            </uax:DataType>
+                            <uax:ValueRank>-1</uax:ValueRank>
+                            <uax:ArrayDimensions/>
+                            <uax:Description/>
+                        </uax:Argument>
+                    </uax:Body>
+                </uax:ExtensionObject>
+            </uax:ListOfExtensionObject>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=5;i=6124" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=5;i=7024" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>InputArguments</DisplayName>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=5;i=7024</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
@@ -18761,15 +18907,13 @@
                     </uax:TypeId>
                     <uax:Body>
                         <uax:Argument>
-                            <uax:Name>TargetValue</uax:Name>
+                            <uax:Name>Value</uax:Name>
                             <uax:DataType>
                                 <uax:Identifier>i=11</uax:Identifier>
                             </uax:DataType>
                             <uax:ValueRank>-1</uax:ValueRank>
                             <uax:ArrayDimensions/>
-                            <uax:Description>
-                                <uax:Text>(Optional) The value can use to set the target value parallel with the start method.</uax:Text>
-                            </uax:Description>
+                            <uax:Description/>
                         </uax:Argument>
                     </uax:Body>
                 </uax:ExtensionObject>

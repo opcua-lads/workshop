@@ -282,7 +282,7 @@ const workshopStep = 9;
 
         // second step: bind functions for starting and stopping to OPC UA methods
         temperatureController.stateMachine.start.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
-        temperatureController.stateMachine.startWithTargetValue.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
+        temperatureController.stateMachine.startWithTargetValue?.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
         temperatureController.stateMachine.stop.bindMethod(onStopTemperatureController.bind(temperatureControllerStateMachine))
 
         // third step: bind internal state variable to OPC UA stateMachine.currentState variable
@@ -407,7 +407,7 @@ const workshopStep = 9;
             }
         }
 
-        functionalUnit.stateMachine.startProgram.bindMethod(startProgram.bind(functionalUnitStateMachine))
+        functionalUnit.stateMachine.startProgram?.bindMethod(startProgram.bind(functionalUnitStateMachine))
 
     } catch (err) {
         console.log(err);
