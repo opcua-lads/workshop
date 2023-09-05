@@ -33,18 +33,22 @@ import {
 import { UADevice } from "node-opcua-nodeset-di"
 
 import {
+    LADSDeviceHelper,
+    getLADSObjectType,
+    sleepMilliSeconds
+} from "./lads-utils"
+
+import {
     LADSAnalogArraySensorFunction,
     LADSAnalogControlFunction,
     LADSCoverFunction,
     LADSDevice,
     LADSFunctionalUnit,
     LADSResult,
-    getLADSObjectType,
-    sleepMilliSeconds
-} from "./lads-utils"
+} from "./lads-interfaces"
 
 // At which level is the workshop currently
-const workshopStep = 9;
+const workshopStep = 10;
 
 //---------------------------------------------------------------
 // main
@@ -337,7 +341,7 @@ const workshopStep = 9;
 
             // set context information provided by input-arguments
             result.properties?.setValueFromSource(inputArguments[1])
-            result.jobId?.setValueFromSource(inputArguments[2])
+            result.supervisoryJobId?.setValueFromSource(inputArguments[2])
             result.supervisoryTaskId?.setValueFromSource(inputArguments[3])
             result.samples?.setValueFromSource(inputArguments[4])
             result.started?.setValueFromSource({ dataType: DataType.DateTime, value: new Date() })
@@ -408,6 +412,10 @@ const workshopStep = 9;
         }
 
         functionalUnit.stateMachine.startProgram?.bindMethod(startProgram.bind(functionalUnitStateMachine))
+
+        // stop here if we only want to show step 9
+        if (workshopStep < 10) return
+        const deviceHelper = new LADSDeviceHelper(luminescenceReaderDevice, {initializationTime: 2000, shutdownTime: 2000})
 
     } catch (err) {
         console.log(err);
