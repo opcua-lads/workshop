@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-09-05T10:07:18.983Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-09-05T10:22:14.852Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -86,7 +86,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="90c9046a52d6b74dc399d0279a1e58cf"/>
+            <si:GeneratorExtension Hash="8d80fdb5e7f90b04158013dc311c909f"/>
         </Extension>
     </Extensions>
     <UAObject SymbolicName="OPCUADINamespaceMetadata" NodeId="ns=1;i=15001" BrowseName="1:http://opcfoundation.org/UA/DI/" ParentNodeId="i=11715">
@@ -10675,7 +10675,7 @@
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6495" BrowseName="4:DeviceProgramRunId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
@@ -19729,4 +19729,12 @@
             <Reference ReferenceType="HasComponent" IsForward="false">ns=5;i=5070</Reference>
         </References>
     </UAMethod>
+    <UAVariable DataType="String" NodeId="ns=5;i=6330" BrowseName="4:SupervisoryTaskId" ParentNodeId="ns=5;i=5088" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>SupervisoryTaskId</DisplayName>
+        <Description>SupervisoryTaskId is the unique identifier of the specific task in the supervisory system to which the result belongs. It is provided as an argument of the StartProgram() Method which initiates the program run.</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=5;i=5088</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+        </References>
+    </UAVariable>
 </UANodeSet>

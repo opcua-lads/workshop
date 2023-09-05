@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-09-05T08:06:14.680Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-09-05T10:22:59.831Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -62,7 +62,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="fe0d7b81c27890151072db67245e870e"/>
+            <si:GeneratorExtension Hash="3c3890b86ee10ad86dc7a06df89839cf"/>
         </Extension>
     </Extensions>
     <UADataType NodeId="ns=4;i=3003" BrowseName="4:KeyValueType">
@@ -3267,7 +3267,7 @@
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6495" BrowseName="4:DeviceProgramRunId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">

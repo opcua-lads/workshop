@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-09-05T08:06:30.703Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-09-05T10:23:14.056Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/Machinery/</Uri>
@@ -45,7 +45,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="253a70259fc52d31b7fda9d1210aac8a"/>
+            <si:GeneratorExtension Hash="affbecfe9cfac4628c7e670c22d614fb"/>
         </Extension>
     </Extensions>
     <UAObject SymbolicName="http___spectaris_de_LuminescenceReader_" NodeId="ns=4;i=5000" BrowseName="4:http://spectaris.de/LuminescenceReader/" ParentNodeId="i=11715">
@@ -1528,8 +1528,8 @@
         <Description>The FunctionalUnitType represents a functional unit of a laboratory or analytical device.</Description>
         <References>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5021</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1000</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5010" BrowseName="3:Operational" ParentNodeId="ns=4;i=1000">
@@ -5394,4 +5394,12 @@
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5070</Reference>
         </References>
     </UAMethod>
+    <UAVariable DataType="String" NodeId="ns=4;i=6330" BrowseName="3:SupervisoryTaskId" ParentNodeId="ns=4;i=5088" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>SupervisoryTaskId</DisplayName>
+        <Description>SupervisoryTaskId is the unique identifier of the specific task in the supervisory system to which the result belongs. It is provided as an argument of the StartProgram() Method which initiates the program run.</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5088</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+        </References>
+    </UAVariable>
 </UANodeSet>
