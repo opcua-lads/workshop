@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-08-26T09:33:43.753Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-09-05T08:06:14.680Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -62,7 +62,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="b6837916826451c52ea3e959d9c41246"/>
+            <si:GeneratorExtension Hash="fe0d7b81c27890151072db67245e870e"/>
         </Extension>
     </Extensions>
     <UADataType NodeId="ns=4;i=3003" BrowseName="4:KeyValueType">
@@ -236,7 +236,7 @@
             <Reference ReferenceType="HasSubtype" IsForward="false">i=58</Reference>
         </References>
     </UAObjectType>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6348" BrowseName="4:Author" ParentNodeId="ns=4;i=1018">
+    <UAVariable DataType="String" NodeId="ns=4;i=6348" BrowseName="4:Author" ParentNodeId="ns=4;i=1018">
         <DisplayName>Author</DisplayName>
         <Description>Author is the user who created the template.</Description>
         <References>
@@ -272,9 +272,9 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6259" BrowseName="4:Name" ParentNodeId="ns=4;i=1018">
-        <DisplayName>Name</DisplayName>
-        <Description>Name is the program template's name.</Description>
+    <UAVariable DataType="String" NodeId="ns=4;i=6259" BrowseName="4:DeviceTemplateId" ParentNodeId="ns=4;i=1018">
+        <DisplayName>DeviceTemplateId</DisplayName>
+        <Description>The program template's identifier unique within the scope of the device.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1018</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -386,9 +386,9 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAObject>
-    <UAVariable DataType="String" NodeId="ns=4;i=6393" BrowseName="4:JobId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
-        <DisplayName>JobId</DisplayName>
-        <Description>JobId is the identifier for the execution of a specific workflow, consisting of one or multiple steps. It is provided as an argument Argument of the StartProgram() Method which initiates the program run.</Description>
+    <UAVariable DataType="String" NodeId="ns=4;i=6393" BrowseName="4:SupervisoryJobId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>SupervisoryJobId</DisplayName>
+        <Description>SupervisoryJobId is the identifier for the execution of a specific workflow, consisting of one or multiple steps. It is provided as an argument Argument of the StartProgram() ny the supervisory system.Method which initiates the program run.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -562,8 +562,8 @@
             <Reference ReferenceType="HasSubtype" IsForward="false">i=2771</Reference>
         </References>
     </UAObjectType>
-    <UAMethod NodeId="ns=4;i=7021" BrowseName="4:GotoOperating" ParentNodeId="ns=4;i=1039">
-        <DisplayName>GotoOperating</DisplayName>
+    <UAMethod NodeId="ns=4;i=7021" BrowseName="4:GotoOperate" ParentNodeId="ns=4;i=1039">
+        <DisplayName>GotoOperate</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -583,8 +583,8 @@
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAObject NodeId="ns=4;i=5178" BrowseName="4:Operating" ParentNodeId="ns=4;i=1039">
-        <DisplayName>Operating</DisplayName>
+    <UAObject NodeId="ns=4;i=5178" BrowseName="4:Operate" ParentNodeId="ns=4;i=1039">
+        <DisplayName>Operate</DisplayName>
         <Description>The Device is in Operating mode. The LADS Client uses this mode for normal operation: configuration, control and data collection.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
@@ -602,8 +602,8 @@
             <uax:UInt32>2</uax:UInt32>
         </Value>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5184" BrowseName="4:OperatingToShutdown" ParentNodeId="ns=4;i=1039">
-        <DisplayName>OperatingToShutdown</DisplayName>
+    <UAObject NodeId="ns=4;i=5184" BrowseName="4:OperateToShutdown" ParentNodeId="ns=4;i=1039">
+        <DisplayName>OperateToShutdown</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="ToState">ns=4;i=5180</Reference>
@@ -624,8 +624,8 @@
             <uax:UInt32>5</uax:UInt32>
         </Value>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5260" BrowseName="4:OperatingToSleep" ParentNodeId="ns=4;i=1039">
-        <DisplayName>OperatingToSleep</DisplayName>
+    <UAObject NodeId="ns=4;i=5260" BrowseName="4:OperateToSleep" ParentNodeId="ns=4;i=1039">
+        <DisplayName>OperateToSleep</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="ToState">ns=4;i=5259</Reference>
@@ -665,8 +665,8 @@
             <uax:UInt32>1</uax:UInt32>
         </Value>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5181" BrowseName="4:InitializationToOperating" ParentNodeId="ns=4;i=1039">
-        <DisplayName>InitializationToOperating</DisplayName>
+    <UAObject NodeId="ns=4;i=5181" BrowseName="4:InitializationToOperate" ParentNodeId="ns=4;i=1039">
+        <DisplayName>InitializationToOperate</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
@@ -1217,15 +1217,8 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAMethod NodeId="ns=4;i=7123" BrowseName="4:GotoMaintenance" ParentNodeId="ns=4;i=5191">
-        <DisplayName>GotoMaintenance</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5191</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7124" BrowseName="4:GotoOperating" ParentNodeId="ns=4;i=5191">
-        <DisplayName>GotoOperating</DisplayName>
+    <UAMethod NodeId="ns=4;i=7124" BrowseName="4:GotoOperate" ParentNodeId="ns=4;i=5191">
+        <DisplayName>GotoOperate</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5191</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -1592,15 +1585,6 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAObject>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6574" BrowseName="4:Author" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Author</DisplayName>
-        <Description>Author is the user who created the template.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
     <UAVariable DataType="DateTime" NodeId="ns=4;i=6575" BrowseName="4:Created" ParentNodeId="ns=4;i=5250">
         <DisplayName>Created</DisplayName>
         <Description>Created is the time of the template’s creation.</Description>
@@ -1628,17 +1612,9 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6578" BrowseName="4:Name" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Name</DisplayName>
-        <Description>Name is the program template's name.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6580" BrowseName="4:Type" ParentNodeId="ns=4;i=5250" UserAccessLevel="3" AccessLevel="3">
-        <DisplayName>Type</DisplayName>
+    <UAVariable DataType="String" NodeId="ns=4;i=6578" BrowseName="4:DeviceTemplateId" ParentNodeId="ns=4;i=5250">
+        <DisplayName>DeviceTemplateId</DisplayName>
+        <Description>The program template's identifier unique within the scope of the device.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -2746,13 +2722,6 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAMethod>
-    <UAMethod NodeId="ns=4;i=7018" BrowseName="4:Unlock" ParentNodeId="ns=4;i=5055">
-        <DisplayName>Unlock</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAMethod>
     <UAObject NodeId="ns=4;i=5055" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1011">
         <DisplayName>StateMachine</DisplayName>
         <References>
@@ -3141,7 +3110,6 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
-            <Reference ReferenceType="HasCause">ns=4;i=7012</Reference>
             <Reference ReferenceType="ToState">ns=4;i=5028</Reference>
             <Reference ReferenceType="FromState">ns=4;i=5049</Reference>
             <Reference ReferenceType="HasEffect">i=2311</Reference>
@@ -3262,8 +3230,8 @@
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAObject NodeId="ns=4;i=5083" BrowseName="4:SleepToOperating" ParentNodeId="ns=4;i=1039">
-        <DisplayName>SleepToOperating</DisplayName>
+    <UAObject NodeId="ns=4;i=5083" BrowseName="4:SleepToOperate" ParentNodeId="ns=4;i=1039">
+        <DisplayName>SleepToOperate</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
@@ -3929,7 +3897,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6090" BrowseName="4:SupervisoryTemplateId" ParentNodeId="ns=4;i=1018">
         <DisplayName>SupervisoryTemplateId</DisplayName>
-        <Description>TemplateId is an optional enterprise-wide unique ID for the template. This can be utilized to refer the template to supervisory systems.</Description>
+        <Description>SupervisoryTemplateId is an optional enterprise-wide unique ID for the template. This can be utilized to refer the template to supervisory systems.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1018</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -3947,15 +3915,15 @@
     <UAVariable DataType="Double" NodeId="ns=4;i=6003" BrowseName="4:CtrlP" ParentNodeId="ns=4;i=1030" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CtrlP</DisplayName>
         <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=1030</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1030</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6004" BrowseName="4:CtrlTd" ParentNodeId="ns=4;i=1030" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CtrlTd</DisplayName>
         <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=1030</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1030</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
         </References>
@@ -3963,7 +3931,7 @@
     <UAVariable DataType="Double" NodeId="ns=4;i=6005" BrowseName="4:CtrlTi" ParentNodeId="ns=4;i=1030" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CtrlTi</DisplayName>
         <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=1030</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1030</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
@@ -5069,7 +5037,7 @@
                     </uax:TypeId>
                     <uax:Body>
                         <uax:Argument>
-                            <uax:Name>JobId</uax:Name>
+                            <uax:Name>SupervisoryJobId</uax:Name>
                             <uax:DataType>
                                 <uax:Identifier>i=12</uax:Identifier>
                             </uax:DataType>
@@ -5253,10 +5221,9 @@
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6104" BrowseName="CurrentState" ParentNodeId="ns=4;i=5005">
+    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6104" BrowseName="CurrentState" ParentNodeId="ns=4;i=5007">
         <DisplayName>CurrentState</DisplayName>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5005</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5267,8 +5234,8 @@
         <References>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6104</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1047" BrowseName="4:MultiModeAnalogControlFunctionType">
@@ -5696,7 +5663,7 @@
                     </uax:TypeId>
                     <uax:Body>
                         <uax:Argument>
-                            <uax:Name>JobId</uax:Name>
+                            <uax:Name>SupervisoryJobId</uax:Name>
                             <uax:DataType>
                                 <uax:Identifier>i=12</uax:Identifier>
                             </uax:DataType>
@@ -5850,7 +5817,7 @@
                     </uax:TypeId>
                     <uax:Body>
                         <uax:Argument>
-                            <uax:Name>JobId</uax:Name>
+                            <uax:Name>SupervisoryJobId</uax:Name>
                             <uax:DataType>
                                 <uax:Identifier>i=12</uax:Identifier>
                             </uax:DataType>
@@ -6527,7 +6494,266 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5098" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1009">
+    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6279" BrowseName="CurrentState" ParentNodeId="ns=4;i=1043">
+        <DisplayName>CurrentState</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1043</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6280" BrowseName="EffectiveDisplayName" ParentNodeId="ns=4;i=6279">
+        <DisplayName>EffectiveDisplayName</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6279</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAObject NodeId="ns=4;i=5098" BrowseName="4:LockedToUnlocking" ParentNodeId="ns=4;i=1010">
+        <DisplayName>LockedToUnlocking</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5049</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5107</Reference>
+            <Reference ReferenceType="HasCause">ns=4;i=7014</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5107" BrowseName="4:Unlocking" ParentNodeId="ns=4;i=1010">
+        <DisplayName>Unlocking</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5108" BrowseName="4:Locking" ParentNodeId="ns=4;i=1010">
+        <DisplayName>Locking</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5109" BrowseName="4:Opening" ParentNodeId="ns=4;i=1010">
+        <DisplayName>Opening</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5110" BrowseName="4:Closing" ParentNodeId="ns=4;i=1010">
+        <DisplayName>Closing</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5114" BrowseName="4:UnlockingToClosed" ParentNodeId="ns=4;i=1010">
+        <DisplayName>UnlockingToClosed</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5107</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5028</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5115" BrowseName="4:ClosedToOpening" ParentNodeId="ns=4;i=1010">
+        <DisplayName>ClosedToOpening</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5109</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5028</Reference>
+            <Reference ReferenceType="HasCause">ns=4;i=7011</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5136" BrowseName="4:OpeningToOpened" ParentNodeId="ns=4;i=1010">
+        <DisplayName>OpeningToOpened</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5109</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5025</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5137" BrowseName="4:OpenedToClosing" ParentNodeId="ns=4;i=1010">
+        <DisplayName>OpenedToClosing</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5025</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5110</Reference>
+            <Reference ReferenceType="HasCause">ns=4;i=7012</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5138" BrowseName="4:ClosingToClosed" ParentNodeId="ns=4;i=1010">
+        <DisplayName>ClosingToClosed</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5110</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5028</Reference>
+        </References>
+    </UAObject>
+    <UAMethod NodeId="ns=4;i=7018" BrowseName="4:Unlock" ParentNodeId="ns=4;i=5055">
+        <DisplayName>Unlock</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAMethod>
+    <UAObject NodeId="ns=4;i=5139" BrowseName="4:ClosedToLocking" ParentNodeId="ns=4;i=1010">
+        <DisplayName>ClosedToLocking</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5028</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5108</Reference>
+            <Reference ReferenceType="HasCause">ns=4;i=7013</Reference>
+        </References>
+    </UAObject>
+    <UAObject NodeId="ns=4;i=5140" BrowseName="4:LockingToLocked" ParentNodeId="ns=4;i=1010">
+        <DisplayName>LockingToLocked</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2310</Reference>
+            <Reference ReferenceType="FromState">ns=4;i=5108</Reference>
+            <Reference ReferenceType="ToState">ns=4;i=5049</Reference>
+        </References>
+    </UAObject>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6286" BrowseName="StateNumber" ParentNodeId="ns=4;i=5110">
+        <DisplayName>StateNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5110</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>5</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6287" BrowseName="StateNumber" ParentNodeId="ns=4;i=5108">
+        <DisplayName>StateNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5108</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>6</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6288" BrowseName="StateNumber" ParentNodeId="ns=4;i=5109">
+        <DisplayName>StateNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5109</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>7</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6293" BrowseName="StateNumber" ParentNodeId="ns=4;i=5107">
+        <DisplayName>StateNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5107</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>8</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6294" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5139">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5139</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>8</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6295" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5115">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5115</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>9</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6296" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5138">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5138</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>10</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6300" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5098">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5098</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>11</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6301" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5140">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5140</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>12</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6302" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5137">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5137</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>13</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6303" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5136">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5136</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>14</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6304" BrowseName="TransitionNumber" ParentNodeId="ns=4;i=5114">
+        <DisplayName>TransitionNumber</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5114</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:UInt32>15</uax:UInt32>
+        </Value>
+    </UAVariable>
+    <UAObject NodeId="ns=4;i=5141" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1009">
         <DisplayName>StateMachine</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1009</Reference>
@@ -6535,18 +6761,18 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAObject>
-    <UAMethod NodeId="ns=4;i=7020" BrowseName="4:StartWithTargetValue" ParentNodeId="ns=4;i=5098">
+    <UAMethod NodeId="ns=4;i=7027" BrowseName="4:StartWithTargetValue" ParentNodeId="ns=4;i=5141">
         <DisplayName>StartWithTargetValue</DisplayName>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5098</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5141</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6279" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=4;i=7020">
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6305" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=4;i=7027">
         <DisplayName>InputArguments</DisplayName>
         <Description>the definition of the input argument of method 4:FunctionStateMachineTypeType.4:Start</Description>
         <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7020</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7027</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
@@ -6560,7 +6786,7 @@
                         <uax:Argument>
                             <uax:Name>TargetValue</uax:Name>
                             <uax:DataType>
-                                <uax:Identifier>i=26</uax:Identifier>
+                                <uax:Identifier>i=11</uax:Identifier>
                             </uax:DataType>
                             <uax:ValueRank>-1</uax:ValueRank>
                             <uax:ArrayDimensions/>
@@ -6572,5 +6798,181 @@
                 </uax:ExtensionObject>
             </uax:ListOfExtensionObject>
         </Value>
+    </UAVariable>
+    <UAObject NodeId="ns=4;i=5142" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1045">
+        <DisplayName>StateMachine</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1045</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAObject>
+    <UAMethod NodeId="ns=4;i=7050" BrowseName="4:StartWithTargetValue" ParentNodeId="ns=4;i=5142">
+        <DisplayName>StartWithTargetValue</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5142</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAMethod>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6306" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=4;i=7050">
+        <DisplayName>InputArguments</DisplayName>
+        <Description>the definition of the input argument of method 4:FunctionStateMachineTypeType.4:Start</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7050</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:ListOfExtensionObject>
+                <uax:ExtensionObject>
+                    <uax:TypeId>
+                        <uax:Identifier>i=297</uax:Identifier>
+                    </uax:TypeId>
+                    <uax:Body>
+                        <uax:Argument>
+                            <uax:Name>TargetValue</uax:Name>
+                            <uax:DataType>
+                                <uax:Identifier>i=7</uax:Identifier>
+                            </uax:DataType>
+                            <uax:ValueRank>-1</uax:ValueRank>
+                            <uax:ArrayDimensions/>
+                            <uax:Description>
+                                <uax:Text>(Optional) The value can use to set the target value parallel with the start method.</uax:Text>
+                            </uax:Description>
+                        </uax:Argument>
+                    </uax:Body>
+                </uax:ExtensionObject>
+            </uax:ListOfExtensionObject>
+        </Value>
+    </UAVariable>
+    <UAObject NodeId="ns=4;i=5144" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1042">
+        <DisplayName>StateMachine</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1042</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAObject>
+    <UAMethod NodeId="ns=4;i=7054" BrowseName="4:StartWithTargetValue" ParentNodeId="ns=4;i=5144">
+        <DisplayName>StartWithTargetValue</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5144</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAMethod>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6309" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=4;i=7054">
+        <DisplayName>InputArguments</DisplayName>
+        <Description>the definition of the input argument of method 4:FunctionStateMachineTypeType.4:Start</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7054</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:ListOfExtensionObject>
+                <uax:ExtensionObject>
+                    <uax:TypeId>
+                        <uax:Identifier>i=297</uax:Identifier>
+                    </uax:TypeId>
+                    <uax:Body>
+                        <uax:Argument>
+                            <uax:Name>TargetValue</uax:Name>
+                            <uax:DataType>
+                                <uax:Identifier>i=1</uax:Identifier>
+                            </uax:DataType>
+                            <uax:ValueRank>-1</uax:ValueRank>
+                            <uax:ArrayDimensions/>
+                            <uax:Description>
+                                <uax:Text>(Optional) The value can use to set the target value parallel with the start method.</uax:Text>
+                            </uax:Description>
+                        </uax:Argument>
+                    </uax:Body>
+                </uax:ExtensionObject>
+            </uax:ListOfExtensionObject>
+        </Value>
+    </UAVariable>
+    <UAMethod NodeId="ns=4;i=7020" BrowseName="4:GotoProcessing" ParentNodeId="ns=4;i=5090">
+        <DisplayName>GotoProcessing</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5090</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAMethod>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6131" BrowseName="InputArguments" ParentNodeId="ns=4;i=7020">
+        <DisplayName>InputArguments</DisplayName>
+        <Description>the definition of the input argument of method 3:MachineryOperationMode.4:GotoProcessing</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7020</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6283" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7020">
+        <DisplayName>OutputArguments</DisplayName>
+        <Description>the definition of the output arguments of method 3:MachineryOperationMode.4:GotoProcessing</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7020</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAMethod NodeId="ns=4;i=7055" BrowseName="4:GotoMaintenance" ParentNodeId="ns=4;i=5090">
+        <DisplayName>GotoMaintenance</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5090</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAMethod>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6310" BrowseName="InputArguments" ParentNodeId="ns=4;i=7055">
+        <DisplayName>InputArguments</DisplayName>
+        <Description>the definition of the input argument of method 3:MachineryOperationMode.4:GotoMaintenance</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7055</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6311" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7055">
+        <DisplayName>OutputArguments</DisplayName>
+        <Description>the definition of the output arguments of method 3:MachineryOperationMode.4:GotoMaintenance</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7055</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAMethod NodeId="ns=4;i=7056" BrowseName="4:GotoSetup" ParentNodeId="ns=4;i=5090">
+        <DisplayName>GotoSetup</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5090</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAMethod>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6312" BrowseName="InputArguments" ParentNodeId="ns=4;i=7056">
+        <DisplayName>InputArguments</DisplayName>
+        <Description>the definition of the input argument of method 3:MachineryOperationMode.4:GotoSetup</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7056</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6313" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7056">
+        <DisplayName>OutputArguments</DisplayName>
+        <Description>the definition of the output arguments of method 3:MachineryOperationMode.4:GotoSetup</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7056</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6314" BrowseName="4:Author" ParentNodeId="ns=4;i=5250">
+        <DisplayName>Author</DisplayName>
+        <Description>Author is the user who created the template.</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
     </UAVariable>
 </UANodeSet>
