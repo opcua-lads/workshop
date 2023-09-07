@@ -48,7 +48,7 @@ import {
 } from "./lads-interfaces"
 
 // At which level is the workshop currently
-const workshopStep = 10;
+const workshopStep = 1;
 
 //---------------------------------------------------------------
 // main
@@ -157,7 +157,7 @@ const workshopStep = 10;
             (device) => (device.typeDefinitionObj.browseName.name?.includes('Luminescence')))
 
         // alternative pragmatic way completley omitting step 2: if the node-id is known directly access device object
-        const luminescenceDeviceID = 5088
+        const luminescenceDeviceID = 5011
         const nameSpaceLR = addressSpace.getNamespace('http://spectaris.de/LuminescenceReader/')
         const _luminescenceReaderDevice = <LuminescenceReaderDevice>addressSpace.findNode(coerceNodeId(luminescenceDeviceID, nameSpaceLR.index))
 
