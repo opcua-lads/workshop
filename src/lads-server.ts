@@ -48,7 +48,7 @@ import {
 } from "./lads-interfaces"
 
 // At which level is the workshop currently
-const workshopStep = 1;
+const workshopStep = 10;
 
 //---------------------------------------------------------------
 // main
