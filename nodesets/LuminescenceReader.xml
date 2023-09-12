@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-09-08T09:37:09.642Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-09-12T14:30:19.953Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/Machinery/</Uri>
@@ -45,7 +45,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="456712bdc8c30aafcb7a7c3231d22335"/>
+            <si:GeneratorExtension Hash="8313a3c8600ec685b7080385bf704ce6"/>
         </Extension>
     </Extensions>
     <UAObject SymbolicName="http___spectaris_de_LuminescenceReader_" NodeId="ns=4;i=5000" BrowseName="4:http://spectaris.de/LuminescenceReader/" ParentNodeId="i=11715">
@@ -3201,18 +3201,6 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAMethod NodeId="ns=4;i=7052" BrowseName="3:Start" ParentNodeId="ns=4;i=5080">
-        <DisplayName>Start</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5080</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7053" BrowseName="3:Stop" ParentNodeId="ns=4;i=5080">
-        <DisplayName>Stop</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5080</Reference>
-        </References>
-    </UAMethod>
     <UAVariable DataType="String" NodeId="ns=4;i=6289" BrowseName="3:DeviceTemplateId" ParentNodeId="ns=4;i=5084">
         <DisplayName>DeviceTemplateId</DisplayName>
         <Description>The program template's identifier unique within the scope of the device.</Description>
