@@ -35,7 +35,12 @@ import { UADevice } from "node-opcua-nodeset-di"
 import {
     LADSDeviceHelper,
     getLADSObjectType,
-    sleepMilliSeconds
+    sleepMilliSeconds,
+    stateAborted,
+    stateAborting,
+    stateRunning,
+    stateStopped,
+    stateStopping
 } from "./lads-utils"
 
 import {
@@ -357,8 +362,8 @@ const workshopStep = 10;
             activeProgram.deviceProgramRunId?.setValueFromSource({ dataType: DataType.String, value: deviceProgramRunId })
 
             // start all required functions
-            functionalUnitStateMachine.setState("Running")
-            temperatureControllerStateMachine.setState("Running")
+            functionalUnitStateMachine.setState(stateRunning)
+            temperatureControllerStateMachine.setState(stateRunning)
             for (let t = 0; t <= runTime; t += delta) {
                 // update active-program runtime properties
                 activeProgram.currentRuntime?.setValueFromSource({ dataType: DataType.Double, value: t })
@@ -366,9 +371,17 @@ const workshopStep = 10;
 
                 // do whatever is necessary for the run
                 await sleepMilliSeconds(delta)
+
+                // check if run was stopped or aborted from remote
+                const currentState  = functionalUnitStateMachine.getCurrentState()
+                if (currentState) {
+                    if ([stateStopping, stateStopped, stateAborting, stateAborted].some( (state) => {currentState.includes(state)})) {
+                        break
+                    }
+                }
             }
-            temperatureControllerStateMachine.setState("Stopped")
-            functionalUnitStateMachine.setState("Stopped")
+            temperatureControllerStateMachine.setState(stateStopped)
+            functionalUnitStateMachine.setState(stateStopped)
 
             // finalize
             result.stopped?.setValueFromSource({ dataType: DataType.DateTime, value: new Date() })
@@ -390,7 +403,9 @@ const workshopStep = 10;
         async function startProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
             // validate current state
             const currentState = this.getCurrentState();
-            if (!(currentState && currentState.includes("Stopped"))) return { statusCode: StatusCodes.BadInvalidState }
+            if (!(currentState && (currentState.includes(stateStopped) || currentState.includes(stateAborted)))) {
+                return { statusCode: StatusCodes.BadInvalidState }
+            }
 
             // valdate input arguments
             for (const inputArgumentIndex in inputArguments) {
@@ -411,7 +426,25 @@ const workshopStep = 10;
             }
         }
 
+        async function stopProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
+            return stopOrAbortProgram(this, stateStopping, stateStopped)
+        }
+
+        async function abortProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
+            return stopOrAbortProgram(this, stateAborting, stateAborted)
+        }
+
+        async function stopOrAbortProgram(stateMachine: UAStateMachineEx, transitiveState: string, finalState: string) {
+            const currentState = stateMachine.getCurrentState();
+            if (!(currentState && currentState.includes(stateRunning))) return { statusCode: StatusCodes.BadInvalidState }
+            stateMachine.setState(transitiveState)
+            sleepMilliSeconds(1000).then(() => stateMachine.setState(finalState))
+            return { statusCode: StatusCodes.Good }
+        }
+
         functionalUnit.stateMachine.startProgram?.bindMethod(startProgram.bind(functionalUnitStateMachine))
+        functionalUnit.stateMachine.stop?.bindMethod(stopProgram.bind(functionalUnitStateMachine))
+        functionalUnit.stateMachine.abort?.bindMethod(abortProgram.bind(functionalUnitStateMachine))
 
         // stop here if we only want to show step 9
         if (workshopStep < 10) return

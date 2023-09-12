@@ -179,12 +179,12 @@ const stateOperationModeMaintenance = 'Maintenance'
 const stateOperationModeSetup = 'Setup'
 
 // FunctionalStateMachine
-const stateClearing = 'Clearing'
-const stateRunning = 'Running'
-const stateStopping = 'Stopping'
-const stateStopped = 'Stopped'
-const stateAborting = 'Aborting'
-const stateAborted = 'Aborted'
+export const stateClearing = 'Clearing'
+export const stateRunning = 'Running'
+export const stateStopping = 'Stopping'
+export const stateStopped = 'Stopped'
+export const stateAborting = 'Aborting'
+export const stateAborted = 'Aborted'
 
 export interface LADSDeviceHelperOptions {
     initializationTime?: number
