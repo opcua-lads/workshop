@@ -374,10 +374,8 @@ const workshopStep = 10;
 
                 // check if run was stopped or aborted from remote
                 const currentState  = functionalUnitStateMachine.getCurrentState()
-                if (currentState) {
-                    if ([stateStopping, stateStopped, stateAborting, stateAborted].some( (state) => {currentState.includes(state)})) {
-                        break
-                    }
+                if (currentState && !currentState.includes(stateRunning)) { 
+                    break 
                 }
             }
             temperatureControllerStateMachine.setState(stateStopped)
