@@ -34,6 +34,7 @@ import { UADevice } from "node-opcua-nodeset-di"
 
 import {
     LADSDeviceHelper,
+    constructNameNodeIdExtensionObject,
     getLADSObjectType,
     sleepMilliSeconds,
     stateAborted,
@@ -49,11 +50,13 @@ import {
     LADSCoverFunction,
     LADSDevice,
     LADSFunctionalUnit,
+    LADSProgramTemplate,
     LADSResult,
 } from "./lads-interfaces"
 
 // At which level is the workshop currently
 const workshopStep = 10;
+const big_node_set = true;
 
 //---------------------------------------------------------------
 // main
@@ -70,8 +73,16 @@ const workshopStep = 10;
     const nodeset_machinery = join(nodeset_path, 'Opc.Ua.Machinery.NodeSet2.xml')
     const nodeset_lads = join(nodeset_path, 'Opc.Ua.LADS.NodeSet2.xml')
     const nodeset_luminescencereader = join(nodeset_path, 'LuminescenceReader.xml')
+    const nodeset_centrifuge = join(nodeset_path, 'Centrifuge.xml')
+    const nodeset_bpc = join(nodeset_path, 'BPC.xml')
+    const nodeset_atd = join(nodeset_path, 'AutomatedThermoDesorper.xml')
+    const nodeset_vaccu_select = join(nodeset_path, 'VaccuSelect.xml')
 
     try {
+        // list of node-set files
+        const node_set_filenames = [nodeset_standard, nodeset_di, nodeset_machinery, nodeset_amb, nodeset_lads, nodeset_luminescencereader,]
+        if (big_node_set) { node_set_filenames.push(nodeset_centrifuge, nodeset_vaccu_select) }
+
         // build the server object
         const uri = "LADS-SampleServer"
         const server = new OPCUAServer({
@@ -90,14 +101,7 @@ const workshopStep = 10;
 
             },
             // nodesets used by the server
-            nodeset_filename: [
-                nodeset_standard,
-                nodeset_di,
-                nodeset_machinery,
-                nodeset_amb,
-                nodeset_lads,
-                nodeset_luminescencereader,
-            ]
+            nodeset_filename: node_set_filenames,
         })
 
         // start the server
@@ -337,28 +341,49 @@ const workshopStep = 10;
         let runId = 0
 
         async function runProgram(deviceProgramRunId: string, inputArguments: VariantLike[]) {
-            // dynamically create an new result object in the result set
+            // dynamically create an new result object in the result set and update node-version attribute
+            const startedTimestamp = new Date()
             const resultType = getLADSObjectType(addressSpace, "ResultType")
-            const result = <LADSResult>resultType.instantiate({ componentOf: <BaseNode><unknown>resultSet, browseName: deviceProgramRunId })
+            const resultSetNode = <BaseNode><unknown>resultSet
+            const result = <LADSResult>resultType.instantiate({ 
+                componentOf: resultSetNode, 
+                browseName: deviceProgramRunId, 
+                optionals: ["SupervisoryJobId", "SupervisoryTaskId"] })
+            resultSetNode.nodeVersion?.setValueFromSource({dataType: DataType.String, value: startedTimestamp.toISOString()})
 
             // get program template-id
             const programTemplateId: string = inputArguments[0].value
-
+            const programTemplateSet = <UAObject><unknown>functionalUnit.programManager.programTemplateSet            
+            const programTemplateReferences = programTemplateSet.findReferencesExAsObject(coerceNodeId(ReferenceTypeIds.Aggregates))
+            const programTemplates = programTemplateReferences.map((template) => <LADSProgramTemplate>template)
+            const programTemplate = programTemplates.find((template) => (template.browseName.name == programTemplateId))
+            if (programTemplate) {
+                activeProgram?.currentProgramTemplate?.setValueFromSource({
+                    dataType: DataType.ExtensionObject, 
+                    value: constructNameNodeIdExtensionObject(
+                        addressSpace,
+                        programTemplateId, 
+                        programTemplate.nodeId 
+                    )})
+            }
+    
             // set context information provided by input-arguments
             result.properties?.setValueFromSource(inputArguments[1])
             result.supervisoryJobId?.setValueFromSource(inputArguments[2])
             result.supervisoryTaskId?.setValueFromSource(inputArguments[3])
             result.samples?.setValueFromSource(inputArguments[4])
-            result.started?.setValueFromSource({ dataType: DataType.DateTime, value: new Date() })
+            result.started?.setValueFromSource({ dataType: DataType.DateTime, value: startedTimestamp })
 
             // initialize active-program runtime properties
             const runTime = 30000 //ms
+            const finishTime = 2000
             const delta = 500 //ms
             activeProgram.currentRuntime?.setValueFromSource({ dataType: DataType.Double, value: 0 })
             activeProgram.currentStepName?.setValueFromSource({ dataType: DataType.LocalizedText, value: 'Measure' })
             activeProgram.currentStepNumber?.setValueFromSource({ dataType: DataType.UInt32, value: 1 })
             activeProgram.currentStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: 0 })
-            activeProgram.estimatedRuntime?.setValueFromSource({ dataType: DataType.Double, value: runTime })
+            activeProgram.estimatedRuntime?.setValueFromSource({ dataType: DataType.Double, value: runTime + finishTime })
+            activeProgram.estimatedStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: runTime })
             activeProgram.deviceProgramRunId?.setValueFromSource({ dataType: DataType.String, value: deviceProgramRunId })
 
             // start all required functions
@@ -379,13 +404,9 @@ const workshopStep = 10;
                 }
             }
             temperatureControllerStateMachine.setState(stateStopped)
-            functionalUnitStateMachine.setState(stateStopped)
 
             // finalize
             result.stopped?.setValueFromSource({ dataType: DataType.DateTime, value: new Date() })
-            activeProgram.currentStepName?.setValueFromSource({ dataType: DataType.LocalizedText, value: 'Finished' })
-            activeProgram.currentStepNumber?.setValueFromSource({ dataType: DataType.UInt32, value: 2 })
-
             // get luminescence readings and add to VariableSet in result
             const readings = luminescenceSensor.sensorValue.readValue()
             result.namespace.addVariable({
@@ -396,10 +417,25 @@ const workshopStep = 10;
                 arrayDimensions: [wells],
                 value: readings.value
             })
+            
+            // simulate finish step
+            activeProgram.currentStepName?.setValueFromSource({ dataType: DataType.LocalizedText, value: 'Finalizing' })
+            activeProgram.currentStepNumber?.setValueFromSource({ dataType: DataType.UInt32, value: 2 })
+            activeProgram.currentStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: 0 })
+            activeProgram.estimatedStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: finishTime })
+            for (let t = 0; t <= finishTime; t += delta) {
+                // update active-program runtime properties
+                activeProgram.currentRuntime?.setValueFromSource({ dataType: DataType.Double, value: t + runTime })
+                activeProgram.currentStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: t })
+                // do whatever is necessary for the run
+                await sleepMilliSeconds(delta)
+            }
+            functionalUnitStateMachine.setState(stateStopped)
         }
 
         async function startProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
             // validate current state
+            // console.log("StartProgram")
             const currentState = this.getCurrentState();
             if (!(currentState && (currentState.includes(stateStopped) || currentState.includes(stateAborted)))) {
                 return { statusCode: StatusCodes.BadInvalidState }
@@ -446,7 +482,7 @@ const workshopStep = 10;
 
         // stop here if we only want to show step 9
         if (workshopStep < 10) return
-        const deviceHelper = new LADSDeviceHelper(luminescenceReaderDevice, {initializationTime: 2000, shutdownTime: 2000})
+        const deviceHelper = new LADSDeviceHelper(luminescenceReaderDevice, {initializationTime: 2000, shutdownTime: 2000, raiseEvents: true})
 
     } catch (err) {
         console.log(err);

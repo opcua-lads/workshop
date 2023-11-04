@@ -19,7 +19,9 @@ import {
     UAMultiStateDiscrete,
     UAObject,
     UAProperty,
-    UATwoStateDiscrete} from "node-opcua"
+    UAString,
+    UATwoStateDiscrete,
+    UAVariableT} from "node-opcua"
 import { UADevice, UALockingServices } from "node-opcua-nodeset-di"
 
 //---------------------------------------------------------------
@@ -30,7 +32,14 @@ export interface LADSDevice extends UADevice {
     stateMachine: LADSDeviceStateMachine
     machineryItemState?: UAFiniteStateMachine
     machineryOperationMode?: MachineryOperationModeStateMachine
+    operationalLocation?: UAProperty<UAString, DataType.String>
+    hierarchicalLocation?: UAProperty<UAString, DataType.String>
+    identifictaion?: LADSIdentifictaion
     lock?: UALockingServices
+}
+
+export interface LADSIdentifictaion extends UAObject {
+    
 }
 
 export interface LADSFunctionalUnitSet  {
@@ -160,6 +169,7 @@ export interface LADSTwoStateDiscreteControlFunction extends LADSBaseControlFunc
 // Interfaces for LADS program-manager
 //---------------------------------------------------------------
 export interface LADSActiveProgram {
+    currentProgramTemplate?: UAProperty<any, DataType.ExtensionObject>
     currentRuntime?: UAProperty<number, DataType.Double>
     currentPauseTime?: UAProperty<number, DataType.Double>
     currentStepName?: UAProperty<LocalizedText, DataType.LocalizedText>
@@ -169,7 +179,6 @@ export interface LADSActiveProgram {
     estimatedStepRuntime?: UAProperty<number, DataType.Double>
     estimatedStepNumbers?: UAProperty<number, DataType.UInt32>
     deviceProgramRunId?: UAProperty<string, DataType.String>
-    programTemplate?: LADSProgramTemplate
 }
 
 export interface LADSProgramTemplateSet {
@@ -190,8 +199,8 @@ export interface LADSResultSet {
 
 export interface LADSResult extends UAObject {
     name: UAProperty<string, DataType.String>
-    supervisoryJobId: UAProperty<string, DataType.String>
-    supervisoryTaskId: UAProperty<string, DataType.String>
+    supervisoryJobId?: UAProperty<string, DataType.String>
+    supervisoryTaskId?: UAProperty<string, DataType.String>
     properties: UAProperty<any, DataType.ExtensionObject>
     samples: UAProperty<any, DataType.ExtensionObject>
     deviceProgramRunId?: UAProperty<string, DataType.String>

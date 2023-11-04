@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-09-05T10:22:59.831Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-11-03T14:22:56.483Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -62,7 +62,7 @@
             <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
         </Extension>
         <Extension>
-            <si:GeneratorExtension Hash="3c3890b86ee10ad86dc7a06df89839cf"/>
+            <si:GeneratorExtension Hash="6f74b8d784fb3948ba7e45d8231a41bc"/>
         </Extension>
     </Extensions>
     <UADataType NodeId="ns=4;i=3003" BrowseName="4:KeyValueType">
@@ -172,15 +172,6 @@
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5247" BrowseName="4:ProgramTemplate" ParentNodeId="ns=4;i=1040">
-        <DisplayName>ProgramTemplate</DisplayName>
-        <Description>The ProgramTemplateType provides a program template.</Description>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1040</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1018</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAObject>
     <UAObjectType NodeId="ns=4;i=1025" BrowseName="4:LADSComponentsType">
         <DisplayName>LADSComponentsType</DisplayName>
         <Description>The LADSComponentsType is a type used for structuring objects of type LADSComponentsType in an unordered list structure.</Description>
@@ -189,13 +180,13 @@
             <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
         </References>
     </UAObjectType>
-    <UAVariable DataType="String" NodeId="ns=4;i=6075" BrowseName="NodeVersion" ParentNodeId="ns=4;i=1041" UserAccessLevel="3" AccessLevel="3">
+    <UAVariable DataType="String" NodeId="ns=4;i=6075" BrowseName="NodeVersion" ParentNodeId="ns=4;i=61" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>NodeVersion</DisplayName>
         <Description>NodeVersion and the GeneralModelChangeEventType are mechanisms to notify clients that the content of the set has changed and shall be used as defined in OPC 10000-3.</Description>
         <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1041</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=61</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
         <Value>
             <uax:String>NaN</uax:String>
@@ -212,21 +203,21 @@
         <DisplayName>FunctionalUnitSetType</DisplayName>
         <Description>The FunctionalUnitSetType provides a set of a Functional Unit.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1026" BrowseName="4:FunctionSetType">
         <DisplayName>FunctionSetType</DisplayName>
         <Description>The FunctionSetType is a type used for structuring objects of type FunctionType in an unordered list structure.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1019" BrowseName="4:ProgramTemplateSetType">
         <DisplayName>ProgramTemplateSetType</DisplayName>
         <Description>The ProgramTemplateSetType is a type used for structuring objects of type ProgramTemplateType in an unordered list structure.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1018" BrowseName="4:ProgramTemplateType">
@@ -294,7 +285,7 @@
         <DisplayName>SupportedPropertiesSetType</DisplayName>
         <Description>The SupportedPropertiesSetType provides a set of properties which are supported as members of a properties list Argument for Method calls such as, FunctionalUnit.StartFunctions() or ActiveProgram.Start().</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1035" BrowseName="4:SupportedPropertyType">
@@ -308,7 +299,7 @@
         <DisplayName>ResultFileSetType</DisplayName>
         <Description>The ResultFileSetType is a type used for structuring objects of type ResultFileType in an unordered list structure.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1001" BrowseName="4:ResultFileType">
@@ -349,7 +340,7 @@
         <DisplayName>ResultSetType</DisplayName>
         <Description>The ResultSetType is a type used for structuring objects of type ResultType in an unordered list structure.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1021" BrowseName="4:ResultType">
@@ -391,8 +382,8 @@
         <Description>SupervisoryJobId is the identifier for the execution of a specific workflow, consisting of one or multiple steps. It is provided as an argument Argument of the StartProgram() ny the supervisory system.Method which initiates the program run.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="SampleInfoType" ValueRank="1" NodeId="ns=4;i=6308" ArrayDimensions="1" BrowseName="4:Samples" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
@@ -445,8 +436,8 @@
         <Description>The VariableSetType is a type used for storing additional sample data that was created during a run.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1021</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=61</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1041</Reference>
         </References>
     </UAObject>
     <UAObjectType NodeId="ns=4;i=1010" BrowseName="4:CoverStateMachineType">
@@ -1123,7 +1114,7 @@
         <DisplayName>MaintenanceSetType</DisplayName>
         <Description>The SetType provides an unordered set of objects.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
             <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
         </References>
     </UAObjectType>
@@ -1197,8 +1188,8 @@
         <Description>Identification provides properties to identify a device.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1005</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1012</Reference>
         </References>
     </UAObject>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6600" BrowseName="CurrentState" ParentNodeId="ns=4;i=5191">
@@ -1337,7 +1328,7 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1026</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5003" BrowseName="1:Identification" ParentNodeId="ns=4;i=1003">
@@ -1572,64 +1563,10 @@
         <Description>The ActiveProgramType specifies the current state of operation of a FunctionalUnit. It provides context and information about the currently active program on the device. This allows users to follow the progress of a program run in a standardized fashion by organising steps into a flat, linear sequence.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5015</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1040</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAObject>
-    <UAObject NodeId="ns=4;i=5250" BrowseName="4:ProgramTemplate" ParentNodeId="ns=4;i=5218">
-        <DisplayName>ProgramTemplate</DisplayName>
-        <Description>The ProgramTemplateType provides a program template.</Description>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5218</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1018</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAObject>
-    <UAVariable DataType="DateTime" NodeId="ns=4;i=6575" BrowseName="4:Created" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Created</DisplayName>
-        <Description>Created is the time of the template’s creation.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6576" BrowseName="4:Description" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Description</DisplayName>
-        <Description>Description is a human-readable description of the template.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="DateTime" NodeId="ns=4;i=6577" BrowseName="4:Modified" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Modified</DisplayName>
-        <Description>Modified is the time of last modification.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6578" BrowseName="4:DeviceTemplateId" ParentNodeId="ns=4;i=5250">
-        <DisplayName>DeviceTemplateId</DisplayName>
-        <Description>The program template's identifier unique within the scope of the device.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6581" BrowseName="4:Version" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Version</DisplayName>
-        <Description>Version is the version of the template (the format is at the user’s discretion).</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
     <UAObject NodeId="ns=4;i=5021" BrowseName="4:ProgramTemplateSet" ParentNodeId="ns=4;i=5015">
         <DisplayName>ProgramTemplateSet</DisplayName>
         <Description>The ProgramTemplateSetType is a type used for structuring objects of type ProgramTemplateType in an unordered list structure.</Description>
@@ -2742,8 +2679,8 @@
         <Description>The ActiveProgramType specifies the current state of operation of a FunctionalUnit. It provides context and information about the currently active program on the device. This allows users to follow the progress of a program run in a standardized fashion by organising steps into a flat, linear sequence.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1006</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1040</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1040</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5020" BrowseName="4:ProgramTemplateSet" ParentNodeId="ns=4;i=1006">
@@ -2963,14 +2900,6 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAObjectType NodeId="ns=4;i=61" BrowseName="4:VariableSetType">
-        <DisplayName>VariableSetType</DisplayName>
-        <Description>The VariableSetType is a type used for storing additional sample data that was created during a run.</Description>
-        <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
-            <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
-        </References>
-    </UAObjectType>
     <UAObject SymbolicName="http___opcfoundation_org_UA_LADS_" NodeId="ns=4;i=5026" BrowseName="4:http://opcfoundation.org/UA/LADS/" ParentNodeId="i=11715">
         <DisplayName>http://opcfoundation.org/UA/LADS/</DisplayName>
         <References>
@@ -3267,7 +3196,7 @@
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6495" BrowseName="4:DeviceProgramRunId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
@@ -4454,19 +4383,11 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
-    <UAObjectType IsAbstract="true" NodeId="ns=4;i=1041" BrowseName="4:SetType">
-        <DisplayName>SetType</DisplayName>
-        <Description>The SetType provides an unordered set of objects.</Description>
-        <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">i=61</Reference>
-            <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
-        </References>
-    </UAObjectType>
-    <UAVariable NodeId="ns=4;i=6082" BrowseName="4:&lt;VariableSetElement&gt;" ParentNodeId="ns=4;i=61" UserAccessLevel="3" AccessLevel="3" SymbolicName="S_VariableSetElement_">
+    <UAVariable NodeId="ns=4;i=6082" BrowseName="4:&lt;VariableSetElement&gt;" ParentNodeId="ns=4;i=1041" UserAccessLevel="3" AccessLevel="3" SymbolicName="S_VariableSetElement_">
         <DisplayName>&lt;VariableSetElement&gt;</DisplayName>
         <Description>Placeholder for vendor-specific properties.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=61</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1041</Reference>
             <Reference ReferenceType="HasModellingRule">i=11508</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=62</Reference>
         </References>
@@ -4548,13 +4469,13 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5014" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1041">
+    <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5014" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=61">
         <DisplayName>&lt;SetElement&gt;</DisplayName>
         <Description>SetElement is the element of the set. Subtypes of the SetType will override this node.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1041</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=61</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=58</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5016" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1023">
@@ -4562,8 +4483,8 @@
         <Description>SetElement is the element of the set and is overridden with FunctionalUnitType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1023</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1003</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5027" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1026">
@@ -4571,8 +4492,8 @@
         <Description>SetElement is the element of the set and is overridden with FunctionType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1026</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1004</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5029" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1019">
@@ -4580,8 +4501,8 @@
         <Description>SetElement is the element of the set and is overridden with ProgramTemplateType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1019</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1018</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="SetElement" NodeId="ns=4;i=5048" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1033">
@@ -4589,8 +4510,8 @@
         <Description>SetElement is the element of the set and is overridden with SupportedPropertiesType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1033</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1035</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5060" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1022">
@@ -4598,8 +4519,8 @@
         <Description>SetElement is the element of the set and is overridden with ResultFileSetType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1022</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1001</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5062" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1020">
@@ -4607,8 +4528,8 @@
         <Description>SetElement is the element of the set and is overridden with ResultSetType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1020</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1021</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6081" BrowseName="4:LastOperatingTime" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
@@ -4939,13 +4860,13 @@
             </uax:ListOfExtensionObject>
         </Value>
     </UAVariable>
-    <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5086" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=61">
+    <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5086" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1041">
         <DisplayName>&lt;SetElement&gt;</DisplayName>
         <Description>Placeholder for one or more objects that hold vendor-specific data that was created during a run. Objects follow these rules: The type of each object shall be BaseObjectType. Each object may have arbitrary child nodes; The structure and data contained in each object are vendor specific; It is up to the vendor whether the list contains objects with the same kind of data or objects of different kinds of data; The structure may be nested.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=61</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1041</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=58</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5005" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1003">
@@ -5279,7 +5200,7 @@
         <DisplayName>ControllerParameterSetType</DisplayName>
         <Description>The SetType provides an unordered set of objects.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1041</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5023" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1049">
@@ -5288,7 +5209,7 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1049</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1048</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5058" BrowseName="4:Operational" ParentNodeId="ns=4;i=1047">
@@ -5353,7 +5274,7 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1052</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=61</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1041</Reference>
         </References>
     </UAObject>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6136" BrowseName="FalseState" ParentNodeId="ns=4;i=6007">
@@ -5487,15 +5408,15 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5006</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1005</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6032" ArrayDimensions="1" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7053" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>OutputArguments</DisplayName>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7053</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
         <Value>
             <uax:ListOfExtensionObject>
@@ -5935,7 +5856,7 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1027</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1028</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11510</Reference>
+            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
     <UAVariableType DataType="LocalizedText" NodeId="ns=4;i=2000" BrowseName="4:ExtendedStateVariableType">
@@ -6966,13 +6887,28 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6314" BrowseName="4:Author" ParentNodeId="ns=4;i=5250">
-        <DisplayName>Author</DisplayName>
-        <Description>Author is the user who created the template.</Description>
+    <UAObjectType IsAbstract="true" NodeId="ns=4;i=61" BrowseName="4:SetType">
+        <DisplayName>SetType</DisplayName>
+        <Description>The SetType provides an unordered set of objects.</Description>
         <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5250</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=61</Reference>
+            <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
+        </References>
+    </UAObjectType>
+    <UAObjectType NodeId="ns=4;i=1041" BrowseName="4:VariableSetType">
+        <DisplayName>VariableSetType</DisplayName>
+        <Description>The VariableSetType is a type used for storing additional sample data that was created during a run.</Description>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
+            <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
+        </References>
+    </UAObjectType>
+    <UAVariable DataType="NameNodeIdDataType" NodeId="ns=4;i=6315" BrowseName="4:CurrentProgramTemplate" ParentNodeId="ns=4;i=1040" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>CurrentProgramTemplate</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1040</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
 </UANodeSet>

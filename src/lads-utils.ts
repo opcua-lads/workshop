@@ -26,7 +26,9 @@ import {
     UAStateMachineEx,
     VariantLike,
     coerceNodeId,
-    promoteToStateMachine
+    promoteToStateMachine,
+    ExtensionObject, 
+    NodeId
 } from "node-opcua"
 import { 
     LADSDevice, 
@@ -44,8 +46,20 @@ export function getLADSNamespace(addressSpace: IAddressSpace): INamespace {
     return addressSpace.getNamespace('http://opcfoundation.org/UA/LADS/')
 }
 
+export function getAMBNamespace(addressSpace: IAddressSpace): INamespace {
+    return addressSpace.getNamespace('http://opcfoundation.org/UA/AMB/')
+}
+
 export function getMachineryNamespace(addressSpace: IAddressSpace): INamespace {
     return addressSpace.getNamespace('http://opcfoundation.org/UA/Machinery/')
+}
+
+export function constructNameNodeIdExtensionObject(addressSpace: IAddressSpace, name: string, nodeId: NodeId): ExtensionObject {
+    const ns = getAMBNamespace(addressSpace)
+    const dt = addressSpace.findDataType("NameNodeIdDataType", ns.index)
+    assert(dt)
+    const result = addressSpace.constructExtensionObject(dt, { Name: name, NodeId: nodeId})
+    return result
 }
 
 export function getLADSObjectType(addressSpace: IAddressSpace, objectType: string): UAObjectType {
@@ -114,7 +128,6 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
     })
     return functions
 }
-
 
 //---------------------------------------------------------------
 // buildLADSEventNotifierTree()
@@ -205,6 +218,9 @@ export class LADSDeviceHelper {
         this.device = device
         this.options = options
         const addressSpace = device.addressSpace
+
+        // provide some geographical location
+        device.operationalLocation?.setValueFromSource({dataType: DataType.String, value: "N 51 E 6.2"})
 
         // prepare event bubble up propagation
         buildLADSEventNotifierTree(device)
@@ -305,7 +321,7 @@ export class LADSDeviceHelper {
         if (!state) return
         this.raiseEvent(`state changed to ${state} .. `)
         if (!state.includes(stateDeviceOperate)) {
-            this.machineryItemState?.setState(stateMachineryItemNotAvailable)
+            this.adjustMachineryItemState()
         }
     }
 
@@ -336,14 +352,19 @@ export class LADSDeviceHelper {
         this.raiseEvent(`item state changed to ${state} .. `)
     }
 
+    adjustMachineryItemState(): number {
+        const functionalUnitStates = this.functionalUnitStateMachines.map((stateMachine => (state2str(stateMachine.getCurrentState()))))
+        const functionalUnitsRunnning = functionalUnitStates.reduce((count, state) => { return state.includes(stateRunning)?count +1:count }, 0)    
+        this.machineryItemState?.setState(functionalUnitsRunnning>0?stateMachineryItemExecuting:stateMachineryItemNotExecuting)
+        return functionalUnitsRunnning
+    }
+
     async onFunctionalUnitStateChanged(functionalUnit: LADSFunctionalUnit, stateMachine: UAStateMachineEx, dataValue: DataValueT<LocalizedText, DataType.LocalizedText>) { 
         const state = dataValue.value.value.text
         if (!state) return
         this.raiseEvent(`${functionalUnit.getDisplayName()} state changed to ${state} ..`)
         sleepMilliSeconds(50).then(() => {
-            const functionalUnitStates = this.functionalUnitStateMachines.map((stateMachine => (state2str(stateMachine.getCurrentState()))))
-            const functionalUnitsRunnning = functionalUnitStates.reduce((count, state) => { return state.includes(stateRunning)?count +1:count }, 0)    
-            this.machineryItemState?.setState(functionalUnitsRunnning>0?stateMachineryItemExecuting:stateMachineryItemNotExecuting)
+            this.adjustMachineryItemState()
         })        
     }
 }
