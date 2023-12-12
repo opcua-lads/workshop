@@ -2,3 +2,11 @@ node_modules
 out
 presentation/*
 !presentation/*.pdf
+nodesets/AutomatedThermoDesorper.xml
+nodesets/BPC.xml
+nodesets/Centrifuge.xml
+nodesets/HPLC.xml
+nodesets/Thermostat.xml
+nodesets/VaccuSelect.xml
+nodesets/WorktableIncubator.xml
+src/lads-multi-models.ts
