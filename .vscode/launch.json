@@ -14,6 +14,17 @@
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
             ],
+        },
+        {
+            "name": "LADS MultiModels",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/lads-multi-models.ts",
+            "sourceMaps": true,
+            "preLaunchTask": "tsc: build",
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ],
         }
     ]
 }
