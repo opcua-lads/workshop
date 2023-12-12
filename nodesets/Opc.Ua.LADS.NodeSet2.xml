@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2023-11-03T14:22:56.483Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd" xmlns:s3="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s4="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:s5="http://yourorganisation.org/helper/Types.xsd">
+<UANodeSet LastModified="2023-11-28T10:47:57.562Z" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd">
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/AMB/</Uri>
@@ -7,7 +7,7 @@
         <Uri>http://opcfoundation.org/UA/LADS/</Uri>
     </NamespaceUris>
     <Models>
-        <Model ModelUri="http://opcfoundation.org/UA/LADS/" PublicationDate="2023-08-30T00:00:00Z" Version="1.0.0">
+        <Model ModelUri="http://opcfoundation.org/UA/LADS/" PublicationDate="2023-11-30T00:00:00Z" Version="1.0.0">
             <RequiredModel ModelUri="http://opcfoundation.org/UA/" PublicationDate="2022-11-01T00:00:00Z" Version="1.05.02"/>
             <RequiredModel ModelUri="http://opcfoundation.org/UA/DI/" PublicationDate="2022-11-03T00:00:00Z" Version="1.04.0"/>
             <RequiredModel ModelUri="http://opcfoundation.org/UA/AMB/" PublicationDate="2022-11-01T00:00:00Z" Version="1.01.0"/>
@@ -34,6 +34,7 @@
         <Alias Alias="HasTypeDefinition">i=40</Alias>
         <Alias Alias="HasModellingRule">i=37</Alias>
         <Alias Alias="HasEncoding">i=38</Alias>
+        <Alias Alias="HasDescription">i=39</Alias>
         <Alias Alias="HasCause">i=53</Alias>
         <Alias Alias="ToState">i=52</Alias>
         <Alias Alias="FromState">i=51</Alias>
@@ -58,15 +59,10 @@
         <Alias Alias="KeyValueType">ns=4;i=3003</Alias>
     </Aliases>
     <Extensions>
-        <Extension>
-            <si:Generator Product="SiOME" Edition="Standard" Version="2.5.12"/>
-        </Extension>
-        <Extension>
-            <si:GeneratorExtension Hash="6f74b8d784fb3948ba7e45d8231a41bc"/>
-        </Extension>
     </Extensions>
     <UADataType NodeId="ns=4;i=3003" BrowseName="4:KeyValueType">
         <DisplayName>KeyValueType</DisplayName>
+        <Description>A key-value pair similar to 0:KeyValuePair which uses 0:String instead of 0:Qualifiedname for easu of use.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=22</Reference>
             <Reference ReferenceType="HasEncoding">ns=4;i=5056</Reference>
@@ -74,12 +70,17 @@
             <Reference ReferenceType="HasEncoding">ns=4;i=5045</Reference>
         </References>
         <Definition Name="4:KeyValueType">
-            <Field DataType="String" Name="Key"/>
-            <Field DataType="String" Name="Value"/>
+            <Field DataType="String" Name="Key">
+                <Description>Unique key to identify a value.</Description>
+            </Field>
+            <Field DataType="String" Name="Value">
+                <Description>The value associated with the key.</Description>
+            </Field>
         </Definition>
     </UADataType>
     <UADataType NodeId="ns=4;i=3002" BrowseName="4:SampleInfoType">
         <DisplayName>SampleInfoType</DisplayName>
+        <Description>This DataType contains metadata for a sample, specifically data on the identification and location of the sample in a container.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=22</Reference>
             <Reference ReferenceType="HasEncoding">ns=4;i=5043</Reference>
@@ -87,10 +88,18 @@
             <Reference ReferenceType="HasEncoding">ns=4;i=5042</Reference>
         </References>
         <Definition Name="4:SampleInfoType">
-            <Field DataType="String" Name="ContainerId"/>
-            <Field DataType="String" Name="SampleId"/>
-            <Field DataType="String" Name="Position"/>
-            <Field DataType="String" Name="CustomData"/>
+            <Field DataType="String" Name="ContainerId">
+                <Description>Identifier of the container the sample is in.</Description>
+            </Field>
+            <Field DataType="String" Name="SampleId">
+                <Description>Identifier of the sample.</Description>
+            </Field>
+            <Field DataType="String" Name="Position">
+                <Description>Vendor-specific description of the position of the sample in the container.</Description>
+            </Field>
+            <Field DataType="String" Name="CustomData">
+                <Description>Custom data field for vendor-specific data.</Description>
+            </Field>
         </Definition>
     </UADataType>
     <UAObjectType NodeId="ns=4;i=1040" BrowseName="4:ActiveProgramType">
@@ -201,21 +210,21 @@
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1023" BrowseName="4:FunctionalUnitSetType">
         <DisplayName>FunctionalUnitSetType</DisplayName>
-        <Description>The FunctionalUnitSetType provides a set of a Functional Unit.</Description>
+        <Description>The FunctionalUnitSetType provides a set of a FunctionalUnit objects.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1026" BrowseName="4:FunctionSetType">
         <DisplayName>FunctionSetType</DisplayName>
-        <Description>The FunctionSetType is a type used for structuring objects of type FunctionType in an unordered list structure.</Description>
+        <Description>The FunctionSetType is used for organising FunctionType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1019" BrowseName="4:ProgramTemplateSetType">
         <DisplayName>ProgramTemplateSetType</DisplayName>
-        <Description>The ProgramTemplateSetType is a type used for structuring objects of type ProgramTemplateType in an unordered list structure.</Description>
+        <Description>The ProgramTemplateSetType is used for organising ProgramTemplateType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
@@ -265,7 +274,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6259" BrowseName="4:DeviceTemplateId" ParentNodeId="ns=4;i=1018">
         <DisplayName>DeviceTemplateId</DisplayName>
-        <Description>The program template's identifier unique within the scope of the device.</Description>
+        <Description>DeviceTemplateId is the program template's identifier unique within the scope of the device.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1018</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -297,14 +306,14 @@
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1022" BrowseName="4:ResultFileSetType">
         <DisplayName>ResultFileSetType</DisplayName>
-        <Description>The ResultFileSetType is a type used for structuring objects of type ResultFileType in an unordered list structure.</Description>
+        <Description>The ResultFileSetType is used for organising ResultFileType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1001" BrowseName="4:ResultFileType">
         <DisplayName>ResultFileType</DisplayName>
-        <Description>The ResultFileType provides a description of a file that is part of a result of a program managers run.</Description>
+        <Description>ResultFile provides a description of a file that is part of a result of a program managers run.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=58</Reference>
         </References>
@@ -338,7 +347,7 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1020" BrowseName="4:ResultSetType">
         <DisplayName>ResultSetType</DisplayName>
-        <Description>The ResultSetType is a type used for structuring objects of type ResultType in an unordered list structure.</Description>
+        <Description>The ResultSetType is used for organising ResultType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
@@ -352,7 +361,7 @@
     </UAObjectType>
     <UAVariable DataType="String" NodeId="ns=4;i=6281" BrowseName="4:ApplicationUri" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>ApplicationUri</DisplayName>
-        <Description>Client provides information about the (remote) client which started the program run that generated the result.</Description>
+        <Description>ApplicationUri provides information about the remote client that initiated the program run generating the result. It must align with the ApplicationUri in the ApplicationDescription (refer to OPC 10000-4 section 7.1) of a Session (refer to OPC 10000-4 section 5.6.2). In instances where the program was initiated locally and cannot be attributed to an OPC UA Client, the ApplicationUri of the Server should be utilized.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -361,7 +370,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6396" BrowseName="4:Description" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>Description</DisplayName>
-        <Description>Description is the description of the result set.</Description>
+        <Description>Description is the human-readable description of the specific program run that created this result and the result itself.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -370,7 +379,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5081" BrowseName="4:FileSet" ParentNodeId="ns=4;i=1021">
         <DisplayName>FileSet</DisplayName>
-        <Description>The ResultFileSetType is a type used for structuring objects of type ResultFileType in an unordered list structure.</Description>
+        <Description>The ResultFileSetType is used for organising ResultFileType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1022</Reference>
@@ -379,11 +388,11 @@
     </UAObject>
     <UAVariable DataType="String" NodeId="ns=4;i=6393" BrowseName="4:SupervisoryJobId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>SupervisoryJobId</DisplayName>
-        <Description>SupervisoryJobId is the identifier for the execution of a specific workflow, consisting of one or multiple steps. It is provided as an argument Argument of the StartProgram() ny the supervisory system.Method which initiates the program run.</Description>
+        <Description>SupervisoryJobId is the identifier for the execution of a specific workflow consisting of one or multiple tasks. It is provided as an Argument of the StartProgram() Method which initiates the program run.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="SampleInfoType" ValueRank="1" NodeId="ns=4;i=6308" ArrayDimensions="1" BrowseName="4:Samples" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
@@ -397,7 +406,7 @@
     </UAVariable>
     <UAVariable DataType="DateTime" NodeId="ns=4;i=6307" BrowseName="4:Started" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>Started</DisplayName>
-        <Description>Started is the timestamp of when the program is started.</Description>
+        <Description>Started is the timestamp of when the program was started.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -415,7 +424,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5112" BrowseName="4:ProgramTemplate" ParentNodeId="ns=4;i=1021">
         <DisplayName>ProgramTemplate</DisplayName>
-        <Description>The ProgramTemplateType provides a program template.</Description>
+        <Description>ProgramTemplate is an immutable copy of the Program Template attributes with which the result was generated and is provided for documentation and traceability purposes. This copy will not change even if the original is changed.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1018</Reference>
@@ -424,7 +433,7 @@
     </UAObject>
     <UAVariable DataType="String" NodeId="ns=4;i=6282" BrowseName="4:User" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>User</DisplayName>
-        <Description>User provides information about the (remote) client which started the program run which that generated the result.</Description>
+        <Description>User provides information about the remote client user that initiated the program run generating the result. User must be a human-readable value, based on the UserIdentityToken (refer to OPC 10000-4 section 7.36). In instances where the program was initiated locally and cannot be attributed to an OPC UA Client, the local user of the Server should be utilized.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -433,7 +442,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5067" BrowseName="4:VariableSet" ParentNodeId="ns=4;i=1021">
         <DisplayName>VariableSet</DisplayName>
-        <Description>The VariableSetType is a type used for storing additional sample data that was created during a run.</Description>
+        <Description>The VariableSetType is used for storing additional sample data that was created during a run.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -442,6 +451,7 @@
     </UAObject>
     <UAObjectType NodeId="ns=4;i=1010" BrowseName="4:CoverStateMachineType">
         <DisplayName>CoverStateMachineType</DisplayName>
+        <Description>he CoverStateMachineType is used to control the lid, door, or cover of a laboratory device. One Device may have any arbitrary number of lids, doors, covers and their corresponding CoverFunction.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=2771</Reference>
         </References>
@@ -455,6 +465,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5028" BrowseName="4:Closed" ParentNodeId="ns=4;i=1010">
         <DisplayName>Closed</DisplayName>
+        <Description>Closed is the state of the cover when it is closed.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -473,6 +484,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5050" BrowseName="4:Error" ParentNodeId="ns=4;i=1010">
         <DisplayName>Error</DisplayName>
+        <Description>Error is the state of the cover when it is in an error state. For example, if the locking did not work properly or there is some kind of malfunction on locking/closing the Device cover.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -498,6 +510,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5049" BrowseName="4:Locked" ParentNodeId="ns=4;i=1010">
         <DisplayName>Locked</DisplayName>
+        <Description>Locked is the state of the cover when it is closed and locked.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -523,6 +536,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5025" BrowseName="4:Opened" ParentNodeId="ns=4;i=1010">
         <DisplayName>Opened</DisplayName>
+        <Description>Opened is the state of the cover when it is opened.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -612,7 +626,7 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
         <Value>
-            <uax:UInt32>5</uax:UInt32>
+            <uax:UInt32>4</uax:UInt32>
         </Value>
     </UAVariable>
     <UAObject NodeId="ns=4;i=5260" BrowseName="4:OperateToSleep" ParentNodeId="ns=4;i=1039">
@@ -634,7 +648,7 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
         <Value>
-            <uax:UInt32>6</uax:UInt32>
+            <uax:UInt32>2</uax:UInt32>
         </Value>
     </UAVariable>
     <UAObject NodeId="ns=4;i=5177" BrowseName="4:Initialization" ParentNodeId="ns=4;i=1039">
@@ -674,11 +688,12 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
         <Value>
-            <uax:UInt32>7</uax:UInt32>
+            <uax:UInt32>1</uax:UInt32>
         </Value>
     </UAVariable>
     <UAObject NodeId="ns=4;i=5180" BrowseName="4:Shutdown" ParentNodeId="ns=4;i=1039">
         <DisplayName>Shutdown</DisplayName>
+        <Description>The Device is in its power-down sequence and cannot perform any other Task.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -697,6 +712,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5259" BrowseName="4:Sleep" ParentNodeId="ns=4;i=1039">
         <DisplayName>Sleep</DisplayName>
+        <Description>The Device is still powered on and its OPC UA Server is still running, but it is not ready to perform any Tasks until it transitions to the Operate state. This state can be used to represent a PowerSave state where a Device may shut down some of its Components, such as the GUI.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1039</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -728,6 +744,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5160" BrowseName="4:Aborted" ParentNodeId="ns=4;i=1038">
         <DisplayName>Aborted</DisplayName>
+        <Description>Aborted maintains unit/device status information relevant to the Abort condition. The unit/device can only exit the Aborted state after an explicit Clear command subsequent to intervention to correct and reset the detected unit/device faults.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -768,6 +785,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5159" BrowseName="4:Aborting" ParentNodeId="ns=4;i=1038">
         <DisplayName>Aborting</DisplayName>
+        <Description>The Aborting state can be entered at any time in response to the Abort command or in the event of a unit/device fault. The aborting logic will bring the unit/device to a rapid safe stop.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -807,6 +825,7 @@
     </UAVariable>
     <UAVariable DataType="NodeId" ValueRank="1" NodeId="ns=4;i=6473" ArrayDimensions="1" BrowseName="AvailableStates" ParentNodeId="ns=4;i=1038">
         <DisplayName>AvailableStates</DisplayName>
+        <Description>Set of states supported by the implementation.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
@@ -815,6 +834,7 @@
     </UAVariable>
     <UAVariable DataType="NodeId" ValueRank="1" NodeId="ns=4;i=6472" ArrayDimensions="1" BrowseName="AvailableTransitions" ParentNodeId="ns=4;i=1038">
         <DisplayName>AvailableTransitions</DisplayName>
+        <Description>Set of transitions supported by the implementation.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
@@ -830,6 +850,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5143" BrowseName="4:Clearing" ParentNodeId="ns=4;i=1038">
         <DisplayName>Clearing</DisplayName>
+        <Description>Clearing is initiated by a state command to clear faults that may have occurred when Aborting that are present in the Aborted state.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -848,12 +869,14 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1036" BrowseName="4:RunningStateMachineType">
         <DisplayName>RunningStateMachineType</DisplayName>
+        <Description>The RunningStateMachineType is a sub-state machine of the FunctionalStateMachine and includes detailed substates.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=2771</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5128" BrowseName="4:Complete" ParentNodeId="ns=4;i=1036">
         <DisplayName>Complete</DisplayName>
+        <Description>Complete indicates that the process associated with the active protocol has come to its defined end. The unit/device will wait in this state until a Reset command is issued (in which case it will transition to Resetting), or until the unit/device is Stopped or Aborted.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -872,6 +895,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5127" BrowseName="4:Completing" ParentNodeId="ns=4;i=1036">
         <DisplayName>Completing</DisplayName>
+        <Description>Completing: Once the process associated with the current mode has reached a defined threshold (e.g., the required number of samples for the current job have been analysed or the cultivation/fermentation process has reached is final stage in terms of cell count, product yield, cell viability, etc.), the unit/device transitions from Execute to Completing. All steps necessary to shut down the current process are carried out in this state. The unit/device then transitions automatically to the Complete state.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -890,6 +914,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5168" BrowseName="4:Execute" ParentNodeId="ns=4;i=1036">
         <DisplayName>Execute</DisplayName>
+        <Description>In state Execute the unit/device is actively carrying out the behaviour or activity defined by the selected protocol and its associated processing mode. Examples of a unit/device in processing mode include when the unit/device is performing an analytical run, cultivation/fermentation in the case of a bioreactor, or another defined unit of operation provided by the instrument (e.g., separation in the case of a centrifuge).</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -908,6 +933,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5124" BrowseName="4:Held" ParentNodeId="ns=4;i=1036">
         <DisplayName>Held</DisplayName>
+        <Description>In state Held the unit/device is paused, waiting for internal process conditions to clear. In this state, the unit/device shall not continue processing, although it may dry cycle if required (e.g., maintaining process conditions critical for the preservation of the samples or culture). A transition to Unholding will occur once internal unit/device conditions have cleared, or if the Unhold command is initiated by an operator.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -933,6 +959,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5123" BrowseName="4:Holding" ParentNodeId="ns=4;i=1036">
         <DisplayName>Holding</DisplayName>
+        <Description>In state Holding the unit/device will transition from Execute to Holding if conditions internal to the unit/device require a pause in processing. Examples of such conditions include low levels of materials required for processing (e.g., consumables, reagents, buffers, etc.) or other minor issues requiring operator service. After all steps required to hold the unit/device have been completed, the unit/device will transition automatically to the Held state.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -951,6 +978,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5120" BrowseName="4:Idle" ParentNodeId="ns=4;i=1036">
         <DisplayName>Idle</DisplayName>
+        <Description>In state Idle the unit/device is in an error-free state, waiting to start. The unit/device transitions automatically to Idle after all steps necessary for Resetting have been completed. All conditions achieved during Resetting are maintained. A Start command will transition the unit/device from Idle to Starting.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -976,6 +1004,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5119" BrowseName="4:Resetting" ParentNodeId="ns=4;i=1036">
         <DisplayName>Resetting</DisplayName>
+        <Description>Resetting: In response to a Reset command, the unit/device will transition to Resetting from either Stopped or Complete. In this state the unit/device attempts to clear any standing errors or stop causes. If successful, the unit/device transitions to Idle. No hazardous motion should occur while in this state.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -994,6 +1023,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5117" BrowseName="4:Starting" ParentNodeId="ns=4;i=1036">
         <DisplayName>Starting</DisplayName>
+        <Description>In state Starting the unit/device completes all steps necessary to begin execution of the active protocol. Typical steps during this state include but are not limited to inspecting system setup (checking sufficient supplies of resources and consumables), priming of fluids, homing of handling systems, or equilibration of process conditions. A Start command will cause the unit/device to transition from Idle to Starting. The unit/device will transition automatically from Starting to Execute once all required steps have been completed.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -1019,6 +1049,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5121" BrowseName="4:Suspended" ParentNodeId="ns=4;i=1036">
         <DisplayName>Suspended</DisplayName>
+        <Description>In state Suspended the unit/device is paused, waiting for external process conditions to clear. In this state, the unit/device shall not continue processing, but may dry cycle if required (e.g., maintaining process conditions critical for the preservation of the samples or culture, including but not limited to temperature, oxygen or pH levels, etc.). Once external conditions have returned to normal, the unit/device will transition to Unsuspending, with or without operator intervention.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -1037,6 +1068,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5118" BrowseName="4:Suspending" ParentNodeId="ns=4;i=1036">
         <DisplayName>Suspending</DisplayName>
+        <Description>The unit/device will transition from Execute to Suspending if conditions external to the unit/device require a pause in processing. Such conditions include faults to upstream or downstream equipment. The decision to Suspend may be made by a human operator supervising the process, an automated supervisory system monitoring the conditions of the overall process line/workflow, or by unit/device Sensors detecting downstream blockages or upstream scarcity of samples, etc.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -1069,6 +1101,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5125" BrowseName="4:Unholding" ParentNodeId="ns=4;i=1036">
         <DisplayName>Unholding</DisplayName>
+        <Description>Unholding: After all internal process conditions that caused the unit/device to hold have cleared, the unit/device completes all steps required to resume execution of the active protocol. Once all required actions to unhold the unit/device have been completed, the unit/device will transition automatically to the Execute state.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -1094,6 +1127,7 @@
     </UAMethod>
     <UAObject NodeId="ns=4;i=5122" BrowseName="4:Unsuspending" ParentNodeId="ns=4;i=1036">
         <DisplayName>Unsuspending</DisplayName>
+        <Description>Unsuspending: After all external process conditions that caused the unit/device to suspend have cleared, the unit/device completes all steps required to resume execution of the active protocol.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -1112,7 +1146,7 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1027" BrowseName="4:MaintenanceSetType">
         <DisplayName>MaintenanceSetType</DisplayName>
-        <Description>The SetType provides an unordered set of objects.</Description>
+        <Description>The MaintenanceSetType is a set containing all maintenance tasks for a Device or Component according to the recommendations in OPC UA 10000-110.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
             <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
@@ -1120,6 +1154,7 @@
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1028" BrowseName="4:MaintenanceTaskType">
         <DisplayName>MaintenanceTaskType</DisplayName>
+        <Description>The MaintenanceTaskType shall be used to implement instances of maintenance tasks applicable at both the Device and Component levels. Maintenance tasks include activities such as periodic maintenance, cleaning, calibration, and validation.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=1;i=15739</Reference>
             <Reference ReferenceType="HasInterface">ns=2;i=1012</Reference>
@@ -1134,6 +1169,7 @@
     </UAMethod>
     <UAVariable DataType="UtcTime" NodeId="ns=4;i=6360" BrowseName="4:LastExecutionDate" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>LastExecutionDate</DisplayName>
+        <Description>LastExecutionDate is the date when the Task was last performed. Optional, as the Task may have never run before.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -1142,6 +1178,7 @@
     </UAVariable>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6362" BrowseName="4:RecurrencePeriod" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>RecurrencePeriod</DisplayName>
+        <Description>RecurrencePeriod is the period of repetition of the Task, specified in milliseconds. Optional, as not all Tasks have a recurrence period.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -1157,7 +1194,7 @@
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5111" BrowseName="3:Components" ParentNodeId="ns=4;i=1002">
         <DisplayName>Components</DisplayName>
-        <Description>The LADSComponentsType is a type used for structuring objects of type LADSComponentsType in an unordered list structure.</Description>
+        <Description>Components is used for structuring objects of type LADSComponentsType in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5063</Reference>
@@ -1167,7 +1204,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5002" BrowseName="4:FunctionalUnitSet" ParentNodeId="ns=4;i=1002">
         <DisplayName>FunctionalUnitSet</DisplayName>
-        <Description>The FunctionalUnitSetType provides a set of a Functional Unit.</Description>
+        <Description>The FunctionalUnitSetType provides a set of a FunctionalUnit objects.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1023</Reference>
@@ -1185,9 +1222,10 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5096" BrowseName="1:Identification" ParentNodeId="ns=4;i=1002">
         <DisplayName>Identification</DisplayName>
-        <Description>Identification provides properties to identify a device.</Description>
+        <Description>Identification provides properties to identify a device or component.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
+            <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5063</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=3;i=1012</Reference>
         </References>
@@ -1229,9 +1267,9 @@
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAObject NodeId="ns=4;i=5191" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1002">
-        <DisplayName>StateMachine</DisplayName>
-        <Description>The LADSDeviceStateMachineType state machine represents the Device’s operation mode. It is inspired by the AnalyserDeviceStateMachineType from the Analyzer Devices Specification.</Description>
+    <UAObject NodeId="ns=4;i=5191" BrowseName="4:DeviceState" ParentNodeId="ns=4;i=1002">
+        <DisplayName>DeviceState</DisplayName>
+        <Description>DeviceState represents the Device’s state of operation. It is inspired by the AnalyserDeviceStateMachineType from the Analyzer Devices Specification.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1039</Reference>
@@ -1240,7 +1278,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5092" BrowseName="4:Maintenance" ParentNodeId="ns=4;i=1002">
         <DisplayName>Maintenance</DisplayName>
-        <Description>The SetType provides an unordered set of objects.</Description>
+        <Description>The MaintenanceSetType is a set containing all maintenance tasks for a Device or Component according to the recommendations in OPC UA 10000-110.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -1287,6 +1325,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5095" BrowseName="1:Identification" ParentNodeId="ns=4;i=1024">
         <DisplayName>Identification</DisplayName>
+        <Description>Identification provides properties to identify a device or component.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=3;i=1005</Reference>
@@ -1295,7 +1334,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5106" BrowseName="4:Maintenance" ParentNodeId="ns=4;i=1024">
         <DisplayName>Maintenance</DisplayName>
-        <Description>The SetType provides an unordered set of objects.</Description>
+        <Description>The MaintenanceSetType is a set containing all maintenance tasks for a Device or Component according to the recommendations in OPC UA 10000-110.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1027</Reference>
@@ -1324,7 +1363,7 @@
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5008" BrowseName="4:FunctionSet" ParentNodeId="ns=4;i=1003">
         <DisplayName>FunctionSet</DisplayName>
-        <Description>The FunctionSetType is a type used for structuring objects of type FunctionType in an unordered list structure.</Description>
+        <Description>The FunctionSetType is used for organising FunctionType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1026</Reference>
@@ -1342,7 +1381,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5004" BrowseName="1:Lock" ParentNodeId="ns=4;i=1003">
         <DisplayName>Lock</DisplayName>
-        <Description>Used to lock the topology element.</Description>
+        <Description>Used to lock the FunctionalUnit.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=6388</Reference>
@@ -1551,7 +1590,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5015" BrowseName="4:ProgramManager" ParentNodeId="ns=4;i=1003">
         <DisplayName>Program Manager</DisplayName>
-        <Description>The ProgramManagerType provides the functional unit's program manager.</Description>
+        <Description>The ProgramManager provides the functional unit's program manager.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1006</Reference>
@@ -1560,7 +1599,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5218" BrowseName="4:ActiveProgram" ParentNodeId="ns=4;i=5015">
         <DisplayName>ActiveProgram</DisplayName>
-        <Description>The ActiveProgramType specifies the current state of operation of a FunctionalUnit. It provides context and information about the currently active program on the device. This allows users to follow the progress of a program run in a standardized fashion by organising steps into a flat, linear sequence.</Description>
+        <Description>The ActiveProgram specifies the current state of operation of a FunctionalUnit. It provides context and information about the currently active program on the device. This allows users to follow the progress of a program run in a standardized fashion by organising steps into a flat, linear sequence.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5015</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -1569,7 +1608,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5021" BrowseName="4:ProgramTemplateSet" ParentNodeId="ns=4;i=5015">
         <DisplayName>ProgramTemplateSet</DisplayName>
-        <Description>The ProgramTemplateSetType is a type used for structuring objects of type ProgramTemplateType in an unordered list structure.</Description>
+        <Description>The ProgramTemplateSetType is used for organising ProgramTemplateType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5015</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1019</Reference>
@@ -1581,8 +1620,8 @@
         <Description>NodeVersion and the GeneralModelChangeEventType are mechanisms to notify clients that the content of the set has changed and shall be used as defined in OPC 10000-3.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5021</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
         <Value>
             <uax:String>NaN</uax:String>
@@ -1590,7 +1629,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5022" BrowseName="4:ResultSet" ParentNodeId="ns=4;i=5015">
         <DisplayName>ResultSet</DisplayName>
-        <Description>The ResultSetType is a type used for structuring objects of type ResultType in an unordered list structure.</Description>
+        <Description>The ResultSetType is used for organising ResultType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5015</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1020</Reference>
@@ -1608,7 +1647,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5116" BrowseName="4:SupportedPropertiesSet" ParentNodeId="ns=4;i=1003">
         <DisplayName>SupportedPropertiesSet</DisplayName>
-        <Description>The SupportedPropertiesSetType provides a set of properties which are supported as members of a properties list Argument for Method calls such as, FunctionalUnit.StartFunctions() or ActiveProgram.Start().</Description>
+        <Description>SupportedPropertiesSet provides a set of properties which are supported as members of a properties list Argument for Method calls such as, FunctionalUnit.StartFunctions() or ActiveProgram.Start().</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1033</Reference>
@@ -1624,7 +1663,7 @@
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5012" BrowseName="4:Configuration" ParentNodeId="ns=4;i=1004">
         <DisplayName>Configuration</DisplayName>
-        <Description>Used to organize parameters for configuration of this function.</Description>
+        <Description>Configuration is used to organize parameters for configuration of the Function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1004</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
@@ -1633,7 +1672,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5013" BrowseName="4:FunctionSet" ParentNodeId="ns=4;i=1004">
         <DisplayName>Function Set</DisplayName>
-        <Description>The FunctionSetType is a type used for structuring objects of type FunctionType in an unordered list structure.</Description>
+        <Description>The FunctionSetType is used for organising FunctionType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1004</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1026</Reference>
@@ -1660,12 +1699,14 @@
     </UAVariable>
     <UAObjectType IsAbstract="true" NodeId="ns=4;i=1007" BrowseName="4:BaseControlFunctionType">
         <DisplayName>BaseControlFunctionType</DisplayName>
+        <Description>The BaseControlFunctionType provides an abstract superclass for all control functions.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1004</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5068" BrowseName="4:AlarmMonitor" ParentNodeId="ns=4;i=1007">
         <DisplayName>AlarmMonitor</DisplayName>
+        <Description>AlarmMonitor indicates whether the deviation from a set point exceeds the limit. See: 10000-9: Alarms &amp; Conditions | ExclusiveDeviationAlarmType.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1007</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=9764</Reference>
@@ -2092,6 +2133,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5046" BrowseName="4:Operational" ParentNodeId="ns=4;i=1007">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational is a FunctionalGroup that shall organize the CurrentState property of the StateMachine and all its remote invocable Methods. Furthermore, it shall organize at least the CurrentValue and TargetValue variables.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1007</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
@@ -2103,8 +2145,8 @@
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5038</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5046</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="NodeId" NodeId="ns=4;i=6042" BrowseName="Id" ParentNodeId="ns=4;i=6079">
@@ -2129,8 +2171,9 @@
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAMethod>
-    <UAObject NodeId="ns=4;i=5038" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1007">
-        <DisplayName>StateMachine</DisplayName>
+    <UAObject NodeId="ns=4;i=5038" BrowseName="4:ControlFunctionState" ParentNodeId="ns=4;i=1007">
+        <DisplayName>ControlFunctionState</DisplayName>
+        <Description>ControlFunctionState is a state machine which represents the execution state and controls the execution of the Function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1007</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
@@ -2139,18 +2182,21 @@
     </UAObject>
     <UAObjectType NodeId="ns=4;i=1009" BrowseName="4:AnalogControlFunctionType">
         <DisplayName>AnalogControlFunctionType</DisplayName>
+        <Description>The AnalogControlFunctionType describes an analogue control function (using analogue values). More specialized analogue control functions can be derived from this ObjectType.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1007</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1014" BrowseName="4:AnalogControlFunctionWithTotalizerType">
         <DisplayName>AnalogControlFunctionWithTotalizerType</DisplayName>
+        <Description>The AnalogControlFunctionWithTotalizerType describes an analogue control (using analogue values) function with totalizer.  Typical usage examples include but are not limited to fluid controllers where the quantity of fluid needs to be accurately measured and totalled for metering purposes.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1009</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5059" BrowseName="4:Operational" ParentNodeId="ns=4;i=1014">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational is a FunctionalGroup that shall organize the CurrentState property of the StateMachine and all its remote invocable Methods. Furthermore, it shall organize at least the CurrentValue and TargetValue variables.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1014</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
@@ -2159,38 +2205,37 @@
     </UAObject>
     <UAObjectType IsAbstract="true" NodeId="ns=4;i=1017" BrowseName="4:DiscreteControlFunctionType">
         <DisplayName>DiscreteControlFunctionType</DisplayName>
+        <Description>The DiscreteControlFunctionType describes an abstract discrete control function (using discrete values). More specialized discrete control functions can be derived from this ObjectType.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1007</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1045" BrowseName="4:MultiStateDiscreteControlFunctionType">
         <DisplayName>MultiStateDiscreteControlFunctionType</DisplayName>
+        <Description>The MultiStateDiscreteControlFunctionType describes a discrete control function (using more than two discrete values).</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1017</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1042" BrowseName="4:TwoStateDiscreteControlFunctionType">
         <DisplayName>TwoStateDiscreteControlFunctionType</DisplayName>
+        <Description>The TwoStateDiscreteControlFunctionType describes a discrete control function with two possible values (e.g., on/off).</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1017</Reference>
         </References>
     </UAObjectType>
-    <UAObjectType NodeId="ns=4;i=1032" BrowseName="4:StartStopControlFunctionType">
-        <DisplayName>StartStopControlFunctionType</DisplayName>
-        <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1007</Reference>
-        </References>
-    </UAObjectType>
     <UAObjectType IsAbstract="true" NodeId="ns=4;i=1005" BrowseName="4:BaseSensorFunctionType">
         <DisplayName>BaseSensorFunctionType</DisplayName>
+        <Description>The BaseSensorFunctionType is an abstract ObjectType used as a base for derivation of Sensor Functions. A Sensor Function is a Function that measures data.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1004</Reference>
         </References>
     </UAObjectType>
-    <UAObject NodeId="ns=4;i=5069" BrowseName="4:AlarmMonitor" ParentNodeId="ns=4;i=1005">
+    <UAObject NodeId="ns=4;i=5069" BrowseName="4:AlarmMonitor" ParentNodeId="ns=4;i=1046">
         <DisplayName>AlarmMonitor</DisplayName>
+        <Description>AlarmMonitor indicates whether the limit of an analogue Sensor is exceeded. See: 10000-9: Alarms &amp; Conditions | ExclusiveLevelAlarmType.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1005</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=9482</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
@@ -2569,36 +2614,39 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5030" BrowseName="4:Configuration" ParentNodeId="ns=4;i=1005">
         <DisplayName>Configuration</DisplayName>
-        <Description>Used to organize parameters for configuration of this function.</Description>
+        <Description>Configuration is used to organize parameters for configuration of the Function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1005</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAObject>
-    <UAObject NodeId="ns=4;i=5011" BrowseName="4:Operational" ParentNodeId="ns=4;i=1005">
+    <UAObject NodeId="ns=4;i=5011" BrowseName="4:Operational" ParentNodeId="ns=4;i=1046">
         <DisplayName>Operational</DisplayName>
         <Description>Used to organize parameters for operation of this function.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1005</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAObject>
-    <UAObjectType NodeId="ns=4;i=1016" BrowseName="4:AnalogSensorFunctionType">
-        <DisplayName>AnalogSensorFunctionType</DisplayName>
+    <UAObjectType NodeId="ns=4;i=1016" BrowseName="4:AnalogScalarSensorFunctionType">
+        <DisplayName>AnalogScalarSensorFunctionType</DisplayName>
+        <Description>The AnalogScalarSensorFunctionType is a concrete subtype of the AnalogSensorFunctionType which represents an analogue measured value.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1005</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1046</Reference>
         </References>
     </UAObjectType>
     <UAObjectType IsAbstract="true" NodeId="ns=4;i=1012" BrowseName="4:DiscreteSensorFunctionType">
         <DisplayName>DiscreteSensorFunctionType</DisplayName>
+        <Description>The DiscreteSensorFunctionType is an abstract ObjectType used as a base for derivation of sensors with discrete signals.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1005</Reference>
         </References>
     </UAObjectType>
     <UAVariable NodeId="ns=4;i=6031" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1012">
         <DisplayName>SensorValue</DisplayName>
+        <Description>SensorValue is a discrete measurement value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1012</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5061</Reference>
@@ -2608,59 +2656,23 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1011" BrowseName="4:CoverFunctionType">
         <DisplayName>CoverFunctionType</DisplayName>
-        <Description>Controls a cover e.g., lid or door.</Description>
+        <Description>The CoverFunctionType is used to control the cover, door, or lid of a Laboratory Device.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1004</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5064" BrowseName="4:Operational" ParentNodeId="ns=4;i=1011">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational organizes the methods and current state of the cover function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1011</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAObject>
-    <UAMethod NodeId="ns=4;i=7015" BrowseName="4:Close" ParentNodeId="ns=4;i=5055">
-        <DisplayName>Close</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAMethod>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6112" BrowseName="CurrentState" ParentNodeId="ns=4;i=5055">
-        <DisplayName>CurrentState</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5064</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="NodeId" NodeId="ns=4;i=6040" BrowseName="Id" ParentNodeId="ns=4;i=6112">
-        <DisplayName>Id</DisplayName>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6112</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAMethod NodeId="ns=4;i=7016" BrowseName="4:Lock" ParentNodeId="ns=4;i=5055">
-        <DisplayName>Lock</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7017" BrowseName="4:Open" ParentNodeId="ns=4;i=5055">
-        <DisplayName>Open</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAMethod>
-    <UAObject NodeId="ns=4;i=5055" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1011">
-        <DisplayName>StateMachine</DisplayName>
+    <UAObject NodeId="ns=4;i=5055" BrowseName="4:CoverState" ParentNodeId="ns=4;i=1011">
+        <DisplayName>CoverState</DisplayName>
+        <Description>he CoverStateMachineType is used to control the lid, door, or cover of a laboratory device. One Device may have any arbitrary number of lids, doors, covers and their corresponding CoverFunction.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1011</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1010</Reference>
@@ -2669,14 +2681,14 @@
     </UAObject>
     <UAObjectType NodeId="ns=4;i=1006" BrowseName="4:ProgramManagerType">
         <DisplayName>ProgramManagerType</DisplayName>
-        <Description>The ProgramManagerType provides the functional unit's program manager.</Description>
+        <Description>The ProgramManager provides the functional unit's program manager.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=1;i=1001</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5190" BrowseName="4:ActiveProgram" ParentNodeId="ns=4;i=1006">
         <DisplayName>ActiveProgram</DisplayName>
-        <Description>The ActiveProgramType specifies the current state of operation of a FunctionalUnit. It provides context and information about the currently active program on the device. This allows users to follow the progress of a program run in a standardized fashion by organising steps into a flat, linear sequence.</Description>
+        <Description>The ActiveProgram specifies the current state of operation of a FunctionalUnit. It provides context and information about the currently active program on the device. This allows users to follow the progress of a program run in a standardized fashion by organising steps into a flat, linear sequence.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1006</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -2685,7 +2697,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5020" BrowseName="4:ProgramTemplateSet" ParentNodeId="ns=4;i=1006">
         <DisplayName>ProgramTemplateSet</DisplayName>
-        <Description>The ProgramTemplateSetType is a type used for structuring objects of type ProgramTemplateType in an unordered list structure.</Description>
+        <Description>The ProgramTemplateSetType is used for organising ProgramTemplateType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1006</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1019</Reference>
@@ -2744,7 +2756,7 @@
                     </uax:TypeId>
                     <uax:Body>
                         <uax:Argument>
-                            <uax:Name>AdditionalParamters</uax:Name>
+                            <uax:Name>AdditionalParameters</uax:Name>
                             <uax:DataType>
                                 <uax:Identifier>ns=4;i=3003</uax:Identifier>
                             </uax:DataType>
@@ -2784,8 +2796,8 @@
         <Description>NodeVersion and the GeneralModelChangeEventType are mechanisms to notify clients that the content of the set has changed and shall be used as defined in OPC 10000-3.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5020</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
     <UAMethod NodeId="ns=4;i=7052" BrowseName="4:Remove" ParentNodeId="ns=4;i=1006">
@@ -2847,7 +2859,7 @@
                     </uax:TypeId>
                     <uax:Body>
                         <uax:Argument>
-                            <uax:Name>AdditionalParameter</uax:Name>
+                            <uax:Name>AdditionalParameters</uax:Name>
                             <uax:DataType>
                                 <uax:Identifier>ns=4;i=3003</uax:Identifier>
                             </uax:DataType>
@@ -2884,7 +2896,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5019" BrowseName="4:ResultSet" ParentNodeId="ns=4;i=1006">
         <DisplayName>ResultSet</DisplayName>
-        <Description>The ResultSetType is a type used for structuring objects of type ResultType in an unordered list structure.</Description>
+        <Description>The ResultSetType is used for organising ResultType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1006</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1020</Reference>
@@ -2913,6 +2925,9 @@
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5026</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
+		<Value>
+            <uax:Boolean>false</uax:Boolean>
+        </Value>
     </UAVariable>
     <UAVariable DataType="DateTime" NodeId="ns=4;i=6054" BrowseName="NamespacePublicationDate" ParentNodeId="ns=4;i=5026">
         <DisplayName>NamespacePublicationDate</DisplayName>
@@ -2921,7 +2936,7 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
         <Value>
-            <uax:DateTime>2023-08-30T00:00:00Z</uax:DateTime>
+            <uax:DateTime>2023-11-30T00:00:00Z</uax:DateTime>
         </Value>
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6055" BrowseName="NamespaceUri" ParentNodeId="ns=4;i=5026">
@@ -2944,14 +2959,19 @@
             <uax:String>1.0.0</uax:String>
         </Value>
     </UAVariable>
-    <UAVariable DataType="IdType" ValueRank="1" NodeId="ns=4;i=6057" BrowseName="StaticNodeIdTypes" ParentNodeId="ns=4;i=5026">
+    <UAVariable DataType="IdType" ValueRank="1" ArrayDimensions="0" NodeId="ns=4;i=6057" BrowseName="StaticNodeIdTypes" ParentNodeId="ns=4;i=5026">
         <DisplayName>StaticNodeIdTypes</DisplayName>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5026</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
+		<Value>
+            <uax:ListOfInt32>
+                <uax:Int32>0</uax:Int32>
+            </uax:ListOfInt32>
+        </Value>
     </UAVariable>
-    <UAVariable DataType="NumericRange" ValueRank="1" NodeId="ns=4;i=6058" BrowseName="StaticNumericNodeIdRange" ParentNodeId="ns=4;i=5026">
+    <UAVariable DataType="NumericRange" ValueRank="1" ArrayDimensions="0" NodeId="ns=4;i=6058" BrowseName="StaticNumericNodeIdRange" ParentNodeId="ns=4;i=5026">
         <DisplayName>StaticNumericNodeIdRange</DisplayName>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5026</Reference>
@@ -2969,12 +2989,14 @@
         <DisplayName>Default Binary</DisplayName>
         <References>
             <Reference ReferenceType="HasTypeDefinition">i=76</Reference>
+            <Reference ReferenceType="HasDescription">ns=4;i=6283</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="DefaultXml" NodeId="ns=4;i=5043" BrowseName="Default XML">
         <DisplayName>Default XML</DisplayName>
         <References>
             <Reference ReferenceType="HasTypeDefinition">i=76</Reference>
+            <Reference ReferenceType="HasDescription">ns=4;i=6311</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="DefaultJson" NodeId="ns=4;i=5044" BrowseName="Default JSON">
@@ -2987,12 +3009,14 @@
         <DisplayName>Default Binary</DisplayName>
         <References>
             <Reference ReferenceType="HasTypeDefinition">i=76</Reference>
+            <Reference ReferenceType="HasDescription">ns=4;i=6145</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="DefaultXml" NodeId="ns=4;i=5056" BrowseName="Default XML">
         <DisplayName>Default XML</DisplayName>
         <References>
             <Reference ReferenceType="HasTypeDefinition">i=76</Reference>
+            <Reference ReferenceType="HasDescription">ns=4;i=6310</Reference>
         </References>
     </UAObject>
     <UAObject SymbolicName="DefaultJson" NodeId="ns=4;i=5057" BrowseName="Default JSON">
@@ -3042,6 +3066,7 @@
             <Reference ReferenceType="ToState">ns=4;i=5028</Reference>
             <Reference ReferenceType="FromState">ns=4;i=5049</Reference>
             <Reference ReferenceType="HasEffect">i=2311</Reference>
+            <Reference ReferenceType="HasCause">ns=4;i=7014</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5078" BrowseName="4:LockedToError" ParentNodeId="ns=4;i=1010">
@@ -3178,7 +3203,7 @@
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
         <Value>
-            <uax:UInt32>1</uax:UInt32>
+            <uax:UInt32>3</uax:UInt32>
         </Value>
     </UAVariable>
     <UAVariable DataType="KeyValueType" ValueRank="1" NodeId="ns=4;i=6485" ArrayDimensions="1" BrowseName="4:Properties" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
@@ -3192,16 +3217,16 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6487" BrowseName="4:SupervisoryTaskId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>SupervisoryTaskId</DisplayName>
-        <Description>SupervisoryTaskId is the unique identifier of the specific task in the supervisory system to which the result belongs. It is provided as an argument of the StartProgram() Method which initiates the program run.</Description>
+        <Description>SupervisoryTaskId is the unique identifier of the specific Task in the supervisory system to which the result belongs. It is provided as an Argument of the StartProgram() Method which initiates the program run.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6495" BrowseName="4:DeviceProgramRunId" ParentNodeId="ns=4;i=1021" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>DeviceProgramRunId</DisplayName>
-        <Description>DeviceProgramRunId is the internal program ID assigned by the Device to the ProgramRun to generate this result. It is used to identify a Result object and is returned to the Client when the StartProgram Method is called.</Description>
+        <Description>DeviceProgramRunId is the internal program identifier assigned by the Device to the program run generating this result. It is used to identify a Result object and is returned to the Client when the StartProgram Method is called.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1021</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -3237,6 +3262,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5085" BrowseName="4:Stopped" ParentNodeId="ns=4;i=1038">
         <DisplayName>Stopped</DisplayName>
+        <Description>Stopped is the initial state for an ActiveProgram, FunctionalUnit or Function. It is an Idle state which means that the Function, FunctionalUnit or ActiveProgram is stopped and ready for activation.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2309</Reference>
@@ -3244,6 +3270,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5099" BrowseName="4:Running" ParentNodeId="ns=4;i=1038">
         <DisplayName>Running</DisplayName>
+        <Description>Running is the state when the Function or FunctionalUnit is currently running/executing.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasSubStateMachine">ns=4;i=5130</Reference>
@@ -3252,6 +3279,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5100" BrowseName="4:Stopping" ParentNodeId="ns=4;i=1038">
         <DisplayName>Stopping</DisplayName>
+        <Description>Stopping indicates that the ActiveProgram, FunctionalUnit, or Function is in the process of stopping. This state usually occurs when the program execution is finished or stopped, either because it has ended or has been triggered by the Stop Method.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -3730,6 +3758,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5130" BrowseName="4:RunningStateMachine" ParentNodeId="ns=4;i=1038">
         <DisplayName>RunningStateMachine</DisplayName>
+        <Description>The RunningStateMachineType is a sub-state machine of the FunctionalStateMachine and includes detailed substates.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1036</Reference>
@@ -3829,12 +3858,13 @@
         <Description>SupervisoryTemplateId is an optional enterprise-wide unique ID for the template. This can be utilized to refer the template to supervisory systems.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1018</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="Boolean" NodeId="ns=4;i=6002" BrowseName="4:IsEnabled" ParentNodeId="ns=4;i=1004" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>IsEnabled</DisplayName>
+        <Description>IsEnabled indicates whether the Function can currently be executed on the Device. A Function may be disabled for several reasons including not licensed, missing hardware modules, or missing supplies</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1004</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -3843,6 +3873,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6003" BrowseName="4:CtrlP" ParentNodeId="ns=4;i=1030" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CtrlP</DisplayName>
+        <Description>CtrlP is the proportional controller parameter</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1030</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -3851,6 +3882,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6004" BrowseName="4:CtrlTd" ParentNodeId="ns=4;i=1030" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CtrlTd</DisplayName>
+        <Description>CtrlTd is the derivate controller parameter</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1030</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -3859,6 +3891,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6005" BrowseName="4:CtrlTi" ParentNodeId="ns=4;i=1030" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CtrlTi</DisplayName>
+        <Description>CtrlTi is the integrator controller parameter.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1030</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
@@ -3867,6 +3900,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6011" BrowseName="4:TotalizedValue" ParentNodeId="ns=4;i=1014">
         <DisplayName>TotalizedValue</DisplayName>
+        <Description>TotalizedValue is the totalized process value. It can be reset at any time using the ResetTotalizer() command.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1014</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5059</Reference>
@@ -3884,12 +3918,14 @@
     </UAMethod>
     <UAObjectType NodeId="ns=4;i=1013" BrowseName="4:TimerControlFunctionType">
         <DisplayName>TimerControlFunctionType</DisplayName>
+        <Description>The TimerControlFunctionType defines a simple “one shot” Timer which stops once it has elapsed. It follows the design of other LADS ControlFunctions, utilizing the same state machine and similar variable definitions. As soon as the CurrentValue reaches the TargetValue, the CurrentState of the TimerFunction automatically transitions to Off. This is typically accompanied by some (internal) action/effect, such as stopping the execution of a Function or similar. In the SuspendedState the CurrentValue holds its current value and does not count further until the state switches back to On, either due to a Client command or an internal state change.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1007</Reference>
         </References>
     </UAObjectType>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6012" BrowseName="4:DifferenceValue" ParentNodeId="ns=4;i=1013">
         <DisplayName>Remaining time</DisplayName>
+        <Description>The DifferenceValue (aka remaining time) is calculated by subtracting the CurrentValue from the TargetValue. Thus, it counts downwards from the TargetValue to zero.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1013</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5113</Reference>
@@ -3899,6 +3935,7 @@
     </UAVariable>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6034" BrowseName="4:TargetValue" ParentNodeId="ns=4;i=1013" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>Target time</DisplayName>
+        <Description>The timer's target time. As soon as the CurrentValue reaches the TargetValue, the CurrentState of the TimerFunction automatically transitions to Off. This is typically accompanied by some (internal) action/effect, such as stopping the execution of a Function or similar.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1013</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -3907,6 +3944,7 @@
     </UAVariable>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6035" BrowseName="4:CurrentValue" ParentNodeId="ns=4;i=1013">
         <DisplayName>Elapsed time</DisplayName>
+        <Description>Once started, the CurrentValue (aka elapsed time) counts upwards from zero until it reaches the TargetValue (aka target time).</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1013</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -3915,45 +3953,49 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5113" BrowseName="4:Operational" ParentNodeId="ns=4;i=1013">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational is a FunctionalGroup that shall organize the CurrentState property of the StateMachine and all its remote invocable Methods. Furthermore, it shall organize at least the CurrentValue and TargetValue variables.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1013</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
         </References>
     </UAObject>
-    <UAVariable DataType="Double" ValueRank="1" NodeId="ns=4;i=6036" ArrayDimensions="1" BrowseName="4:CalibrationValues" ParentNodeId="ns=4;i=1005" UserAccessLevel="3" AccessLevel="3">
+    <UAVariable DataType="Double" ValueRank="1" NodeId="ns=4;i=6036" ArrayDimensions="1" BrowseName="4:CalibrationValues" ParentNodeId="ns=4;i=1046" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CalibrationValues</DisplayName>
+        <Description>CalibrationValues is an array of calibration values for converting the Sensor’s raw value to the process value.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1005</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5135</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6037" BrowseName="4:CompensationValue" ParentNodeId="ns=4;i=1000" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CompensationValue</DisplayName>
+        <Description>CompensationValue is the compensation value used while calculating the process value, such as the temperature at the Sensor element for pH or DO Sensors.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
         </References>
     </UAVariable>
-    <UAVariable DataType="Double" NodeId="ns=4;i=6038" BrowseName="4:Damping" ParentNodeId="ns=4;i=1005" UserAccessLevel="3" AccessLevel="3">
+    <UAVariable DataType="Double" NodeId="ns=4;i=6038" BrowseName="4:Damping" ParentNodeId="ns=4;i=1046" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>Damping</DisplayName>
+        <Description>Damping is a low-pass filter parameter used for signal damping.</Description>
         <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1005</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5010</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1046</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5135" BrowseName="4:Calibration" ParentNodeId="ns=4;i=1005">
+    <UAObject NodeId="ns=4;i=5135" BrowseName="4:Calibration" ParentNodeId="ns=4;i=1046">
         <DisplayName>Calibration</DisplayName>
-        <Description>Used to organize parameters for configuration of this function.</Description>
+        <Description>Calibration is used to organize parameters for configuration of this Function</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1005</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5024" BrowseName="4:Operational" ParentNodeId="ns=4;i=1016">
@@ -3967,6 +4009,7 @@
     </UAObject>
     <UAVariable DataType="Double" NodeId="ns=4;i=6033" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1016">
         <DisplayName>SensorValue</DisplayName>
+        <Description>SensorValue is the calibrated and optionally compensated/filtered process value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1016</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5024</Reference>
@@ -3974,14 +4017,16 @@
             <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
         </References>
     </UAVariable>
-    <UAObjectType NodeId="ns=4;i=1000" BrowseName="4:AnalogSensorFunctionWithCompensationType">
-        <DisplayName>AnalogSensorFunctionWithCompensationType</DisplayName>
+    <UAObjectType NodeId="ns=4;i=1000" BrowseName="4:AnalogScalarSensorFunctionWithCompensationType">
+        <DisplayName>AnalogScalarSensorFunctionWithCompensationType</DisplayName>
+        <Description>The AnalogScalarSensorFunctionWithCompensationType represents a compensated  analogue measured value (e.g. pH sensor, dissolved oxygen sensor, ..)</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1016</Reference>
         </References>
     </UAObjectType>
     <UAVariable NodeId="ns=4;i=6065" BrowseName="4:CurrentValue" ParentNodeId="ns=4;i=1017">
         <DisplayName>CurrentValue</DisplayName>
+        <Description>CurrentValue is a current discrete process value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1017</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -3990,6 +4035,7 @@
     </UAVariable>
     <UAVariable DataType="Boolean" NodeId="ns=4;i=6066" BrowseName="4:CurrentValue" ParentNodeId="ns=4;i=1042">
         <DisplayName>CurrentValue</DisplayName>
+        <Description>CurrentValue is a current discrete process value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1042</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -3998,6 +4044,7 @@
     </UAVariable>
     <UAVariable DataType="UInt32" NodeId="ns=4;i=6067" BrowseName="4:CurrentValue" ParentNodeId="ns=4;i=1045">
         <DisplayName>CurrentValue</DisplayName>
+        <Description>CurrentValue is a current discrete process value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1045</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -4006,6 +4053,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6039" BrowseName="4:RawValue" ParentNodeId="ns=4;i=1016">
         <DisplayName>RawValue</DisplayName>
+        <Description>RawValue is the raw value measured at the Sensor element, such as the Nernst voltage of a pH Sensor element.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1016</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5024</Reference>
@@ -4013,11 +4061,11 @@
             <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
         </References>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5010" BrowseName="4:Tuning" ParentNodeId="ns=4;i=1005">
+    <UAObject NodeId="ns=4;i=5010" BrowseName="4:Tuning" ParentNodeId="ns=4;i=1046">
         <DisplayName>Tuning</DisplayName>
-        <Description>Used to organize parameters for operation of this function.</Description>
+        <Description>Tuning is used to organize parameters for operation of this Function.</Description>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1005</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=1;i=1005</Reference>
         </References>
@@ -4054,7 +4102,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6051" BrowseName="1:DeviceManual" ParentNodeId="ns=4;i=1002">
         <DisplayName>DeviceManual</DisplayName>
-        <Description>Address (pathname in the file system or a URL | Web address) of user manual for the device</Description>
+        <Description>DeviceManual allows specifying an address of the user manual. It may be a pathname in the file system or a URL (Web address).</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5096</Reference>
@@ -4094,6 +4142,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6068" BrowseName="1:AssetId" ParentNodeId="ns=4;i=1002" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>AssetId</DisplayName>
+        <Description>AssetId is a user writable alphanumeric character sequence uniquely identifying a component. The ID is provided by the integrator or user of the device.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5096</Reference>
@@ -4103,6 +4152,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6069" BrowseName="1:ComponentName" ParentNodeId="ns=4;i=1002" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>ComponentName</DisplayName>
+        <Description>ComponentName is a user writable name provided by the integrator or user of the component.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5096</Reference>
@@ -4112,6 +4162,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6083" BrowseName="1:DeviceClass" ParentNodeId="ns=4;i=1002">
         <DisplayName>DeviceClass</DisplayName>
+        <Description>DeviceClass indicates in which domain or for what purpose a certain item for which the Interface is applied is used. Examples are “ProgrammableController”, “RemoteIO”, and “TemperatureSensor”.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4120,6 +4171,7 @@
     </UAVariable>
     <UAVariable DataType="DeviceHealthEnumeration" NodeId="ns=4;i=6086" BrowseName="1:DeviceHealth" ParentNodeId="ns=4;i=1002">
         <DisplayName>DeviceHealth</DisplayName>
+        <Description>DeviceHealth indicates the status as defined by NAMUR Recommendation NE107. Clients can read or monitor this Variable to determine the device condition.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4138,6 +4190,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6094" BrowseName="1:ManufacturerUri" ParentNodeId="ns=4;i=1002">
         <DisplayName>ManufacturerUri</DisplayName>
+        <Description>ManufacturerUri provides a unique identifier for this company. This identifier should be a fully qualified domain name; however, it may be a GUID or similar construct that ensures global uniqueness.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5096</Reference>
@@ -4147,6 +4200,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6095" BrowseName="1:ProductCode" ParentNodeId="ns=4;i=1002">
         <DisplayName>ProductCode</DisplayName>
+        <Description>ProductCode provides a unique combination of numbers and letters used to identify the product. It may be the order information displayed on type shields or in ERP systems.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5096</Reference>
@@ -4156,6 +4210,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6096" BrowseName="1:ProductInstanceUri" ParentNodeId="ns=4;i=1002">
         <DisplayName>ProductInstanceUri</DisplayName>
+        <Description>ProductInstanceUri is a globally unique resource identifier provided by the manufacturer. This is often stamped on the outside of a physical component and may be used for traceability and warranty purposes.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5096</Reference>
@@ -4165,6 +4220,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6149" BrowseName="1:AssetId" ParentNodeId="ns=4;i=1024" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>AssetId</DisplayName>
+        <Description>AssetId is a user writable alphanumeric character sequence uniquely identifying a component. The ID is provided by the integrator or user of the device.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5095</Reference>
@@ -4174,6 +4230,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6150" BrowseName="1:ComponentName" ParentNodeId="ns=4;i=1024" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>ComponentName</DisplayName>
+        <Description>ComponentName is a user writable name provided by the integrator or user of the component.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5095</Reference>
@@ -4183,6 +4240,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6151" BrowseName="1:DeviceClass" ParentNodeId="ns=4;i=1024">
         <DisplayName>DeviceClass</DisplayName>
+        <Description>DeviceClass indicates in which domain or for what purpose a certain item for which the Interface is applied is used. Examples are “ProgrammableController”, “RemoteIO”, and “TemperatureSensor”.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5095</Reference>
@@ -4192,6 +4250,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6152" BrowseName="1:DeviceManual" ParentNodeId="ns=4;i=1024">
         <DisplayName>DeviceManual</DisplayName>
+        <Description>DeviceManual allows specifying an address of the user manual. It may be a pathname in the file system or a URL (Web address).</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5095</Reference>
@@ -4201,6 +4260,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6153" BrowseName="1:DeviceRevision" ParentNodeId="ns=4;i=1024">
         <DisplayName>DeviceRevision</DisplayName>
+        <Description>DeviceRevision provides the overall revision level of a hardware component or the Device. As an example, this Property can be used in ERP systems together with the ProductCode Property.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5095</Reference>
@@ -4210,6 +4270,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6154" BrowseName="1:HardwareRevision" ParentNodeId="ns=4;i=1024">
         <DisplayName>HardwareRevision</DisplayName>
+        <Description>HardwareRevision provides the revision level of the hardware.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=5095</Reference>
@@ -4299,7 +4360,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6028" BrowseName="2:OperationalLocation" ParentNodeId="ns=4;i=1002" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>OperationalLocation</DisplayName>
-        <Description>OperationalLocation provides the operational location of the LADSDevice. The structure within the string may expose several levels. How this is exposed, which delimiters are used, etc. is vendor-specific. Examples of such strings are “Warehouse1/Sheet3” or “StainlessSteelTote3” (see OPC UA OPC 10000-110 for more details).</Description>
+        <Description>OperationalLocation provides the operational location of the Device or Component. The structure within the string may expose several levels. How this is exposed, which delimiters are used, etc. is vendor-specific. Examples of such strings are “Warehouse1/Sheet3” or “StainlessSteelTote3” (see OPC UA OPC 10000-110 for more details).</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5096</Reference>
@@ -4319,18 +4380,21 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1008" BrowseName="4:ControllerTuningParameterType">
         <DisplayName>ControllerTuningParameterType</DisplayName>
+        <Description>The ControllerTuningParameterType is an abstract class. It is formally defined in Table 85. Subtypes of the ControllerTuningParameterType contain the parameters and information about a Controller (configuration).</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=58</Reference>
         </References>
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1030" BrowseName="4:PidControllerParameterType">
         <DisplayName>PidControllerParameterType</DisplayName>
+        <Description>The PidControllerParameterType contains the parameters of an PID controller.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1008</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5001" BrowseName="4:ControllerTuningParameter" ParentNodeId="ns=4;i=1007">
         <DisplayName>ControllerTuningParameter</DisplayName>
+        <Description>The ControllerTuningParameterType is an abstract class. It is formally defined in Table 85. Subtypes of the ControllerTuningParameterType contain the parameters and information about a Controller (configuration).</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1007</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4339,6 +4403,7 @@
     </UAObject>
     <UAVariable DataType="Double" NodeId="ns=4;i=6001" BrowseName="4:CurrentValue" ParentNodeId="ns=4;i=1009">
         <DisplayName>CurrentValue</DisplayName>
+        <Description>CurrentValue is the current process value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1009</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5009</Reference>
@@ -4348,6 +4413,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6006" BrowseName="4:TargetValue" ParentNodeId="ns=4;i=1009" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>TargetValue</DisplayName>
+        <Description>TargetValue is the targeted set-point value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1009</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5009</Reference>
@@ -4357,12 +4423,14 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1031" BrowseName="4:TwoStateDiscreteSensorFunctionType">
         <DisplayName>TwoStateDiscreteSensorFunctionType</DisplayName>
+        <Description>The TwoStateDiscreteSensorFunctionType represents a Boolean value that is measured by a Sensor.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1012</Reference>
         </References>
     </UAObjectType>
-    <UAVariable NodeId="ns=4;i=6007" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1031">
+    <UAVariable DataType="Boolean" NodeId="ns=4;i=6007" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1031">
         <DisplayName>SensorValue</DisplayName>
+        <Description>Boolean sensor value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1031</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2373</Reference>
@@ -4371,12 +4439,14 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1037" BrowseName="4:MultiStateDiscreteSensorFunctionType">
         <DisplayName>MultiStateDiscreteSensorFunctionType</DisplayName>
+        <Description>The MultiStateDiscreteSensorFunctionType represents a value that is measured by a Sensor and can only be set to a discrete set of values.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1012</Reference>
         </References>
     </UAObjectType>
-    <UAVariable NodeId="ns=4;i=6030" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1037">
+    <UAVariable DataType="UInt32" NodeId="ns=4;i=6030" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1037">
         <DisplayName>SensorValue</DisplayName>
+        <Description>Discrete sensor value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1037</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2376</Reference>
@@ -4405,7 +4475,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5073" BrowseName="3:Components" ParentNodeId="ns=4;i=1024">
         <DisplayName>Components</DisplayName>
-        <Description>The LADSComponentsType is a type used for structuring objects of type LADSComponentsType in an unordered list structure.</Description>
+        <Description>Components is used for structuring objects of type LADSComponentsType in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5088</Reference>
@@ -4425,6 +4495,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5009" BrowseName="4:Operational" ParentNodeId="ns=4;i=1009">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational is a FunctionalGroup that shall organize the CurrentState property of the StateMachine and all its remote invocable Methods. Furthermore, it shall organize at least the CurrentValue and TargetValue variables.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1009</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -4451,7 +4522,7 @@
     </UAObject>
     <UAVariable DataType="String" NodeId="ns=4;i=6074" BrowseName="2:OperationalLocation" ParentNodeId="ns=4;i=1024" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>OperationalLocation</DisplayName>
-        <Description>OperationalLocation provides the operational location of the LADS Device. The structure within the string may expose several levels. How this is exposed, which delimiters are used, etc. is vendor specific. Examples of such strings are “Warehouse1/Sheet3” or “StainlessSteelTote3” (see OPC UA OPC 10000-110 for more Details).</Description>
+        <Description>OperationalLocation provides the operational location of the Device or Component. The structure within the string may expose several levels. How this is exposed, which delimiters are used, etc. is vendor-specific. Examples of such strings are “Warehouse1/Sheet3” or “StainlessSteelTote3” (see OPC UA OPC 10000-110 for more details).</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5095</Reference>
@@ -4516,7 +4587,7 @@
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5060" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1022">
         <DisplayName>&lt;SetElement&gt;</DisplayName>
-        <Description>SetElement is the element of the set and is overridden with ResultFileSetType.</Description>
+        <Description>ResultFile provides a description of a file that is part of a result of a program managers run.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1022</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1001</Reference>
@@ -4534,6 +4605,7 @@
     </UAObject>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6081" BrowseName="4:LastOperatingTime" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>LastOperatingTime</DisplayName>
+        <Description>LastOperatingTime is the total amount of operating time (as defined in Section 9.3 of EN 13306-2017) in milliseconds (ms) by the Device at the time of the last execution of the Task.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4542,6 +4614,7 @@
     </UAVariable>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6087" BrowseName="4:NextOperatingTime" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>NextOperatingTime</DisplayName>
+        <Description>NextOperatingTime is the total amount of operating time (as defined in Section 9.3 of EN 13306-2017) in milliseconds (ms) by the Device before the next execution of the Task.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4550,6 +4623,7 @@
     </UAVariable>
     <UAVariable DataType="UInt32" NodeId="ns=4;i=6088" BrowseName="4:LastOperatingCycles" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>LastOperatingCycles</DisplayName>
+        <Description>LastOperatingCycles is the number of cycles during the operating time (as defined in Section 9.3 of EN 13306-2017) recorded at the time of the last execution of the Task.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4558,6 +4632,7 @@
     </UAVariable>
     <UAVariable DataType="UInt32" NodeId="ns=4;i=6091" BrowseName="4:NextOperatingCycles" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>NextOperatingCycles</DisplayName>
+        <Description>NextOperatingCycles is the number of cycles during operating time (as defined in Section 9.3 of EN 13306-2017) to be completed before the next execution of the Task.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4592,7 +4667,9 @@
                             </uax:DataType>
                             <uax:ValueRank>-1</uax:ValueRank>
                             <uax:ArrayDimensions/>
-                            <uax:Description/>
+                            <uax:Description>
+                                <uax:Text>Provide the result of the.Task execution.</uax:Text>
+                            </uax:Description>
                         </uax:Argument>
                     </uax:Body>
                 </uax:ExtensionObject>
@@ -4608,7 +4685,9 @@
                             </uax:DataType>
                             <uax:ValueRank>-1</uax:ValueRank>
                             <uax:ArrayDimensions/>
-                            <uax:Description/>
+                            <uax:Description>
+                                <uax:Text>Additional comment.</uax:Text>
+                            </uax:Description>
                         </uax:Argument>
                     </uax:Body>
                 </uax:ExtensionObject>
@@ -4624,6 +4703,7 @@
     </UAMethod>
     <UADataType NodeId="ns=4;i=3000" BrowseName="4:MaintenanceTaskResultEnum">
         <DisplayName>MaintenanceTaskResultEnum</DisplayName>
+        <Description>This enumeration defines the different results when executing a Task..</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">i=29</Reference>
         </References>
@@ -4700,6 +4780,7 @@
     </UAVariable>
     <UAVariable DataType="Boolean" NodeId="ns=4;i=6097" BrowseName="2:ConfigurationChanged" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>ConfigurationChanged</DisplayName>
+        <Description>The ConfigurationChanged provides information if the configuration of the asset is planned to be changed or has changed during the maintenance activity.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4708,6 +4789,7 @@
     </UAVariable>
     <UAVariable DataType="Duration" NodeId="ns=4;i=6102" BrowseName="2:EstimatedDowntime" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>EstimatedDowntime</DisplayName>
+        <Description>The EstimatedDowntime provides the estimated time the execution of the maintenance activity will take. In case of replanning, it is allowed to change the EstimatedDowntime. If during the execution of the maintenance activity the EstimatedDowntime can be adjusted (e.g., the asset needs to be repaired because an inspection found some issues) this should be done. Clients can access the history of Events to receive the information on the original estimates when the maintenance activity started.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4716,6 +4798,7 @@
     </UAVariable>
     <UAVariable DataType="MaintenanceMethodEnum" NodeId="ns=4;i=6106" BrowseName="2:MaintenanceMethod" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>MaintenanceMethod</DisplayName>
+        <Description>The MaintenanceMethod provides information about the planned or used maintenance method. The content may change during the different MaintenanceStates. By accessing the history of Events a Client can distinguish between the planned and actual used maintenance method during the maintenance activity.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4724,6 +4807,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5066" BrowseName="2:MaintenanceState" ParentNodeId="ns=4;i=1028">
         <DisplayName>MaintenanceState</DisplayName>
+        <Description>The MaintenanceState state-machine provides information, whether a maintenance activity is planned, currently in execution, of has been executed.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -4732,22 +4816,25 @@
     </UAObject>
     <UAVariable DataType="NameNodeIdDataType" NodeId="ns=4;i=6107" BrowseName="2:MaintenanceSupplier" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>MaintenanceSupplier</DisplayName>
+        <Description>The MaintenanceSupplier provides information on the supplier that is planned to execute, currently executing or has executed the maintenance activity. The content may change during the different MaintenanceStates. By accessing the history of Events a Client can distinguish between the planned and actual supplier that executed the maintenance activity. The value contains always a human-readable name of the supplier and optionally references a Node representing the supplier in the AddressSpace.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAVariable DataType="NameNodeIdDataType" ValueRank="1" NodeId="ns=4;i=6108" BrowseName="2:PartsOfAssetReplaced" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
+    <UAVariable DataType="NameNodeIdDataType" ValueRank="1" ArrayDimensions="0" NodeId="ns=4;i=6108" BrowseName="2:PartsOfAssetReplaced" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>PartsOfAssetReplaced</DisplayName>
+        <Description>The PartsOfAssetReplaced provides information on the parts of the assets that are planned to be replaced during the maintenance activity, currently in replacement or have been replaced, depending on the different MaintenanceStates. The content may change during the different MaintenanceStates. By accessing the history of Events a Client can distinguish between the planned and actual parts of the assets replaced during the maintenance activity. The value contains always an array of a human-readable name of the qualification of the parts of the asset to be replaced and optionally references a Node representing each part of the asset in the AddressSpace.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
     </UAVariable>
-    <UAVariable DataType="NameNodeIdDataType" ValueRank="1" NodeId="ns=4;i=6111" BrowseName="2:PartsOfAssetServiced" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
+    <UAVariable DataType="NameNodeIdDataType" ValueRank="1" ArrayDimensions="0" NodeId="ns=4;i=6111" BrowseName="2:PartsOfAssetServiced" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>PartsOfAssetServiced</DisplayName>
+        <Description>The PartsOfAssetServiced provides information on the parts of the assets that are planned to be serviced during the maintenance activity, currently serviced or have been serviced, depending on the different MaintenanceStates. The content may change during the different MaintenanceStates. By accessing the history of Events a Client can distinguish between the planned and actual parts of the assets serviced during the maintenance activity. The value contains always an array of a human-readable name of the qualification of the parts of the asset to be serviced and optionally references a Node representing the part of the asset in the AddressSpace.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4756,6 +4843,7 @@
     </UAVariable>
     <UAVariable DataType="UtcTime" NodeId="ns=4;i=6119" BrowseName="2:PlannedDate" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>PlannedDate</DisplayName>
+        <Description>The PlannedDate provides the date for which the maintenance activity has been scheduled.. In case of replanning, it is allowed to change the PlannedDate. However, it is not the intention that the PlannedDate is modified because the maintenance activity starts to get executed. If the PlannedDate depends for example on the operation hours of the asset, it might get adapted depending on the passed operation hours.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4764,6 +4852,7 @@
     </UAVariable>
     <UAVariable DataType="NameNodeIdDataType" NodeId="ns=4;i=6120" BrowseName="2:QualificationOfPersonnel" ParentNodeId="ns=4;i=1028" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>QualificationOfPersonnel</DisplayName>
+        <Description>The QualificationOfPersonnel provides information on the qualification of the personnel that is planned to execute, currently executing or has executed the maintenance activity. The content may change during the different MaintenanceStates. By accessing the history of Events a Client can distinguish between the planned and actual qualification of the personnel that executed the maintenance activity. The value contains always a human-readable name of the qualification of the personnel and optionally references a Node representing the qualification of the personnel in the AddressSpace.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -4869,8 +4958,9 @@
             <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
-    <UAObject NodeId="ns=4;i=5005" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1003">
-        <DisplayName>StateMachine</DisplayName>
+    <UAObject NodeId="ns=4;i=5005" BrowseName="4:FunctionalUnitState" ParentNodeId="ns=4;i=1003">
+        <DisplayName>FunctionalUnitState</DisplayName>
+        <Description>FunctionalUnitState provides the state-machine of the FunctionalUnit.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -4879,7 +4969,7 @@
     </UAObject>
     <UAVariable DataType="String" NodeId="ns=4;i=6284" BrowseName="1:AssetId" ParentNodeId="ns=4;i=1003">
         <DisplayName>AssetId</DisplayName>
-        <Description>AssetId is a user-writable alphanumeric character sequence the uniquely identifies a component (see OPC UA 10000-100).</Description>
+        <Description>AssetId is a user-writable alphanumeric character sequence the uniquely identifies a FunctionalUnit (see OPC UA 10000-100).</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5003</Reference>
@@ -4889,7 +4979,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6285" BrowseName="1:ComponentName" ParentNodeId="ns=4;i=1003">
         <DisplayName>ComponentName</DisplayName>
-        <Description>ComponentName is a user-writable name provided by the integrator or user of the component.</Description>
+        <Description>ComponentName is a user-writable name provided by the integrator or user of the FunctionalUnit.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5003</Reference>
@@ -5046,8 +5136,8 @@
         <DisplayName>CurrentState</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1038</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6101" BrowseName="EffectiveDisplayName" ParentNodeId="ns=4;i=6100">
@@ -5060,6 +5150,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5007" BrowseName="4:Operational" ParentNodeId="ns=4;i=1003">
         <DisplayName>Operational</DisplayName>
+        <Description>Parameters and Methods useful for during normal operation, like process data.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1003</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -5070,13 +5161,6 @@
         <DisplayName>Clear</DisplayName>
         <References>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7023" BrowseName="4:StartProgram" ParentNodeId="ns=4;i=5005">
-        <DisplayName>StartProgram</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5005</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
@@ -5094,73 +5178,17 @@
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAObject NodeId="ns=4;i=5047" BrowseName="4:RunningStateMachine" ParentNodeId="ns=4;i=5005">
-        <DisplayName>RunningStateMachine</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5005</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1036</Reference>
-        </References>
-    </UAObject>
-    <UAMethod NodeId="ns=4;i=7026" BrowseName="4:Hold" ParentNodeId="ns=4;i=5047">
-        <DisplayName>Hold</DisplayName>
-        <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5047</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7033" BrowseName="4:Reset" ParentNodeId="ns=4;i=5047">
-        <DisplayName>Reset</DisplayName>
-        <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5047</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7034" BrowseName="4:Suspend" ParentNodeId="ns=4;i=5047">
-        <DisplayName>Suspend</DisplayName>
-        <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5047</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7036" BrowseName="4:Unhold" ParentNodeId="ns=4;i=5047">
-        <DisplayName>Unhold</DisplayName>
-        <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5047</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAMethod NodeId="ns=4;i=7037" BrowseName="4:Unsuspend" ParentNodeId="ns=4;i=5047">
-        <DisplayName>Unsuspend</DisplayName>
-        <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5047</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-        </References>
-    </UAMethod>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6104" BrowseName="CurrentState" ParentNodeId="ns=4;i=5007">
-        <DisplayName>CurrentState</DisplayName>
-        <References>
-            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6105" BrowseName="EffectiveDisplayName" ParentNodeId="ns=4;i=6104">
+    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6105" BrowseName="EffectiveDisplayName" ParentNodeId="ns=4;i=5007">
         <DisplayName>EffectiveDisplayName</DisplayName>
         <References>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5007</Reference>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6104</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1047" BrowseName="4:MultiModeAnalogControlFunctionType">
         <DisplayName>MultiModeAnalogControlFunctionType</DisplayName>
+        <Description>The MultiModeAnalogControlFunctionType is used when a controller or actuator can be operated in different modes, depending on how the target value and current value are represented. A common example in the laboratory and analytical domain is a peristaltic pump. In this case, the user can choose from various operation modes, such as relative pump speed (0 to 100%), absolute pump rotor speed in RPM, volumetric rate in mL/min (requiring pump calibration), or mass flow rate in g/min (requiring knowledge of the fluid density). Another example in the laboratory and analytical domain is centrifuges. Operators can select between RPM or RCF (Rotational Centrifugal Force, defined as a multiple of G-force) modes. The RCF mode considers the radius of the centrifuge rotor when converting RCF to RPM.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1007</Reference>
         </References>
@@ -5173,6 +5201,7 @@
     </UAObjectType>
     <UAVariable DataType="Double" NodeId="ns=4;i=6109" BrowseName="4:CurrentValue" ParentNodeId="ns=4;i=1048">
         <DisplayName>CurrentValue</DisplayName>
+        <Description>CurrentValue is the current process value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1048</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5181,6 +5210,7 @@
     </UAVariable>
     <UAVariable DataType="Double" NodeId="ns=4;i=6110" BrowseName="4:TargetValue" ParentNodeId="ns=4;i=1048" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>TargetValue</DisplayName>
+        <Description>TargetValue is the targeted set-point value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1048</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5189,6 +5219,7 @@
     </UAVariable>
     <UAVariable DataType="UInt32" NodeId="ns=4;i=6122" BrowseName="4:CurrentMode" ParentNodeId="ns=4;i=1047" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CurrentMode</DisplayName>
+        <Description>CurrentMode defines the currently selected mode. Its EnumStrings array lists the different defined modes, which shall match the names of the corresponding elements in the ControllerModeSet. Note: The EnumStrings array contains LocalizedText entries. The DisplayName of the ControllerMode is used to map the child node of the ControllerModeSet. The locale should be “en-US” or empty.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1047</Reference>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5058</Reference>
@@ -5198,7 +5229,7 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1049" BrowseName="4:ControllerParameterSetType">
         <DisplayName>ControllerParameterSetType</DisplayName>
-        <Description>The SetType provides an unordered set of objects.</Description>
+        <Description>The ControllerParameterSetType is used for organising ControllerParameterType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
         </References>
@@ -5214,6 +5245,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5058" BrowseName="4:Operational" ParentNodeId="ns=4;i=1047">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational is a FunctionalGroup that shall organize the CurrentState property of the StateMachine and all its remote invocable Methods. Furthermore, it shall organize at least the CurrentValue and TargetValue variables.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1047</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5222,7 +5254,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5076" BrowseName="4:ControllerModeSet" ParentNodeId="ns=4;i=1047">
         <DisplayName>ControllerModeSet</DisplayName>
-        <Description>The SetType provides an unordered set of objects.</Description>
+        <Description>ControllerModeSet is the set of target/current value pairs.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1047</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5231,6 +5263,7 @@
     </UAObject>
     <UAVariable NodeId="ns=4;i=6123" BrowseName="4:TargetValue" ParentNodeId="ns=4;i=1017" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>TargetValue</DisplayName>
+        <Description>TargetValue is the targeted discrete set-point value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1017</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5239,6 +5272,7 @@
     </UAVariable>
     <UAVariable DataType="UInt32" NodeId="ns=4;i=6124" BrowseName="4:TargetValue" ParentNodeId="ns=4;i=1045" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>TargetValue</DisplayName>
+        <Description>TargetValue is the targeted discrete set-point value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1045</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5247,6 +5281,7 @@
     </UAVariable>
     <UAVariable DataType="Boolean" NodeId="ns=4;i=6135" BrowseName="4:TargetValue" ParentNodeId="ns=4;i=1042" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>TargetValue</DisplayName>
+        <Description>TargetValue is the targeted discrete set-point value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1042</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2373</Reference>
@@ -5255,7 +5290,7 @@
     </UAVariable>
     <UAVariable DataType="String" NodeId="ns=4;i=6126" BrowseName="4:DeviceProgramRunId" ParentNodeId="ns=4;i=1040">
         <DisplayName>DeviceProgramRunId</DisplayName>
-        <Description>The device specific ID of the current program-run (if any).</Description>
+        <Description>DeviceProgramRunId represents a device-specific unique internal identifier for this program run. Its value shall be identical to the return value of the last call to the FunctionalUnit’s StartProgram() Method. It is used to identify the result object corresponding to this program run within the FunctionalUnit’s result set.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1040</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -5264,13 +5299,14 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1052" BrowseName="4:AnalogControlFunctionWithComposedTargetValueType">
         <DisplayName>AnalogControlFunctionWithComposedTargetValueType</DisplayName>
+        <Description>The AnalogControlFunctionWithComposedTargetValueType describes an analogue control function (using analogue values), but the TargetValue is composed of several partial values. An example of a composed target value used in mechanical stress analysers involves combining a static/constant base value with periodically changing values for defined amplitude, frequency, and waveform. As the TargetValue is calculated from variables in the TargetValueSet, it should be read-only.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1009</Reference>
         </References>
     </UAObjectType>
     <UAObject NodeId="ns=4;i=5087" BrowseName="4:TargetValueSet" ParentNodeId="ns=4;i=1052">
         <DisplayName>TargetValueSet</DisplayName>
-        <Description>The VariableSetType is a type used for storing additional sample data that was created during a run.</Description>
+        <Description>TargetValueSet contains the partial values for the target value.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1052</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5279,6 +5315,7 @@
     </UAObject>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6136" BrowseName="FalseState" ParentNodeId="ns=4;i=6007">
         <DisplayName>FalseState</DisplayName>
+        <Description>Human readable identifier of the signals' false state.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6007</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5292,6 +5329,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6137" BrowseName="TrueState" ParentNodeId="ns=4;i=6007">
         <DisplayName>TrueState</DisplayName>
+        <Description>Human readable identifier of the signals' true state.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6007</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5305,6 +5343,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6138" BrowseName="FalseState" ParentNodeId="ns=4;i=6066">
         <DisplayName>FalseState</DisplayName>
+        <Description>Human readable identifier of the value false.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6066</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5318,6 +5357,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6140" BrowseName="TrueState" ParentNodeId="ns=4;i=6066">
         <DisplayName>TrueState</DisplayName>
+        <Description>Human readable identifier of the value true.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6066</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5331,6 +5371,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6155" BrowseName="FalseState" ParentNodeId="ns=4;i=6135">
         <DisplayName>FalseState</DisplayName>
+        <Description>Human readable identifier of the value false.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6135</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5344,6 +5385,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6156" BrowseName="TrueState" ParentNodeId="ns=4;i=6135">
         <DisplayName>TrueState</DisplayName>
+        <Description>Human readable identifier of the value true.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6135</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5355,14 +5397,16 @@
             </uax:LocalizedText>
         </Value>
     </UAVariable>
-    <UAObjectType NodeId="ns=4;i=1051" BrowseName="4:MultiAnalogSensorFunctionType">
-        <DisplayName>MultiAnalogSensorFunctionType</DisplayName>
+    <UAObjectType NodeId="ns=4;i=1051" BrowseName="4:MultiSensorFunctionType">
+        <DisplayName>MultiSensorFunctionType</DisplayName>
+        <Description>The MultiSensorFunction represents complex detectors with multiple sensors targeting a specific measurement task, e.g. diode array detector of a HPLC system. The specific sensor elements are represented by sensor-functions in the FunctionSet.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1005</Reference>
         </References>
     </UAObjectType>
     <UAVariable DataType="LocalizedText" ValueRank="1" NodeId="ns=4;i=6157" BrowseName="EnumStrings" ParentNodeId="ns=4;i=6067">
         <DisplayName>EnumStrings</DisplayName>
+        <Description>List of human readable identifiers for the discrete values.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6067</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5371,6 +5415,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" ValueRank="1" NodeId="ns=4;i=6158" BrowseName="EnumStrings" ParentNodeId="ns=4;i=6124">
         <DisplayName>EnumStrings</DisplayName>
+        <Description>List of human readable identifiers for the discrete values.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6124</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5379,6 +5424,7 @@
     </UAVariable>
     <UAVariable DataType="LocalizedText" ValueRank="1" NodeId="ns=4;i=6160" BrowseName="EnumStrings" ParentNodeId="ns=4;i=6030">
         <DisplayName>EnumStrings</DisplayName>
+        <Description>List of human readable identifiers for the discrete sensor values.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6030</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5395,7 +5441,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5006" BrowseName="4:FunctionSet" ParentNodeId="ns=4;i=1051">
         <DisplayName>Function Set</DisplayName>
-        <Description>The FunctionSetType is a type used for structuring objects of type FunctionType in an unordered list structure.</Description>
+        <Description>The FunctionSetType is used for organising FunctionType objects in an unordered list structure.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1051</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5404,7 +5450,7 @@
     </UAObject>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5080" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=5006">
         <DisplayName>&lt;SetElement&gt;</DisplayName>
-        <Description>SetElement is the element of the set and is overridden with FunctionType.</Description>
+        <Description>The BaseSensorFunctionType is an abstract ObjectType used as a base for derivation of Sensor Functions. A Sensor Function is a Function that measures data.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5006</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1005</Reference>
@@ -5443,6 +5489,7 @@
     </UAVariable>
     <UAObjectType NodeId="ns=4;i=1029" BrowseName="4:AnalogControlFunctionWithRelativeTargetValueType">
         <DisplayName>AnalogControlFunctionWithRelativeTargetValueType</DisplayName>
+        <Description>The AnalogControlFunctionWithRelativeTargetValueType supports applications where the target value is typically modified by relative increments or decrements. Examples of its usage include position controllers where the actuator needs to modify its position relative to the last defined position by a specific amount, or dispenser controllers that are responsible for aspirating or dispensing a certain volume of fluid.  The optional DecreaseRate and IncreaseRate variables can be utilized to customize the dynamics of the resulting action based on application-specific requirements. These variables allow for adapting to factors such as viscosity when aspirating or dispensing fluids.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1009</Reference>
         </References>
@@ -5508,6 +5555,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5084" BrowseName="4:Operational" ParentNodeId="ns=4;i=1029">
         <DisplayName>Operational</DisplayName>
+        <Description>Operational is a FunctionalGroup that shall organize the CurrentState property of the StateMachine and all its remote invocable Methods. Furthermore, it shall organize at least the CurrentValue and TargetValue variables.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1029</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5516,12 +5564,14 @@
     </UAObject>
     <UAObjectType NodeId="ns=4;i=1015" BrowseName="4:AnalogArraySensorFunctionType">
         <DisplayName>AnalogArraySensorFunctionType</DisplayName>
+        <Description>The AnalogArraySensorFunctionType is a concrete subtype of the AnalogSensorFunctionType which represents an array of analogue measured values.</Description>
         <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1005</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1046</Reference>
         </References>
     </UAObjectType>
     <UAVariable DataType="Double" ValueRank="0" NodeId="ns=4;i=6130" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1015">
         <DisplayName>SensorValue</DisplayName>
+        <Description>SensorValue is the calibrated and optionally compensated/filtered array of measurement values.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1015</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5530,6 +5580,7 @@
     </UAVariable>
     <UAVariable DataType="Double" ValueRank="0" NodeId="ns=4;i=6134" BrowseName="4:RawValue" ParentNodeId="ns=4;i=1015">
         <DisplayName>RawValue</DisplayName>
+        <Description>RawValue is the raw value measured at the sensor array, such as the electrical current of plate-reader photo-detectors.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1015</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
@@ -5684,144 +5735,6 @@
             </uax:ListOfExtensionObject>
         </Value>
     </UAVariable>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6141" ArrayDimensions="5" BrowseName="InputArguments" ParentNodeId="ns=4;i=7023">
-        <DisplayName>InputArguments</DisplayName>
-        <Description>the definition of the input argument of method 4:FunctionalUnitStateMachineType.4:StartProgram</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7023</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-        <Value>
-            <uax:ListOfExtensionObject>
-                <uax:ExtensionObject>
-                    <uax:TypeId>
-                        <uax:Identifier>i=297</uax:Identifier>
-                    </uax:TypeId>
-                    <uax:Body>
-                        <uax:Argument>
-                            <uax:Name>ProgramTemplateId</uax:Name>
-                            <uax:DataType>
-                                <uax:Identifier>i=12</uax:Identifier>
-                            </uax:DataType>
-                            <uax:ValueRank>-1</uax:ValueRank>
-                            <uax:ArrayDimensions/>
-                            <uax:Description>
-                                <uax:Text>The unique id of the program template used for the program-run. The template must be a member of the ProgramTemplateSet.</uax:Text>
-                            </uax:Description>
-                        </uax:Argument>
-                    </uax:Body>
-                </uax:ExtensionObject>
-                <uax:ExtensionObject>
-                    <uax:TypeId>
-                        <uax:Identifier>i=297</uax:Identifier>
-                    </uax:TypeId>
-                    <uax:Body>
-                        <uax:Argument>
-                            <uax:Name>Properties</uax:Name>
-                            <uax:DataType>
-                                <uax:Identifier>ns=4;i=3003</uax:Identifier>
-                            </uax:DataType>
-                            <uax:ValueRank>1</uax:ValueRank>
-                            <uax:ArrayDimensions>
-                                <uax:UInt32>0</uax:UInt32>
-                            </uax:ArrayDimensions>
-                            <uax:Description>
-                                <uax:Text>A Key/Value list for parameterization of the program-run.</uax:Text>
-                            </uax:Description>
-                        </uax:Argument>
-                    </uax:Body>
-                </uax:ExtensionObject>
-                <uax:ExtensionObject>
-                    <uax:TypeId>
-                        <uax:Identifier>i=297</uax:Identifier>
-                    </uax:TypeId>
-                    <uax:Body>
-                        <uax:Argument>
-                            <uax:Name>SupervisoryJobId</uax:Name>
-                            <uax:DataType>
-                                <uax:Identifier>i=12</uax:Identifier>
-                            </uax:DataType>
-                            <uax:ValueRank>-1</uax:ValueRank>
-                            <uax:ArrayDimensions/>
-                            <uax:Description>
-                                <uax:Text>The ID of the supervisory job.</uax:Text>
-                            </uax:Description>
-                        </uax:Argument>
-                    </uax:Body>
-                </uax:ExtensionObject>
-                <uax:ExtensionObject>
-                    <uax:TypeId>
-                        <uax:Identifier>i=297</uax:Identifier>
-                    </uax:TypeId>
-                    <uax:Body>
-                        <uax:Argument>
-                            <uax:Name>SupervisoryTaskId</uax:Name>
-                            <uax:DataType>
-                                <uax:Identifier>i=12</uax:Identifier>
-                            </uax:DataType>
-                            <uax:ValueRank>-1</uax:ValueRank>
-                            <uax:ArrayDimensions/>
-                            <uax:Description>
-                                <uax:Text>The ID of the supervisory task.</uax:Text>
-                            </uax:Description>
-                        </uax:Argument>
-                    </uax:Body>
-                </uax:ExtensionObject>
-                <uax:ExtensionObject>
-                    <uax:TypeId>
-                        <uax:Identifier>i=297</uax:Identifier>
-                    </uax:TypeId>
-                    <uax:Body>
-                        <uax:Argument>
-                            <uax:Name>Samples</uax:Name>
-                            <uax:DataType>
-                                <uax:Identifier>ns=4;i=3002</uax:Identifier>
-                            </uax:DataType>
-                            <uax:ValueRank>1</uax:ValueRank>
-                            <uax:ArrayDimensions>
-                                <uax:UInt32>0</uax:UInt32>
-                            </uax:ArrayDimensions>
-                            <uax:Description>
-                                <uax:Text>An array of the SampleInfoType that describes the samples processed in this program-run.</uax:Text>
-                            </uax:Description>
-                        </uax:Argument>
-                    </uax:Body>
-                </uax:ExtensionObject>
-            </uax:ListOfExtensionObject>
-        </Value>
-    </UAVariable>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6144" ArrayDimensions="1" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7023">
-        <DisplayName>OutputArguments</DisplayName>
-        <Description>the definition of the output arguments of method 4:FunctionalUnitStateMachineType.4:StartProgram</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7023</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-        <Value>
-            <uax:ListOfExtensionObject>
-                <uax:ExtensionObject>
-                    <uax:TypeId>
-                        <uax:Identifier>i=297</uax:Identifier>
-                    </uax:TypeId>
-                    <uax:Body>
-                        <uax:Argument>
-                            <uax:Name>DeviceProgramRunId</uax:Name>
-                            <uax:DataType>
-                                <uax:Identifier>i=12</uax:Identifier>
-                            </uax:DataType>
-                            <uax:ValueRank>-1</uax:ValueRank>
-                            <uax:ArrayDimensions/>
-                            <uax:Description>
-                                <uax:Text>The device specific ID of the current program-run.</uax:Text>
-                            </uax:Description>
-                        </uax:Argument>
-                    </uax:Body>
-                </uax:ExtensionObject>
-            </uax:ListOfExtensionObject>
-        </Value>
-    </UAVariable>
     <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6132" ArrayDimensions="1" BrowseName="InputArguments" ParentNodeId="ns=4;i=7002" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>InputArguments</DisplayName>
         <References>
@@ -5852,56 +5765,24 @@
     </UAVariable>
     <UAObject SymbolicName="S_SetElement_" NodeId="ns=4;i=5017" BrowseName="4:&lt;SetElement&gt;" ParentNodeId="ns=4;i=1027">
         <DisplayName>&lt;SetElement&gt;</DisplayName>
-        <Description>SetElement is the element of the set. Subtypes of the SetType will override this node.</Description>
+        <Description>The MaintenanceTaskType shall be used to implement instances of maintenance tasks applicable at both the Device and Component levels. Maintenance tasks include activities such as periodic maintenance, cleaning, calibration, and validation.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1027</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1028</Reference>
             <Reference ReferenceType="HasModellingRule">i=11508</Reference>
         </References>
     </UAObject>
-    <UAVariableType DataType="LocalizedText" NodeId="ns=4;i=2000" BrowseName="4:ExtendedStateVariableType">
-        <DisplayName>ExtendedStateVariableType</DisplayName>
-        <References>
-            <Reference ReferenceType="HasSubtype" IsForward="false">i=2760</Reference>
-        </References>
-    </UAVariableType>
-    <UAVariable DataType="NameNodeIdDataType" ValueRank="1" NodeId="ns=4;i=6133" ArrayDimensions="1" BrowseName="4:ContinuationOptions" ParentNodeId="ns=4;i=2000">
-        <DisplayName>ContinuationOptions</DisplayName>
-        <Description>A list of options to proceed from the current state. The list may include pure descriptive text elements which propose an action to be completed (e.g. to resolve an error condition) or a descriptive text in combination with a method which could be called to trigger this action.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=2000</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6139" BrowseName="4:ExtendedInformation" ParentNodeId="ns=4;i=2000">
-        <DisplayName>ExtendedInformation</DisplayName>
-        <Description>Optional descriptive text which helps to illustrate the current state considering the actual context of the system to the end user.</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=2000</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="String" NodeId="ns=4;i=6145" BrowseName="4:VendorCode" ParentNodeId="ns=4;i=2000">
-        <DisplayName>VendorCode</DisplayName>
-        <Description>Optional vendor specific code identifying the current state (e.g., error code).</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=2000</Reference>
-            <Reference ReferenceType="HasModellingRule">i=80</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-        </References>
-    </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6146" BrowseName="CurrentState" ParentNodeId="ns=4;i=1036">
         <DisplayName>CurrentState</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1036</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
         </References>
     </UAVariable>
     <UAObject NodeId="ns=4;i=5063" BrowseName="3:MachineryBuildingBlocks" ParentNodeId="ns=4;i=1002">
         <DisplayName>MachineryBuildingBlocks</DisplayName>
+        <Description>The MachineryBuildingBlocks folder contains all machinery building blocks, especially the MachineryItemState, MachineryOperationMode, OperationCounter and Lifetime Counters.</Description>
         <References>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -5910,6 +5791,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5089" BrowseName="3:MachineryItemState" ParentNodeId="ns=4;i=5063">
         <DisplayName>MachineryItemState</DisplayName>
+        <Description>MachineryItemState indicates the current state of the device in conformance with the Machinery Basics specification.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5063</Reference>
@@ -5919,15 +5801,17 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5090" BrowseName="3:MachineryOperationMode" ParentNodeId="ns=4;i=5063">
         <DisplayName>MachineryOperationMode</DisplayName>
+        <Description>State machine representing the operation mode of a laboratory device. Optional methods allow for initiating changes of the operation mode from remote.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5063</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=3;i=1008</Reference>
+            <Reference ReferenceType="HasTypeDefinition">ns=4;i=1050</Reference>
         </References>
     </UAObject>
     <UAObject NodeId="ns=4;i=5091" BrowseName="3:LifetimeCounters" ParentNodeId="ns=4;i=5063">
         <DisplayName>LifetimeCounters</DisplayName>
+        <Description>Lifetime Counter provides information about the past and estimated remaining lifetime.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5063</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
@@ -5937,6 +5821,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5093" BrowseName="1:OperationCounters" ParentNodeId="ns=4;i=5063">
         <DisplayName>OperationCounters</DisplayName>
+        <Description>OperationCounters for monitoring the condition of the device or component in conformance with the Devices specification.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1002</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5063</Reference>
@@ -6027,6 +5912,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5088" BrowseName="3:MachineryBuildingBlocks" ParentNodeId="ns=4;i=1024">
         <DisplayName>MachineryBuildingBlocks</DisplayName>
+        <Description>The MachineryBuildingBlocks folder contains all machinery building blocks, especially the MachineryItemState, MachineryOperationMode, OperationCounter and Lifetime Counters.</Description>
         <References>
             <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
@@ -6035,6 +5921,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5094" BrowseName="3:LifetimeCounters" ParentNodeId="ns=4;i=5088">
         <DisplayName>LifetimeCounters</DisplayName>
+        <Description>Lifetime Counter provides information about the past and estimated remaining lifetime.</Description>
         <References>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=1024</Reference>
             <Reference ReferenceType="HasAddIn" IsForward="false">ns=4;i=5088</Reference>
@@ -6321,6 +6208,7 @@
     </UAVariable>
     <UAObject NodeId="ns=4;i=5018" BrowseName="2:MaintenanceState" ParentNodeId="ns=4;i=5017">
         <DisplayName>MaintenanceState</DisplayName>
+        <Description>The MaintenanceState state-machine provides information, whether a maintenance activity is planned, currently in execution, of has been executed.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5017</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=2;i=1013</Reference>
@@ -6419,8 +6307,8 @@
         <DisplayName>CurrentState</DisplayName>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1043</Reference>
-            <Reference ReferenceType="HasTypeDefinition">ns=4;i=2000</Reference>
             <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
         </References>
     </UAVariable>
     <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6280" BrowseName="EffectiveDisplayName" ParentNodeId="ns=4;i=6279">
@@ -6443,6 +6331,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5107" BrowseName="4:Unlocking" ParentNodeId="ns=4;i=1010">
         <DisplayName>Unlocking</DisplayName>
+        <Description>Unlocking is the transitive state of the cover when it is in the process of unlocking.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -6450,6 +6339,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5108" BrowseName="4:Locking" ParentNodeId="ns=4;i=1010">
         <DisplayName>Locking</DisplayName>
+        <Description>Locking is the transitive state of the cover when it is in the process of locking.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -6457,6 +6347,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5109" BrowseName="4:Opening" ParentNodeId="ns=4;i=1010">
         <DisplayName>Opening</DisplayName>
+        <Description>Opening is the transitive state of the cover when it is in the process of opening.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -6464,6 +6355,7 @@
     </UAObject>
     <UAObject NodeId="ns=4;i=5110" BrowseName="4:Closing" ParentNodeId="ns=4;i=1010">
         <DisplayName>Closing</DisplayName>
+        <Description>Closing is the transitive state of the cover when it is in the process of closing.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1010</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=2307</Reference>
@@ -6516,13 +6408,6 @@
             <Reference ReferenceType="ToState">ns=4;i=5028</Reference>
         </References>
     </UAObject>
-    <UAMethod NodeId="ns=4;i=7018" BrowseName="4:Unlock" ParentNodeId="ns=4;i=5055">
-        <DisplayName>Unlock</DisplayName>
-        <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAMethod>
     <UAObject NodeId="ns=4;i=5139" BrowseName="4:ClosedToLocking" ParentNodeId="ns=4;i=1010">
         <DisplayName>ClosedToLocking</DisplayName>
         <References>
@@ -6674,8 +6559,9 @@
             <uax:UInt32>15</uax:UInt32>
         </Value>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5141" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1009">
-        <DisplayName>StateMachine</DisplayName>
+    <UAObject NodeId="ns=4;i=5141" BrowseName="4:ControlFunctionState" ParentNodeId="ns=4;i=1009">
+        <DisplayName>ControlFunctionState</DisplayName>
+        <Description>ControlFunctionState is a state machine which represents the execution state and controls the execution of the Function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1009</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
@@ -6720,8 +6606,9 @@
             </uax:ListOfExtensionObject>
         </Value>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5142" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1045">
-        <DisplayName>StateMachine</DisplayName>
+    <UAObject NodeId="ns=4;i=5142" BrowseName="4:ControlFunctionState" ParentNodeId="ns=4;i=1045">
+        <DisplayName>ControlFunctionState</DisplayName>
+        <Description>ControlFunctionState is a state machine which represents the execution state and controls the execution of the Function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1045</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
@@ -6766,8 +6653,9 @@
             </uax:ListOfExtensionObject>
         </Value>
     </UAVariable>
-    <UAObject NodeId="ns=4;i=5144" BrowseName="4:StateMachine" ParentNodeId="ns=4;i=1042">
-        <DisplayName>StateMachine</DisplayName>
+    <UAObject NodeId="ns=4;i=5144" BrowseName="4:ControlFunctionState" ParentNodeId="ns=4;i=1042">
+        <DisplayName>ControlFunctionState</DisplayName>
+        <Description>ControlFunctionState is a state machine which represents the execution state and controls the execution of the Function.</Description>
         <References>
             <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1042</Reference>
             <Reference ReferenceType="HasTypeDefinition">ns=4;i=1044</Reference>
@@ -6812,81 +6700,27 @@
             </uax:ListOfExtensionObject>
         </Value>
     </UAVariable>
-    <UAMethod NodeId="ns=4;i=7020" BrowseName="4:GotoProcessing" ParentNodeId="ns=4;i=5090">
+    <UAMethod NodeId="ns=4;i=7020" BrowseName="4:GotoProcessing" ParentNodeId="ns=4;i=1050">
         <DisplayName>GotoProcessing</DisplayName>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5090</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1050</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6131" BrowseName="InputArguments" ParentNodeId="ns=4;i=7020">
-        <DisplayName>InputArguments</DisplayName>
-        <Description>the definition of the input argument of method 3:MachineryOperationMode.4:GotoProcessing</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7020</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6283" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7020">
-        <DisplayName>OutputArguments</DisplayName>
-        <Description>the definition of the output arguments of method 3:MachineryOperationMode.4:GotoProcessing</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7020</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAMethod NodeId="ns=4;i=7055" BrowseName="4:GotoMaintenance" ParentNodeId="ns=4;i=5090">
+    <UAMethod NodeId="ns=4;i=7055" BrowseName="4:GotoMaintenance" ParentNodeId="ns=4;i=1050">
         <DisplayName>GotoMaintenance</DisplayName>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5090</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1050</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6310" BrowseName="InputArguments" ParentNodeId="ns=4;i=7055">
-        <DisplayName>InputArguments</DisplayName>
-        <Description>the definition of the input argument of method 3:MachineryOperationMode.4:GotoMaintenance</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7055</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6311" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7055">
-        <DisplayName>OutputArguments</DisplayName>
-        <Description>the definition of the output arguments of method 3:MachineryOperationMode.4:GotoMaintenance</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7055</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAMethod NodeId="ns=4;i=7056" BrowseName="4:GotoSetup" ParentNodeId="ns=4;i=5090">
+    <UAMethod NodeId="ns=4;i=7056" BrowseName="4:GotoSetup" ParentNodeId="ns=4;i=1050">
         <DisplayName>GotoSetup</DisplayName>
         <References>
-            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5090</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1050</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
     </UAMethod>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6312" BrowseName="InputArguments" ParentNodeId="ns=4;i=7056">
-        <DisplayName>InputArguments</DisplayName>
-        <Description>the definition of the input argument of method 3:MachineryOperationMode.4:GotoSetup</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7056</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
-    <UAVariable DataType="Argument" ValueRank="1" NodeId="ns=4;i=6313" BrowseName="OutputArguments" ParentNodeId="ns=4;i=7056">
-        <DisplayName>OutputArguments</DisplayName>
-        <Description>the definition of the output arguments of method 3:MachineryOperationMode.4:GotoSetup</Description>
-        <References>
-            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=7056</Reference>
-            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
-            <Reference ReferenceType="HasModellingRule">i=78</Reference>
-        </References>
-    </UAVariable>
     <UAObjectType IsAbstract="true" NodeId="ns=4;i=61" BrowseName="4:SetType">
         <DisplayName>SetType</DisplayName>
         <Description>The SetType provides an unordered set of objects.</Description>
@@ -6897,7 +6731,7 @@
     </UAObjectType>
     <UAObjectType NodeId="ns=4;i=1041" BrowseName="4:VariableSetType">
         <DisplayName>VariableSetType</DisplayName>
-        <Description>The VariableSetType is a type used for storing additional sample data that was created during a run.</Description>
+        <Description>The VariableSetType is used for storing additional sample data that was created during a run.</Description>
         <References>
             <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=61</Reference>
             <Reference ReferenceType="GeneratesEvent">i=2133</Reference>
@@ -6905,10 +6739,168 @@
     </UAObjectType>
     <UAVariable DataType="NameNodeIdDataType" NodeId="ns=4;i=6315" BrowseName="4:CurrentProgramTemplate" ParentNodeId="ns=4;i=1040" UserAccessLevel="3" AccessLevel="3">
         <DisplayName>CurrentProgramTemplate</DisplayName>
+        <Description>CurrentProgramTemplate provides the template-id as well as the node-id of the currently executed program.</Description>
         <References>
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1040</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
             <Reference ReferenceType="HasModellingRule">i=80</Reference>
         </References>
+    </UAVariable>
+    <UAVariable DataType="LocalizedText" NodeId="ns=4;i=6314" BrowseName="CurrentState" ParentNodeId="ns=4;i=5055">
+        <DisplayName>CurrentState</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=5055</Reference>
+            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5064</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=2760</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAObject NodeId="ns=4;i=5146" BrowseName="4:AlarmMonitor" ParentNodeId="ns=4;i=1048">
+        <DisplayName>AlarmMonitor</DisplayName>
+        <Description>AlarmMonitor indicates whether the deviation from a set point exceeds the limit. See: 10000-9: Alarms &amp; Conditions | ExclusiveDeviationAlarmType.</Description>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1048</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=9764</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+    </UAObject>
+    <UAObjectType IsAbstract="true" NodeId="ns=4;i=1046" BrowseName="4:AnalogSensorFunctionType">
+        <DisplayName>AnalogSensorFunctionType</DisplayName>
+        <Description>The AnalogSensorFunctionType is a abstract subtype of the BaseSensorFunctionType which represents an analogue measured value. This is an extension point for all analogue measured values without built-in compensation on the Sensor.</Description>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=4;i=1005</Reference>
+        </References>
+    </UAObjectType>
+    <UAVariable DataType="Double" ValueRank="-2" NodeId="ns=4;i=6040" BrowseName="4:RawValue" ParentNodeId="ns=4;i=1046" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>RawValue</DisplayName>
+        <Description>RawValue is the raw value measured at the Sensor element, such as the Nernst voltage of a pH Sensor element.</Description>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable DataType="Double" ValueRank="-2" NodeId="ns=4;i=6112" BrowseName="4:SensorValue" ParentNodeId="ns=4;i=1046" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>SensorValue</DisplayName>
+        <Description>SensorValue is the calibrated and optionally compensated/filtered process value.</Description>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=1046</Reference>
+            <Reference ReferenceType="Organizes" IsForward="false">ns=4;i=5011</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=17570</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+    </UAVariable>
+    <UAObjectType NodeId="ns=4;i=1050" BrowseName="4:LADSOperationModeStateMachineType">
+        <DisplayName>LADSOperationModeStateMachineType</DisplayName>
+        <Description>State machine representing the operation mode of a laboratory device. Optional methods allow for initiating changes of the operation mode from remote.</Description>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">ns=3;i=1008</Reference>
+        </References>
+    </UAObjectType>
+    <UAVariable DataType="String" NodeId="ns=4;i=6104" BrowseName="NodeVersion" ParentNodeId="ns=4;i=1020" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>NodeVersion</DisplayName>
+        <Description>NodeVersion and the GeneralModelChangeEventType are mechanisms to notify clients that the content of the set has changed and shall be used as defined in OPC 10000-3.</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1020</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+        </References>
+        <Value>
+            <uax:String>NaN</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6133" BrowseName="NodeVersion" ParentNodeId="ns=4;i=1019" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>NodeVersion</DisplayName>
+        <Description>NodeVersion and the GeneralModelChangeEventType are mechanisms to notify clients that the content of the set has changed and shall be used as defined in OPC 10000-3.</Description>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1019</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+        </References>
+        <Value>
+            <uax:String>NaN</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="ByteString" NodeId="ns=4;i=6131" BrowseName="4:TypeDictionary" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>TypeDictionary</DisplayName>
+        <Description>Collects the data type descriptions of http://opcfoundation.org/UA/LADS/</Description>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">i=93</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=72</Reference>
+        </References>
+        <Value>
+            <uax:ByteString>PG9wYzpUeXBlRGljdGlvbmFyeSB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4bWxuczp0bnM9Imh0dHA6Ly9vcGNmb3VuZGF0aW9uLm9yZy9VQS9MQURTLyIgRGVmYXVsdEJ5dGVPcmRlcj0iTGl0dGxlRW5kaWFuIiB4bWxuczpvcGM9Imh0dHA6Ly9vcGNmb3VuZGF0aW9uLm9yZy9CaW5hcnlTY2hlbWEvIiB4bWxuczp1YT0iaHR0cDovL29wY2ZvdW5kYXRpb24ub3JnL1VBLyIgVGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vb3BjZm91bmRhdGlvbi5vcmcvVUEvTEFEUy8iPgogICAgPG9wYzpJbXBvcnQgTmFtZXNwYWNlPSJodHRwOi8vb3BjZm91bmRhdGlvbi5vcmcvVUEvIi8+CiAgICA8b3BjOkVudW1lcmF0ZWRUeXBlIExlbmd0aEluQml0cz0iMzIiIE5hbWU9Ik1haW50ZW5hbmNlVGFza1Jlc3VsdEVudW0iPgogICAgICAgIDxvcGM6RW51bWVyYXRlZFZhbHVlIE5hbWU9IlN1Y2Nlc3MiIFZhbHVlPSIwIi8+CiAgICAgICAgPG9wYzpFbnVtZXJhdGVkVmFsdWUgTmFtZT0iRmFpbHVyZSIgVmFsdWU9IjEiLz4KICAgICAgICA8b3BjOkVudW1lcmF0ZWRWYWx1ZSBOYW1lPSJVbmRldGVybWluZWQiIFZhbHVlPSIyIi8+CiAgICA8L29wYzpFbnVtZXJhdGVkVHlwZT4KICAgIDxvcGM6U3RydWN0dXJlZFR5cGUgTmFtZT0iS2V5VmFsdWVUeXBlIj4KICAgICAgICA8b3BjOkZpZWxkIFR5cGVOYW1lPSJvcGM6Q2hhckFycmF5IiBOYW1lPSJLZXkiLz4KICAgICAgICA8b3BjOkZpZWxkIFR5cGVOYW1lPSJvcGM6Q2hhckFycmF5IiBOYW1lPSJWYWx1ZSIvPgogICAgPC9vcGM6U3RydWN0dXJlZFR5cGU+CiAgICA8b3BjOlN0cnVjdHVyZWRUeXBlIE5hbWU9IlNhbXBsZUluZm9UeXBlIj4KICAgICAgICA8b3BjOkZpZWxkIFR5cGVOYW1lPSJvcGM6Q2hhckFycmF5IiBOYW1lPSJDb250YWluZXJJZCIvPgogICAgICAgIDxvcGM6RmllbGQgVHlwZU5hbWU9Im9wYzpDaGFyQXJyYXkiIE5hbWU9IlNhbXBsZUlkIi8+CiAgICAgICAgPG9wYzpGaWVsZCBUeXBlTmFtZT0ib3BjOkNoYXJBcnJheSIgTmFtZT0iUG9zaXRpb24iLz4KICAgICAgICA8b3BjOkZpZWxkIFR5cGVOYW1lPSJvcGM6Q2hhckFycmF5IiBOYW1lPSJDdXN0b21EYXRhIi8+CiAgICA8L29wYzpTdHJ1Y3R1cmVkVHlwZT4KPC9vcGM6VHlwZURpY3Rpb25hcnk+</uax:ByteString>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6139" BrowseName="NamespaceUri" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>NamespaceUri</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6131</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+        </References>
+        <Value>
+            <uax:String>http://opcfoundation.org/UA/LADS/</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="ByteString" NodeId="ns=4;i=6141" BrowseName="4:TypeDictionary" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>TypeDictionary</DisplayName>
+        <Description>Collects the data type descriptions of http://opcfoundation.org/UA/LADS/</Description>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">i=92</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=72</Reference>
+        </References>
+        <Value>
+            <uax:ByteString>PHhzOnNjaGVtYSBlbGVtZW50Rm9ybURlZmF1bHQ9InF1YWxpZmllZCIgdGFyZ2V0TmFtZXNwYWNlPSJodHRwOi8vb3BjZm91bmRhdGlvbi5vcmcvVUEvTEFEUy9UeXBlcy54c2QiIHhtbG5zOnRucz0iaHR0cDovL29wY2ZvdW5kYXRpb24ub3JnL1VBL0xBRFMvVHlwZXMueHNkIiB4bWxuczp1YT0iaHR0cDovL29wY2ZvdW5kYXRpb24ub3JnL1VBLzIwMDgvMDIvVHlwZXMueHNkIiB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiPgogICAgPHhzOmltcG9ydCBuYW1lc3BhY2U9Imh0dHA6Ly9vcGNmb3VuZGF0aW9uLm9yZy9VQS8yMDA4LzAyL1R5cGVzLnhzZCIvPgogICAgPHhzOnNpbXBsZVR5cGUgbmFtZT0iTWFpbnRlbmFuY2VUYXNrUmVzdWx0RW51bSI+CiAgICAgICAgPHhzOnJlc3RyaWN0aW9uIGJhc2U9InhzOnN0cmluZyI+CiAgICAgICAgICAgIDx4czplbnVtZXJhdGlvbiB2YWx1ZT0iU3VjY2Vzc18wIi8+CiAgICAgICAgICAgIDx4czplbnVtZXJhdGlvbiB2YWx1ZT0iRmFpbHVyZV8xIi8+CiAgICAgICAgICAgIDx4czplbnVtZXJhdGlvbiB2YWx1ZT0iVW5kZXRlcm1pbmVkXzIiLz4KICAgICAgICA8L3hzOnJlc3RyaWN0aW9uPgogICAgPC94czpzaW1wbGVUeXBlPgogICAgPHhzOmVsZW1lbnQgdHlwZT0idG5zOk1haW50ZW5hbmNlVGFza1Jlc3VsdEVudW0iIG5hbWU9Ik1haW50ZW5hbmNlVGFza1Jlc3VsdEVudW0iLz4KICAgIDx4czpjb21wbGV4VHlwZSBuYW1lPSJMaXN0T2ZNYWludGVuYW5jZVRhc2tSZXN1bHRFbnVtIj4KICAgICAgICA8eHM6c2VxdWVuY2U+CiAgICAgICAgICAgIDx4czplbGVtZW50IG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSJ1bmJvdW5kZWQiIHR5cGU9InRuczpNYWludGVuYW5jZVRhc2tSZXN1bHRFbnVtIiBuYW1lPSJNYWludGVuYW5jZVRhc2tSZXN1bHRFbnVtIiBuaWxsYWJsZT0idHJ1ZSIvPgogICAgICAgIDwveHM6c2VxdWVuY2U+CiAgICA8L3hzOmNvbXBsZXhUeXBlPgogICAgPHhzOmVsZW1lbnQgdHlwZT0idG5zOkxpc3RPZk1haW50ZW5hbmNlVGFza1Jlc3VsdEVudW0iIG5hbWU9Ikxpc3RPZk1haW50ZW5hbmNlVGFza1Jlc3VsdEVudW0iIG5pbGxhYmxlPSJ0cnVlIi8+CiAgICA8eHM6Y29tcGxleFR5cGUgbmFtZT0iS2V5VmFsdWVUeXBlIj4KICAgICAgICA8eHM6c2VxdWVuY2U+CiAgICAgICAgICAgIDx4czplbGVtZW50IG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSIxIiB0eXBlPSJ4czpzdHJpbmciIG5hbWU9IktleSIvPgogICAgICAgICAgICA8eHM6ZWxlbWVudCBtaW5PY2N1cnM9IjAiIG1heE9jY3Vycz0iMSIgdHlwZT0ieHM6c3RyaW5nIiBuYW1lPSJWYWx1ZSIvPgogICAgICAgIDwveHM6c2VxdWVuY2U+CiAgICA8L3hzOmNvbXBsZXhUeXBlPgogICAgPHhzOmVsZW1lbnQgdHlwZT0idG5zOktleVZhbHVlVHlwZSIgbmFtZT0iS2V5VmFsdWVUeXBlIi8+CiAgICA8eHM6Y29tcGxleFR5cGUgbmFtZT0iTGlzdE9mS2V5VmFsdWVUeXBlIj4KICAgICAgICA8eHM6c2VxdWVuY2U+CiAgICAgICAgICAgIDx4czplbGVtZW50IG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSJ1bmJvdW5kZWQiIHR5cGU9InRuczpLZXlWYWx1ZVR5cGUiIG5hbWU9IktleVZhbHVlVHlwZSIgbmlsbGFibGU9InRydWUiLz4KICAgICAgICA8L3hzOnNlcXVlbmNlPgogICAgPC94czpjb21wbGV4VHlwZT4KICAgIDx4czplbGVtZW50IHR5cGU9InRuczpMaXN0T2ZLZXlWYWx1ZVR5cGUiIG5hbWU9Ikxpc3RPZktleVZhbHVlVHlwZSIgbmlsbGFibGU9InRydWUiLz4KICAgIDx4czpjb21wbGV4VHlwZSBuYW1lPSJTYW1wbGVJbmZvVHlwZSI+CiAgICAgICAgPHhzOnNlcXVlbmNlPgogICAgICAgICAgICA8eHM6ZWxlbWVudCBtaW5PY2N1cnM9IjAiIG1heE9jY3Vycz0iMSIgdHlwZT0ieHM6c3RyaW5nIiBuYW1lPSJDb250YWluZXJJZCIvPgogICAgICAgICAgICA8eHM6ZWxlbWVudCBtaW5PY2N1cnM9IjAiIG1heE9jY3Vycz0iMSIgdHlwZT0ieHM6c3RyaW5nIiBuYW1lPSJTYW1wbGVJZCIvPgogICAgICAgICAgICA8eHM6ZWxlbWVudCBtaW5PY2N1cnM9IjAiIG1heE9jY3Vycz0iMSIgdHlwZT0ieHM6c3RyaW5nIiBuYW1lPSJQb3NpdGlvbiIvPgogICAgICAgICAgICA8eHM6ZWxlbWVudCBtaW5PY2N1cnM9IjAiIG1heE9jY3Vycz0iMSIgdHlwZT0ieHM6c3RyaW5nIiBuYW1lPSJDdXN0b21EYXRhIi8+CiAgICAgICAgPC94czpzZXF1ZW5jZT4KICAgIDwveHM6Y29tcGxleFR5cGU+CiAgICA8eHM6ZWxlbWVudCB0eXBlPSJ0bnM6U2FtcGxlSW5mb1R5cGUiIG5hbWU9IlNhbXBsZUluZm9UeXBlIi8+CiAgICA8eHM6Y29tcGxleFR5cGUgbmFtZT0iTGlzdE9mU2FtcGxlSW5mb1R5cGUiPgogICAgICAgIDx4czpzZXF1ZW5jZT4KICAgICAgICAgICAgPHhzOmVsZW1lbnQgbWluT2NjdXJzPSIwIiBtYXhPY2N1cnM9InVuYm91bmRlZCIgdHlwZT0idG5zOlNhbXBsZUluZm9UeXBlIiBuYW1lPSJTYW1wbGVJbmZvVHlwZSIgbmlsbGFibGU9InRydWUiLz4KICAgICAgICA8L3hzOnNlcXVlbmNlPgogICAgPC94czpjb21wbGV4VHlwZT4KICAgIDx4czplbGVtZW50IHR5cGU9InRuczpMaXN0T2ZTYW1wbGVJbmZvVHlwZSIgbmFtZT0iTGlzdE9mU2FtcGxlSW5mb1R5cGUiIG5pbGxhYmxlPSJ0cnVlIi8+CjwveHM6c2NoZW1hPg==</uax:ByteString>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6144" BrowseName="NamespaceUri" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>NamespaceUri</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=6141</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+        </References>
+        <Value>
+            <uax:String>http://opcfoundation.org/UA/LADS//Types.xsd</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6145" BrowseName="4:KeyValueType" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>KeyValueType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=6131</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=69</Reference>
+        </References>
+        <Value>
+            <uax:String>KeyValueType</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6283" BrowseName="4:SampleInfoType" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>SampleInfoType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=6131</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=69</Reference>
+        </References>
+        <Value>
+            <uax:String>SampleInfoType</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6310" BrowseName="4:KeyValueType" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>KeyValueType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=6141</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=69</Reference>
+        </References>
+        <Value>
+            <uax:String>//xs:element[@name='KeyValueType']</uax:String>
+        </Value>
+    </UAVariable>
+    <UAVariable DataType="String" NodeId="ns=4;i=6311" BrowseName="4:SampleInfoType" ReleaseStatus="Deprecated" UserAccessLevel="3" AccessLevel="3">
+        <DisplayName>SampleInfoType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent" IsForward="false">ns=4;i=6141</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=69</Reference>
+        </References>
+        <Value>
+            <uax:String>//xs:element[@name='SampleInfoType']</uax:String>
+        </Value>
     </UAVariable>
 </UANodeSet>

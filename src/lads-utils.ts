@@ -1,7 +1,6 @@
 /**
  *
  * Copyright (c) 2023 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
- * Copyright (c) 2023 SPECTARIS - Deutscher Industrieverband für optische, medizinische und mechatronische Technologien e.V. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -28,14 +27,40 @@ import {
     coerceNodeId,
     promoteToStateMachine,
     ExtensionObject, 
-    NodeId
+    NodeId,
+    UAFiniteStateMachine,
+    UAState,
+    BaseNode,
+    roundToFloat2,
+    sameNodeId,
+    ObjectIds,
+    makeNodeId,
+    NodeIdLike,
+    UAVariable,
+    UAAliasNameCategory,
+    UAAliasName,
+    UAProperty
 } from "node-opcua"
 import { 
     LADSDevice, 
+    LADSDeviceState, 
     LADSFunction, 
-    LADSFunctionalUnit 
+    LADSBaseControlFunction,
+    LADSFunctionalState, 
+    LADSFunctionalUnit, 
+    MachineryItemState, 
+    MachineryOperationMode,
+    LADSAnalogScalarSensorFunction,
+    LADSAnalogControlFunction,
+    LADSCoverFunction,
+    LADSAnalogControlFunctionWithTotalizer,
+    LADSFunctionalUnitSet
 } from "./lads-interfaces"
 import { EnumDeviceHealth } from "node-opcua-nodeset-di"
+
+export enum DIObjectIds {
+    deviceSet = 5001
+}
 
 //---------------------------------------------------------------
 // Convenience functions
@@ -72,15 +97,20 @@ export function getLADSObjectType(addressSpace: IAddressSpace, objectType: strin
     return objectTypeNode
 }
 
+export function getLADSNode(addressSpace: IAddressSpace, id: number): BaseNode | null {
+    const namespace = getLADSNamespace(addressSpace)
+    return namespace.findNode(makeNodeId(id, namespace.index))
+}
+
 export function getLADSFunctionalUnits(device: LADSDevice): LADSFunctionalUnit[] {
     const functionalUnits: LADSFunctionalUnit[] = []
     if (!device) return functionalUnits
     const addressSpace = device.addressSpace
     const functionalUnitSet = <UAObject><unknown>device.functionalUnitSet
     const functionalUnitType = getLADSObjectType(addressSpace, "FunctionalUnitType")
-    const hierarchicalReferencesType = addressSpace.findReferenceType(coerceNodeId(ReferenceTypeIds.HierarchicalReferences))
-    assert(hierarchicalReferencesType)
-    const nodes = functionalUnitSet.findReferencesExAsObject(hierarchicalReferencesType)
+    const hasChildReferencesType = addressSpace.findReferenceType(coerceNodeId(ReferenceTypeIds.HasChild))
+    assert(hasChildReferencesType)
+    const nodes = functionalUnitSet.findReferencesExAsObject(hasChildReferencesType)
     nodes.forEach((node: UAObject) => {
         if (node.nodeClass === NodeClass.Object) {
             if (node.typeDefinitionObj.isSubtypeOf(functionalUnitType)) {
@@ -99,14 +129,16 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
     const addressSpace = parent.addressSpace
     const functionSet = <UAObject><unknown>parent.functionSet
     const functionType = getLADSObjectType(addressSpace, "FunctionType")
-    const hierarchicalReferencesType = addressSpace.findReferenceType(coerceNodeId(ReferenceTypeIds.HierarchicalReferences))
+    const hasChildReferencesType = addressSpace.findReferenceType(coerceNodeId(ReferenceTypeIds.HasChild))
     const hasNotifierType = addressSpace.findReferenceType(coerceNodeId(ReferenceTypeIds.HasNotifier))
-    assert(hierarchicalReferencesType)
+    assert(hasChildReferencesType)
     assert(hasNotifierType)
-    parent.addReference({referenceType: hasNotifierType, nodeId:functionSet.nodeId})
-    parent.setEventNotifier(1)
-    functionSet.setEventNotifier(1)
-    const nodes = functionSet.findReferencesExAsObject(hierarchicalReferencesType)
+    if (addHasNotifierReferences) {
+        parent.addReference({referenceType: hasNotifierType, nodeId:functionSet.nodeId})
+        parent.setEventNotifier(1)
+        functionSet.setEventNotifier(1)
+    }
+    const nodes = functionSet.findReferencesExAsObject(hasChildReferencesType)
     const notifierReferences = parent.findReferencesAsObject(hasNotifierType)
     nodes.forEach((node: UAObject) => {
         if (node.nodeClass === NodeClass.Object) {
@@ -127,6 +159,105 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
         }
     })
     return functions
+}
+
+export function getAliasName(node: BaseNode): string {
+    const nodes = getParents(node, DIObjectIds.deviceSet)
+    const names = nodes.map((node) => {
+        const name = node.browseName.name
+        return name?name:"unknown"
+    })
+    const filteredNames = names.filter((name) => (!(["DeviceSet", "FunctionalUnitSet", "FunctionSet", "Components", "TaskSet", 
+    "DeviceState", "FunctionalUnitState", "ProgramManager", "ControlFunctionState", "CoverState", "unknown"].includes(name))))
+    return filteredNames.join("_")
+}
+
+export function getParents(node: BaseNode, rootNodeId: NodeIdLike = ObjectIds.ObjectsFolder): BaseNode[] {
+    const rootNode = rootNodeId instanceof NodeId?rootNodeId:makeNodeId(rootNodeId)
+    if (sameNodeId(node.nodeId, rootNode))
+        return [node]
+    const parentNodeId = node.parentNodeId
+    if (parentNodeId) {
+        try {
+            const parent = node.addressSpace.findNode(parentNodeId)
+            assert(parent)
+            const parents = getParents(parent)
+            parents.push(node)
+            return parents
+        }
+        catch(error) {
+            console.log(error)
+            return [node]
+        }
+    } else {
+        return [node]
+    }
+}
+
+function addTagVariable(variable: UAVariable | null | undefined) {
+    if (!variable) return
+    const addressSpace = variable.addressSpace
+    const tagVariables = <UAAliasNameCategory>addressSpace.findNode(coerceNodeId(ObjectIds.TagVariables))
+    const aliasNameType = addressSpace.findObjectType(coerceNodeId(ObjectTypeIds.AliasNameType))
+    const aliasName = getAliasName(variable)
+    const tagVariable = aliasNameType?.instantiate({
+        browseName: aliasName,
+        description: `Tag name of variable ${aliasName}.`,
+        organizedBy: tagVariables,
+    })
+    const aliasFor = tagVariable?.addReference({
+        referenceType: coerceNodeId(ReferenceTypeIds.AliasFor),
+        nodeId: variable.nodeId
+    })
+}
+
+export function addAliases(device: LADSDevice) {
+    addDeviceAliases(device)
+    const functionalUnits = getLADSFunctionalUnits(device)
+    functionalUnits.forEach((functionalUnit: LADSFunctionalUnit) => {
+        addFunctionalUnitAliases(functionalUnit)
+        addFunctionsAliases(getLADSFunctions(functionalUnit))
+    })
+}
+
+function addDeviceAliases(device: LADSDevice) {
+    addTagVariable(device.deviceState.currentState)
+    addTagVariable(device.deviceHealth)
+    addTagVariable(device.machineryItemState?.currentState)
+    addTagVariable(device.machineryOperationMode?.currentState)
+    addTagVariable(device.operationCounters?.operationCycleCounter)
+    addTagVariable(device.operationCounters?.operationDuration)
+    addTagVariable(device.operationCounters?.powerOnDuration)
+}
+
+function addFunctionalUnitAliases(functionalUnit: LADSFunctionalUnit) {
+    addTagVariable(functionalUnit.functionalUnitState.currentState)
+    const programManager = functionalUnit.programManager
+    if (programManager) {
+        const activeProgram = programManager.activeProgram
+        addTagVariable(activeProgram.currentPauseTime)
+        addTagVariable(activeProgram.currentProgramTemplate)
+        addTagVariable(activeProgram.currentRuntime)
+        addTagVariable(activeProgram.currentStepName)
+        addTagVariable(activeProgram.currentStepNumber)
+        addTagVariable(activeProgram.currentStepRuntime)
+        addTagVariable(activeProgram.estimatedRuntime)
+        addTagVariable(activeProgram.estimatedStepNumbers)
+        addTagVariable(activeProgram.estimatedStepRuntime)
+    }
+}
+
+function addFunctionsAliases(functions: LADSFunction[]) {
+    if (!functions) return
+    functions.forEach( (ladsFunction: LADSFunction) => {
+        addTagVariable((<LADSAnalogScalarSensorFunction>ladsFunction).sensorValue)
+        addTagVariable((<LADSBaseControlFunction>ladsFunction).controlFunctionState?.currentState)
+        addTagVariable((<LADSAnalogControlFunction>ladsFunction).targetValue)
+        addTagVariable((<LADSAnalogControlFunction>ladsFunction).currentValue)
+        addTagVariable((<LADSAnalogControlFunctionWithTotalizer>ladsFunction).totalizedValue)
+        addTagVariable((<LADSCoverFunction>ladsFunction).coverState?.currentState)
+        addFunctionsAliases(getLADSFunctions(ladsFunction))
+    })
 }
 
 //---------------------------------------------------------------
@@ -167,37 +298,34 @@ export function buildLADSEventNotifierTree(device: LADSDevice) {
 //
 // Helper object to provide several features for a device object:
 // - automatically add an Organizes reference to the device within the Machines folder
-// - automatically add HasEvent references to the device sub-tree as decribed above
-// - example implmentation of state-machine logic and behavior as 
+// - automatically add HasEventNotifier references to the device sub-tree as decribed above
+// - example implementation of state-machine logic and behavior as 
 //   described in Annex B of LADS OPC UA 30500-1
 // - optionally raise events whenever one of the state-machine states changes
 //---------------------------------------------------------------
 
-// LADSDeviceStateMachine
-const stateDeviceInitialization = 'Initialization'
-const stateDeviceOperate = 'Operate'
-const stateDeviceSleep = 'Sleep'
-const stateDeviceShutdown = 'Shutdown'
+export function promoteToFiniteStateMachine(stateMachine: UAFiniteStateMachine): UAStateMachineEx {
+    const helper = new LADSFiniteStateMachineHelper(stateMachine)
+    return helper.stateMachine
+}
 
-// MachineryItemState
-const stateMachineryItemNotAvailable = 'NotAvailable'
-const stateMachineryItemExecuting = 'Executing'
-const stateMachineryItemNotExecuting = 'NotExecuting'
-const stateMachineryItemOutOfService = 'OutOfService'
+export class LADSFiniteStateMachineHelper {
+    stateMachine: UAStateMachineEx
 
-// MachineryOperationMode
-const stateOperationModeNone = 'None'
-const stateOperationModeProcessing ='Processing'
-const stateOperationModeMaintenance = 'Maintenance'
-const stateOperationModeSetup = 'Setup'
+    constructor(stateMachine: UAFiniteStateMachine) {
+        this.stateMachine = promoteToStateMachine(stateMachine)
+        this.stateMachine.currentState.on("value_changed", this.onCurrentStateChanged.bind(this))
+    } 
 
-// FunctionalStateMachine
-export const stateClearing = 'Clearing'
-export const stateRunning = 'Running'
-export const stateStopping = 'Stopping'
-export const stateStopped = 'Stopped'
-export const stateAborting = 'Aborting'
-export const stateAborted = 'Aborted'
+    async onCurrentStateChanged(dataValue: DataValueT<LocalizedText, DataType.LocalizedText>) {
+        const stateName = dataValue.value.value.text
+        const states = this.stateMachine.getStates()
+        const state = states.find((value: UAState) => (stateName?.includes(value.browseName.name?value.browseName.name:"")))
+        if(state) {
+            this.stateMachine.currentState.id.setValueFromSource({value: state.nodeId, dataType: DataType.NodeId})
+        }
+    }
+}
 
 export interface LADSDeviceHelperOptions {
     initializationTime?: number
@@ -240,29 +368,29 @@ export class LADSDeviceHelper {
         machinesFolder?.addReference({referenceType: organizesType, nodeId: device.nodeId})
 
         // get and promote state-machines
-        this.deviceStateMachine = promoteToStateMachine(device.stateMachine)
-        this.machineryItemState = device.machineryItemState?promoteToStateMachine(device.machineryItemState):undefined
-        this.machineryOperationMode = device.machineryOperationMode?promoteToStateMachine(device.machineryOperationMode):undefined
+        this.deviceStateMachine = promoteToFiniteStateMachine(device.deviceState)
+        this.machineryItemState = device.machineryItemState?promoteToFiniteStateMachine(device.machineryItemState):undefined
+        this.machineryOperationMode = device.machineryOperationMode?promoteToFiniteStateMachine(device.machineryOperationMode):undefined
         const functionalUnits = getLADSFunctionalUnits(device)
         functionalUnits.forEach((functionalUnit) => {
-            const functionalUnitStateMachine = promoteToStateMachine(functionalUnit.stateMachine)
+            const functionalUnitStateMachine = promoteToFiniteStateMachine(functionalUnit.functionalUnitState)
             functionalUnitStateMachine.currentState.on('value_changed', this.onFunctionalUnitStateChanged.bind(this, functionalUnit, functionalUnitStateMachine))
             this.functionalUnitStateMachines.push(functionalUnitStateMachine)
         })
 
         // bind state changes
-        device.stateMachine.currentState.on('value_changed', this.onDeviceStateChanged.bind(this))
+        device.deviceState.currentState.on('value_changed', this.onDeviceStateChanged.bind(this))
         device.machineryItemState?.currentState.on('value_changed', this.onMachineryItemStateChanged.bind(this))
         device.machineryOperationMode?.currentState.on('value_changed', this.onMachineryOperationModeChanged.bind(this))
         device.deviceHealth?.on('value_changed', this.onDeviceHealthChanged.bind(this))
 
         // bind methods
-        device.stateMachine.gotoOperate?.bindMethod(this.onGotoOperating.bind(this))
-        device.stateMachine.gotoSleep?.bindMethod(this.onGotoSleep.bind(this))
-        device.stateMachine.gotoShutdown?.bindMethod(this.onGotoShutdown.bind(this))
-        device.machineryOperationMode?.gotoMaintenance?.bindMethod(this.onGotoOperationMode.bind(this, stateOperationModeMaintenance))
-        device.machineryOperationMode?.gotoProcessing?.bindMethod(this.onGotoOperationMode.bind(this, stateOperationModeProcessing))
-        device.machineryOperationMode?.gotoSetup?.bindMethod(this.onGotoOperationMode.bind(this, stateOperationModeSetup))
+        device.deviceState.gotoOperate?.bindMethod(this.onGotoOperating.bind(this))
+        device.deviceState.gotoSleep?.bindMethod(this.onGotoSleep.bind(this))
+        device.deviceState.gotoShutdown?.bindMethod(this.onGotoShutdown.bind(this))
+        device.machineryOperationMode?.gotoMaintenance?.bindMethod(this.onGotoOperationMode.bind(this, MachineryOperationMode.Maintenance))
+        device.machineryOperationMode?.gotoProcessing?.bindMethod(this.onGotoOperationMode.bind(this, MachineryOperationMode.Processing))
+        device.machineryOperationMode?.gotoSetup?.bindMethod(this.onGotoOperationMode.bind(this, MachineryOperationMode.Setup))
 
         // initialize device
         this.enterDeviceInitialzation()
@@ -294,25 +422,25 @@ export class LADSDeviceHelper {
     }
 
     enterDeviceInitialzation() {
-        this.deviceStateMachine.setState(stateDeviceInitialization)
-        this.machineryOperationMode?.setState(stateOperationModeNone)
+        this.deviceStateMachine.setState(LADSDeviceState.Initialization)
+        this.machineryOperationMode?.setState(MachineryOperationMode.None)
         sleepMilliSeconds(this.options?.initializationTime?this.options.initializationTime:50).then(() => this.enterDeviceOperating())
     }
 
     enterDeviceOperating() {
         const state = state2str(this.deviceStateMachine.getCurrentState())
-        if (state.includes(stateDeviceOperate)) return
-        this.deviceStateMachine.setState(stateDeviceOperate)
-        this.machineryOperationMode?.setState(stateOperationModeProcessing)
+        if (state.includes(LADSDeviceState.Operate)) return
+        this.deviceStateMachine.setState(LADSDeviceState.Operate)
+        this.machineryOperationMode?.setState(MachineryOperationMode.Processing)
     }
 
     enterDeviceSleep() {
-        this.deviceStateMachine.setState(stateDeviceSleep)
+        this.deviceStateMachine.setState(LADSDeviceState.Sleep)
     }
 
     enterDeviceShutdown() {
-        this.deviceStateMachine.setState(stateDeviceShutdown)
-        this.machineryOperationMode?.setState(stateOperationModeNone)
+        this.deviceStateMachine.setState(LADSDeviceState.Shutdown)
+        this.machineryOperationMode?.setState(MachineryOperationMode.None)
         sleepMilliSeconds(this.options?.shutdownTime?this.options.shutdownTime:1000).then(() => { this.enterDeviceInitialzation() })
     }
 
@@ -320,7 +448,7 @@ export class LADSDeviceHelper {
         const state = dataValue.value.value.text
         if (!state) return
         this.raiseEvent(`state changed to ${state} .. `)
-        if (!state.includes(stateDeviceOperate)) {
+        if (!state.includes(LADSDeviceState.Operate)) {
             this.adjustMachineryItemState()
         }
     }
@@ -330,11 +458,11 @@ export class LADSDeviceHelper {
         const key = Object.keys(EnumDeviceHealth)[Object.values(EnumDeviceHealth).indexOf(value)]
         this.raiseEvent(`health changed to ${key} .. `)
         if (value == EnumDeviceHealth.FAILURE) {
-            this.machineryItemState?.setState(stateMachineryItemOutOfService)
+            this.machineryItemState?.setState(MachineryItemState.OutOfService)
             this.functionalUnitStateMachines.forEach((stateMachine) => {
-                if (state2str(stateMachine.getCurrentState()).includes(stateRunning)) {
-                    stateMachine.setState(stateAborting)
-                    sleepMilliSeconds(1000).then(() => stateMachine.setState(stateAborted))
+                if (state2str(stateMachine.getCurrentState()).includes(LADSFunctionalState.Running)) {
+                    stateMachine.setState(LADSFunctionalState.Aborting)
+                    sleepMilliSeconds(1000).then(() => stateMachine.setState(LADSFunctionalState.Aborted))
                 }
             })
         }
@@ -354,8 +482,8 @@ export class LADSDeviceHelper {
 
     adjustMachineryItemState(): number {
         const functionalUnitStates = this.functionalUnitStateMachines.map((stateMachine => (state2str(stateMachine.getCurrentState()))))
-        const functionalUnitsRunnning = functionalUnitStates.reduce((count, state) => { return state.includes(stateRunning)?count +1:count }, 0)    
-        this.machineryItemState?.setState(functionalUnitsRunnning>0?stateMachineryItemExecuting:stateMachineryItemNotExecuting)
+        const functionalUnitsRunnning = functionalUnitStates.reduce((count, state) => { return state.includes(LADSFunctionalState.Running)?count +1:count }, 0)    
+        this.machineryItemState?.setState(functionalUnitsRunnning>0?MachineryItemState.Executing:MachineryItemState.NotExecuting)
         return functionalUnitsRunnning
     }
 

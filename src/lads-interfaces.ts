@@ -15,32 +15,37 @@ import {
     UAExclusiveDeviationAlarm,
     UAExclusiveLimitAlarm,
     UAFiniteStateMachine,
+    UAFolder,
     UAMethod,
     UAMultiStateDiscrete,
     UAObject,
     UAProperty,
     UAString,
-    UATwoStateDiscrete,
-    UAVariableT} from "node-opcua"
-import { UADevice, UALockingServices } from "node-opcua-nodeset-di"
+    UATwoStateDiscrete} from "node-opcua"
+import { UADevice, UAFunctionalGroup, UALockingServices } from "node-opcua-nodeset-di"
 
 //---------------------------------------------------------------
 // Interfaces for LADS devices
 //---------------------------------------------------------------
 export interface LADSDevice extends UADevice {
     functionalUnitSet: LADSFunctionalUnitSet
-    stateMachine: LADSDeviceStateMachine
+    deviceState: LADSDeviceStateMachine
     machineryItemState?: UAFiniteStateMachine
     machineryOperationMode?: MachineryOperationModeStateMachine
     operationalLocation?: UAProperty<UAString, DataType.String>
     hierarchicalLocation?: UAProperty<UAString, DataType.String>
+    operationCounters?: OperationCounters
     identifictaion?: LADSIdentifictaion
     lock?: UALockingServices
 }
 
-export interface LADSIdentifictaion extends UAObject {
-    
+export interface OperationCounters extends UAFunctionalGroup {
+    operationCycleCounter: UAProperty<number, DataType.UInt32>
+    operationDuration: UAProperty<number, DataType.Double>
+    powerOnDuration: UAProperty<number, DataType.Double>
 }
+
+export interface LADSIdentifictaion extends UAObject {}
 
 export interface LADSFunctionalUnitSet  {
     [key: string]: LADSFunctionalUnit
@@ -56,7 +61,7 @@ export interface LADSFunctionalUnit extends UAObject {
         activeProgram: LADSActiveProgram
         resultSet: LADSResultSet
     }
-    stateMachine: LADSFunctionalUnitStateMachine
+    functionalUnitState: LADSFunctionalUnitStateMachine
     lock?: UALockingServices
 }
 
@@ -67,18 +72,46 @@ export interface LADSFunctionSet {
 //---------------------------------------------------------------
 // Interfaces for LADS state machines
 //---------------------------------------------------------------
+// LADSDeviceStateMachine
+export enum LADSDeviceState {
+    Initialization = 'Initialization',
+    Operate = 'Operate',
+    Sleep = 'Sleep',
+    Shutdown = 'Shutdown',
+}
 export interface LADSDeviceStateMachine extends UAFiniteStateMachine {
     gotoOperate?: UAMethod
     gotoShutdown?: UAMethod
     gotoSleep?: UAMethod
 }
 
+// MachineryItemState
+export enum MachineryItemState {
+    NotAvailable = 'NotAvailable',
+    Executing = 'Executing',
+    NotExecuting = 'NotExecuting',
+    OutOfService = 'OutOfService',
+}
+
+// MachineryOperationMode
+export enum MachineryOperationMode {
+    None = 'None',
+    Processing ='Processing',
+    Maintenance = 'Maintenance',
+    Setup = 'Setup',
+}
 export interface MachineryOperationModeStateMachine extends UAFiniteStateMachine {
     gotoMaintenance?: UAMethod
     gotoProcessing?: UAMethod
     gotoSetup?: UAMethod
 }
 
+// LADSCoverStateMachine
+export enum LADSCoverState {
+    Opened = 'Opened',
+    Closed = 'Closed',
+    Locked = 'Locked',
+}
 export interface LADSCoverStateMachine extends UAFiniteStateMachine {
     open: UAMethod
     close: UAMethod
@@ -86,6 +119,15 @@ export interface LADSCoverStateMachine extends UAFiniteStateMachine {
     unlock?: UAMethod
 }
 
+// FunctionalStateMachine
+export enum LADSFunctionalState {
+    Clearing = 'Clearing',
+    Running = 'Running',
+    Stopping = 'Stopping',
+    Stopped = 'Stopped',
+    Aborting = 'Aborting',
+    Aborted = 'Aborted', 
+}
 export interface LADSFunctionalStateMachine extends UAFiniteStateMachine {
     runningStateMachine: LADSRunnnigStateMachine
     start: UAMethod
@@ -93,15 +135,14 @@ export interface LADSFunctionalStateMachine extends UAFiniteStateMachine {
     abort: UAMethod
     clear?: UAMethod
 }
-
 export interface LADSFunctionalUnitStateMachine extends LADSFunctionalStateMachine {
     startProgram?: UAMethod
 }
-
 export interface LADSControlFunctionStateMachine extends LADSFunctionalStateMachine {
     startWithTargetValue?: UAMethod
 }
 
+// RunningStateMachine
 export interface LADSRunnnigStateMachine extends UAFiniteStateMachine {
     suspend: UAMethod
     unsuspend: UAMethod
@@ -121,38 +162,57 @@ export interface LADSFunction extends UAObject {
 }
 
 export interface LADSCoverFunction extends LADSFunction {
-    stateMachine: LADSCoverStateMachine
+    coverState: LADSCoverStateMachine
 }
 
 //---------------------------------------------------------------
 // Interfaces for LADS sensor-functions
 //---------------------------------------------------------------
-interface LADSBaseSensorFunction extends LADSFunction {
+export interface LADSBaseSensorFunction extends LADSFunction {}
+
+export interface LADSAnalogSensorFunction extends LADSBaseSensorFunction {
     alarmMonitor?: UAExclusiveLimitAlarm
     damping?: UAProperty<number, DataType.Double>
 }
 
-export interface LADSAnalogSensorFunction extends LADSBaseSensorFunction {
+export interface LADSAnalogScalarSensorFunction extends LADSAnalogSensorFunction {
     rawValue?: UAAnalogUnitRange<number, DataType.Double>
     sensorValue: UAAnalogUnitRange<number, DataType.Double>
 }
 
-export interface LADSAnalogArraySensorFunction extends LADSBaseSensorFunction {
+export interface LADSAnalogArraySensorFunction extends LADSAnalogSensorFunction {
     rawValue?: UAAnalogUnitRange<Float64Array, DataType.Double>
     sensorValue: UAAnalogUnitRange<Float64Array, DataType.Double>
 }
 
+export interface LADSDiscreteSensorFunction extends LADSBaseSensorFunction {}
+
+export interface LADSTwoStateDiscreteSensorFunction extends LADSDiscreteSensorFunction {
+    sensorValue: UATwoStateDiscrete<boolean>
+}
+
+export interface LADSMultiStateDiscreteSensorFunction extends LADSDiscreteSensorFunction {
+    sensorValue: UAMultiStateDiscrete<number, DataType.UInt32>
+}
+
+export interface LADSMultiSensorFunctionType extends LADSBaseSensorFunction {}
+
 //---------------------------------------------------------------
 // Interfaces for LADS control-functions
 //---------------------------------------------------------------
-interface LADSBaseControlFunction extends LADSFunction {
+export interface LADSBaseControlFunction extends LADSFunction {
     alarmMonitor?: UAExclusiveDeviationAlarm
-    stateMachine: LADSControlFunctionStateMachine
+    controlFunctionState: LADSControlFunctionStateMachine
 }
 
 export interface LADSAnalogControlFunction extends LADSBaseControlFunction {
     currentValue: UAAnalogUnitRange<number, DataType.Double>
     targetValue: UAAnalogUnitRange<number, DataType.Double>
+}
+
+export interface LADSAnalogControlFunctionWithTotalizer extends LADSAnalogControlFunction {
+    totalizedValue: UAAnalogUnitRange<number, DataType.Double>
+    resetTotalizer?: UAMethod
 }
 
 export interface LADSMultiStateDiscreteControlFunction extends LADSBaseControlFunction {

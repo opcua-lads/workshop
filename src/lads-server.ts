@@ -15,6 +15,7 @@ import {
     CallMethodResultOptions,
     DataType,
     DataValue,
+    DataValueT,
     LocalizedText,
     OPCUAServer,
     ObjectTypeIds,
@@ -28,35 +29,33 @@ import {
     VariantArrayType,
     VariantLike,
     coerceNodeId,
-    promoteToStateMachine
 } from "node-opcua"
 import { UADevice } from "node-opcua-nodeset-di"
 
 import {
     LADSDeviceHelper,
+    addAliases,
     constructNameNodeIdExtensionObject,
     getLADSObjectType,
+    promoteToFiniteStateMachine,
     sleepMilliSeconds,
-    stateAborted,
-    stateAborting,
-    stateRunning,
-    stateStopped,
-    stateStopping
 } from "./lads-utils"
 
 import {
     LADSAnalogArraySensorFunction,
     LADSAnalogControlFunction,
     LADSCoverFunction,
+    LADSCoverState,
     LADSDevice,
+    LADSFunctionalState,
     LADSFunctionalUnit,
     LADSProgramTemplate,
     LADSResult,
+    LADSTwoStateDiscreteControlFunction,
 } from "./lads-interfaces"
 
 // At which level is the workshop currently
-const workshopStep = 10;
-const big_node_set = true;
+const workshopStep = 13;
 
 //---------------------------------------------------------------
 // main
@@ -73,15 +72,10 @@ const big_node_set = true;
     const nodeset_machinery = join(nodeset_path, 'Opc.Ua.Machinery.NodeSet2.xml')
     const nodeset_lads = join(nodeset_path, 'Opc.Ua.LADS.NodeSet2.xml')
     const nodeset_luminescencereader = join(nodeset_path, 'LuminescenceReader.xml')
-    const nodeset_centrifuge = join(nodeset_path, 'Centrifuge.xml')
-    const nodeset_bpc = join(nodeset_path, 'BPC.xml')
-    const nodeset_atd = join(nodeset_path, 'AutomatedThermoDesorper.xml')
-    const nodeset_vaccu_select = join(nodeset_path, 'VaccuSelect.xml')
 
     try {
         // list of node-set files
         const node_set_filenames = [nodeset_standard, nodeset_di, nodeset_machinery, nodeset_amb, nodeset_lads, nodeset_luminescencereader,]
-        if (big_node_set) { node_set_filenames.push(nodeset_centrifuge, nodeset_vaccu_select) }
 
         // build the server object
         const uri = "LADS-SampleServer"
@@ -152,6 +146,7 @@ const big_node_set = true;
                 injector2: LADSAnalogControlFunction
                 injector3: LADSAnalogControlFunction
                 cover: LADSCoverFunction
+                wastePump: LADSTwoStateDiscreteControlFunction
             }
         }
 
@@ -267,7 +262,7 @@ const big_node_set = true;
         // Step 7: utilize OPC UA state-machines and its methods
         //---------------------------------------------------------------
         // first step "promoting" the state machine (this depends on the tech/stacks capabilities)
-        const temperatureControllerStateMachine = promoteToStateMachine(temperatureController.stateMachine)
+        const temperatureControllerStateMachine = promoteToFiniteStateMachine(temperatureController.controlFunctionState)
         temperatureControllerStateMachine.setState('Stopped')
         console.log(`Step 7: initialized state machine to "Stopped"`);
 
@@ -294,12 +289,12 @@ const big_node_set = true;
         }
 
         // second step: bind functions for starting and stopping to OPC UA methods
-        temperatureController.stateMachine.start.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
-        temperatureController.stateMachine.startWithTargetValue?.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
-        temperatureController.stateMachine.stop.bindMethod(onStopTemperatureController.bind(temperatureControllerStateMachine))
+        temperatureController.controlFunctionState.start.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
+        temperatureController.controlFunctionState.startWithTargetValue?.bindMethod(onStartTemperatureController.bind(temperatureControllerStateMachine))
+        temperatureController.controlFunctionState.stop.bindMethod(onStopTemperatureController.bind(temperatureControllerStateMachine))
 
         // third step: bind internal state variable to OPC UA stateMachine.currentState variable
-        temperatureController.stateMachine.currentState.on("value_changed", (dataValue: DataValue) => {
+        temperatureController.controlFunctionState.currentState.on("value_changed", (dataValue: DataValue) => {
             const state = (<LocalizedText>dataValue.value.value).text
             temperatureControllerIsOn = state ? state.includes("Running") : false
         })
@@ -315,7 +310,7 @@ const big_node_set = true;
         assert(baseEventType)
 
         // raise event whenever the state of the temperature-controller statemachine has changed
-        temperatureController.stateMachine.currentState.on("value_changed", (dataValue: DataValue) => {
+        temperatureController.controlFunctionState.currentState.on("value_changed", (dataValue: DataValue) => {
             const message = `${temperatureController.getDisplayName()} state changed to "${(<LocalizedText>dataValue.value.value).text}".`
             temperatureController.raiseEvent(baseEventType, { message: { dataType: DataType.LocalizedText, value: message } })
             console.log("Step 8: raised state-changed event");
@@ -336,7 +331,7 @@ const big_node_set = true;
         //---------------------------------------------------------------
         const activeProgram = functionalUnit.programManager.activeProgram
         const resultSet = functionalUnit.programManager.resultSet
-        const functionalUnitStateMachine = promoteToStateMachine(functionalUnit.stateMachine)
+        const functionalUnitStateMachine = promoteToFiniteStateMachine(functionalUnit.functionalUnitState)
         functionalUnitStateMachine.setState("Stopped")
         let runId = 0
 
@@ -358,13 +353,15 @@ const big_node_set = true;
             const programTemplates = programTemplateReferences.map((template) => <LADSProgramTemplate>template)
             const programTemplate = programTemplates.find((template) => (template.browseName.name == programTemplateId))
             if (programTemplate) {
+                const value = constructNameNodeIdExtensionObject(
+                    addressSpace,
+                    programTemplateId, 
+                    programTemplate.nodeId 
+                )
                 activeProgram?.currentProgramTemplate?.setValueFromSource({
                     dataType: DataType.ExtensionObject, 
-                    value: constructNameNodeIdExtensionObject(
-                        addressSpace,
-                        programTemplateId, 
-                        programTemplate.nodeId 
-                    )})
+                    value: value,
+                })
             }
     
             // set context information provided by input-arguments
@@ -384,11 +381,12 @@ const big_node_set = true;
             activeProgram.currentStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: 0 })
             activeProgram.estimatedRuntime?.setValueFromSource({ dataType: DataType.Double, value: runTime + finishTime })
             activeProgram.estimatedStepRuntime?.setValueFromSource({ dataType: DataType.Double, value: runTime })
+            activeProgram.estimatedStepNumbers?.setValueFromSource({ dataType: DataType.UInt32, value: 2 })
             activeProgram.deviceProgramRunId?.setValueFromSource({ dataType: DataType.String, value: deviceProgramRunId })
 
             // start all required functions
-            functionalUnitStateMachine.setState(stateRunning)
-            temperatureControllerStateMachine.setState(stateRunning)
+            functionalUnitStateMachine.setState(LADSFunctionalState.Running)
+            temperatureControllerStateMachine.setState(LADSFunctionalState.Running)
             for (let t = 0; t <= runTime; t += delta) {
                 // update active-program runtime properties
                 activeProgram.currentRuntime?.setValueFromSource({ dataType: DataType.Double, value: t })
@@ -399,11 +397,11 @@ const big_node_set = true;
 
                 // check if run was stopped or aborted from remote
                 const currentState  = functionalUnitStateMachine.getCurrentState()
-                if (currentState && !currentState.includes(stateRunning)) { 
+                if (currentState && !currentState.includes(LADSFunctionalState.Running)) { 
                     break 
                 }
             }
-            temperatureControllerStateMachine.setState(stateStopped)
+            temperatureControllerStateMachine.setState(LADSFunctionalState.Stopped)
 
             // finalize
             result.stopped?.setValueFromSource({ dataType: DataType.DateTime, value: new Date() })
@@ -430,14 +428,14 @@ const big_node_set = true;
                 // do whatever is necessary for the run
                 await sleepMilliSeconds(delta)
             }
-            functionalUnitStateMachine.setState(stateStopped)
+            functionalUnitStateMachine.setState(LADSFunctionalState.Stopped)
         }
 
         async function startProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
             // validate current state
             // console.log("StartProgram")
             const currentState = this.getCurrentState();
-            if (!(currentState && (currentState.includes(stateStopped) || currentState.includes(stateAborted)))) {
+            if (!(currentState && (currentState.includes(LADSFunctionalState.Stopped) || currentState.includes(LADSFunctionalState.Aborted)))) {
                 return { statusCode: StatusCodes.BadInvalidState }
             }
 
@@ -461,28 +459,77 @@ const big_node_set = true;
         }
 
         async function stopProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
-            return stopOrAbortProgram(this, stateStopping, stateStopped)
+            return stopOrAbortProgram(this, LADSFunctionalState.Stopping, LADSFunctionalState.Stopped)
         }
 
         async function abortProgram(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
-            return stopOrAbortProgram(this, stateAborting, stateAborted)
+            return stopOrAbortProgram(this, LADSFunctionalState.Aborting, LADSFunctionalState.Aborted)
         }
 
         async function stopOrAbortProgram(stateMachine: UAStateMachineEx, transitiveState: string, finalState: string) {
             const currentState = stateMachine.getCurrentState();
-            if (!(currentState && currentState.includes(stateRunning))) return { statusCode: StatusCodes.BadInvalidState }
+            if (!(currentState && currentState.includes(LADSFunctionalState.Running))) return { statusCode: StatusCodes.BadInvalidState }
             stateMachine.setState(transitiveState)
             sleepMilliSeconds(1000).then(() => stateMachine.setState(finalState))
             return { statusCode: StatusCodes.Good }
         }
 
-        functionalUnit.stateMachine.startProgram?.bindMethod(startProgram.bind(functionalUnitStateMachine))
-        functionalUnit.stateMachine.stop?.bindMethod(stopProgram.bind(functionalUnitStateMachine))
-        functionalUnit.stateMachine.abort?.bindMethod(abortProgram.bind(functionalUnitStateMachine))
-
-        // stop here if we only want to show step 9
+        functionalUnit.functionalUnitState.startProgram?.bindMethod(startProgram.bind(functionalUnitStateMachine))
+        functionalUnit.functionalUnitState.stop?.bindMethod(stopProgram.bind(functionalUnitStateMachine))
+        functionalUnit.functionalUnitState.abort?.bindMethod(abortProgram.bind(functionalUnitStateMachine))
         if (workshopStep < 10) return
+
+        //---------------------------------------------------------------
+        // Step 10: Implemement cover state-machine
+        //---------------------------------------------------------------
+        const cover = functionSet.cover
+        const coverState = cover.coverState
+        const coverStateMachine = promoteToFiniteStateMachine(coverState)
+        coverStateMachine.setState(LADSCoverState.Closed)
+        coverState.open?.bindMethod(transite.bind(coverStateMachine, LADSCoverState.Closed, LADSCoverState.Opened, cover))
+        coverState.close?.bindMethod(transite.bind(coverStateMachine, LADSCoverState.Opened, LADSCoverState.Closed, cover))
+        coverState.lock?.bindMethod(transite.bind(coverStateMachine, LADSCoverState.Closed, LADSCoverState.Locked, cover))
+        coverState.unlock?.bindMethod(transite.bind(coverStateMachine, LADSCoverState.Locked, LADSCoverState.Closed, cover))
+
+        async function transite(this: UAStateMachineEx, fromStateName: string, toStateName: string, eventSource: UAObject, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
+            const state = this.getCurrentState()
+            if (state == null || state?.includes(fromStateName)) {
+                this.setState(toStateName)
+                if (eventSource && baseEventType)
+                    eventSource.raiseEvent(baseEventType, { message: { dataType: DataType.LocalizedText, value: `${eventSource.getDisplayName()} ${toStateName.toLowerCase()}` } })
+                return { statusCode: StatusCodes.Good}
+            } else {
+                return {statusCode: StatusCodes.BadInvalidState}
+            } 
+        }
+        if (workshopStep < 11) return
+
+        //---------------------------------------------------------------
+        // Step 11: Implemement waste-pump as two-state control-function
+        //---------------------------------------------------------------
+        const wastePump = functionSet.wastePump
+        promoteToFiniteStateMachine(wastePump.controlFunctionState).setState("Running")
+        const wastePumpTrueStateName = wastePump.targetValue.trueState.readValue().value.value.text
+        const wastePumpFalseStateName = wastePump.targetValue.falseState.readValue().value.value.text
+        wastePump.targetValue.on("value_changed", (dataValue: DataValueT<boolean, DataType.Boolean>) => {
+            wastePump.currentValue.setValueFromSource(dataValue.value)
+            const valueName = dataValue.value.value?wastePumpTrueStateName:wastePumpFalseStateName
+            wastePump.raiseEvent(baseEventType, { message: { dataType: DataType.LocalizedText, value: `${wastePump.getDisplayName()} turned ${valueName}`} })
+        })
+        if (workshopStep < 12) return
+
+        //---------------------------------------------------------------
+        // Step 12: Attach LADSDeviceHelper to implememt standard behavior 
+        // for event propagation and device level state-machines
+        //---------------------------------------------------------------
         const deviceHelper = new LADSDeviceHelper(luminescenceReaderDevice, {initializationTime: 2000, shutdownTime: 2000, raiseEvents: true})
+        if (workshopStep < 13) return
+
+        //---------------------------------------------------------------
+        // Step 13: Create Tag-Variable aliases in accordance
+        // Asset Management Basics (AMB) for selected variables
+        //---------------------------------------------------------------
+        addAliases(luminescenceReaderDevice)
 
     } catch (err) {
         console.log(err);
