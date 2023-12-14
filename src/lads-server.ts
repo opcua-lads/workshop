@@ -336,6 +336,7 @@ const workshopStep = 13;
         let runId = 0
 
         async function runProgram(deviceProgramRunId: string, inputArguments: VariantLike[]) {
+            console.log("Step 9: run a program which generates results");
             // dynamically create an new result object in the result set and update node-version attribute
             const startedTimestamp = new Date()
             const resultType = getLADSObjectType(addressSpace, "ResultType")
@@ -526,8 +527,7 @@ const workshopStep = 13;
         if (workshopStep < 13) return
 
         //---------------------------------------------------------------
-        // Step 13: Create Tag-Variable aliases in accordance
-        // Asset Management Basics (AMB) for selected variables
+        // Step 13: Create Tag-Variable aliases
         //---------------------------------------------------------------
         addAliases(luminescenceReaderDevice)
 
