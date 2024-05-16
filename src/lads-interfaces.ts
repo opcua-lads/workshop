@@ -15,7 +15,6 @@ import {
     UAExclusiveDeviationAlarm,
     UAExclusiveLimitAlarm,
     UAFiniteStateMachine,
-    UAFolder,
     UAMethod,
     UAMultiStateDiscrete,
     UAObject,
@@ -178,6 +177,10 @@ export interface LADSAnalogSensorFunction extends LADSBaseSensorFunction {
 export interface LADSAnalogScalarSensorFunction extends LADSAnalogSensorFunction {
     rawValue?: UAAnalogUnitRange<number, DataType.Double>
     sensorValue: UAAnalogUnitRange<number, DataType.Double>
+}
+
+export interface LADSAnalogScalarSensorWithCompensationFunction extends LADSAnalogScalarSensorFunction {
+    compensationValue?: UAAnalogUnitRange<number, DataType.Double>
 }
 
 export interface LADSAnalogArraySensorFunction extends LADSAnalogSensorFunction {
