@@ -218,6 +218,19 @@ export interface LADSAnalogControlFunctionWithTotalizer extends LADSAnalogContro
     resetTotalizer?: UAMethod
 }
 
+export interface LADSControllerParameter {
+    alarmMonitor?: UAExclusiveDeviationAlarm
+    currentValue: UAAnalogUnitRange<number, DataType.Double>
+    targetValue: UAAnalogUnitRange<number, DataType.Double>
+}
+export interface LADSControllerParameterSet {
+    [key: string]: LADSControllerParameter
+}
+export interface LADSMultiModeControlFunction extends LADSAnalogControlFunction {
+    currentMode: UAMultiStateDiscrete<number, DataType.UInt32>
+    controllerModeSet: LADSControllerParameterSet
+}
+
 export interface LADSMultiStateDiscreteControlFunction extends LADSBaseControlFunction {
     currentValue: UAMultiStateDiscrete<number, DataType.UInt32>
     targetValue: UAMultiStateDiscrete<number, DataType.UInt32>
