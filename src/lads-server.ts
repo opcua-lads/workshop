@@ -125,7 +125,7 @@ const workshopStep = 13;
 
         // To list all devices in the deviceSet we check for nodes that are referenced by references of type `Aggregates`
         const deviceReferences = deviceSet.findReferencesExAsObject(coerceNodeId(ReferenceTypeIds.Aggregates))
-        const devices = deviceReferences.map((device) => <UADevice>device )
+        const devices = deviceReferences.map((device) => <UADevice>device)
 
         devices.forEach((device: UADevice) => {
             console.log(`Step 2: Found device ${device.browseName} of type ${device.typeDefinitionObj.browseName}`)
@@ -190,7 +190,7 @@ const workshopStep = 13;
 
         // second step: periodically calulate values and update their OPC UA peer variables
         const verbose = false
-        const interval = verbose?5:1
+        const interval = verbose ? 5 : 1
         setInterval(() => {
             // temperature with 1st order low pass filter and noise
             const temperature = temperatureControllerIsOn ? targetTemperature : 25
@@ -198,7 +198,7 @@ const workshopStep = 13;
             const currentTemperatureWithNoise = currentTemperature + 0.2 * (Math.random() - 0.5)
 
             // array of luminescence readings with some noise
-            const luminescenceWithNoise = new Float64Array(wells).map((_, index) => index * index + (Math.random() - 0.5) )
+            const luminescenceWithNoise = new Float64Array(wells).map((_, index) => index * index + (Math.random() - 0.5))
 
             // use the setValueFromSource() function to update the variables in the OPC UA information model
             temperatureController.currentValue.setValueFromSource({ dataType: DataType.Double, value: currentTemperatureWithNoise })
@@ -270,7 +270,7 @@ const workshopStep = 13;
         async function onStartTemperatureController(this: UAStateMachineEx, inputArguments: VariantLike[], context: SessionContext): Promise<CallMethodResultOptions> {
             if (inputArguments.length > 0) {
                 targetTemperature = inputArguments[0].value
-                temperatureController.targetValue.setValueFromSource({value: targetTemperature, dataType: DataType.Double})
+                temperatureController.targetValue.setValueFromSource({ value: targetTemperature, dataType: DataType.Double })
             }
             this.setState("Running")
             console.log("Step 7: changed state machine to Running");
@@ -341,30 +341,31 @@ const workshopStep = 13;
             const startedTimestamp = new Date()
             const resultType = getLADSObjectType(addressSpace, "ResultType")
             const resultSetNode = <BaseNode><unknown>resultSet
-            const result = <LADSResult>resultType.instantiate({ 
-                componentOf: resultSetNode, 
-                browseName: deviceProgramRunId, 
-                optionals: ["SupervisoryJobId", "SupervisoryTaskId"] })
-            resultSetNode.nodeVersion?.setValueFromSource({dataType: DataType.String, value: startedTimestamp.toISOString()})
+            const result = <LADSResult>resultType.instantiate({
+                componentOf: resultSetNode,
+                browseName: deviceProgramRunId,
+                optionals: ["SupervisoryJobId", "SupervisoryTaskId"]
+            })
+            resultSetNode.nodeVersion?.setValueFromSource({ dataType: DataType.String, value: startedTimestamp.toISOString() })
 
             // get program template-id
             const programTemplateId: string = inputArguments[0].value
-            const programTemplateSet = <UAObject><unknown>functionalUnit.programManager.programTemplateSet            
+            const programTemplateSet = <UAObject><unknown>functionalUnit.programManager.programTemplateSet
             const programTemplateReferences = programTemplateSet.findReferencesExAsObject(coerceNodeId(ReferenceTypeIds.Aggregates))
             const programTemplates = programTemplateReferences.map((template) => <LADSProgramTemplate>template)
             const programTemplate = programTemplates.find((template) => (template.browseName.name == programTemplateId))
             if (programTemplate) {
                 const value = constructNameNodeIdExtensionObject(
                     addressSpace,
-                    programTemplateId, 
-                    programTemplate.nodeId 
+                    programTemplateId,
+                    programTemplate.nodeId
                 )
                 activeProgram?.currentProgramTemplate?.setValueFromSource({
-                    dataType: DataType.ExtensionObject, 
+                    dataType: DataType.ExtensionObject,
                     value: value,
                 })
             }
-    
+
             // set context information provided by input-arguments
             result.properties?.setValueFromSource(inputArguments[1])
             result.supervisoryJobId?.setValueFromSource(inputArguments[2])
@@ -397,9 +398,9 @@ const workshopStep = 13;
                 await sleepMilliSeconds(delta)
 
                 // check if run was stopped or aborted from remote
-                const currentState  = functionalUnitStateMachine.getCurrentState()
-                if (currentState && !currentState.includes(LADSFunctionalState.Running)) { 
-                    break 
+                const currentState = functionalUnitStateMachine.getCurrentState()
+                if (currentState && !currentState.includes(LADSFunctionalState.Running)) {
+                    break
                 }
             }
             temperatureControllerStateMachine.setState(LADSFunctionalState.Stopped)
@@ -416,7 +417,7 @@ const workshopStep = 13;
                 arrayDimensions: [wells],
                 value: readings.value
             })
-            
+
             // simulate finish step
             activeProgram.currentStepName?.setValueFromSource({ dataType: DataType.LocalizedText, value: 'Finalizing' })
             activeProgram.currentStepNumber?.setValueFromSource({ dataType: DataType.UInt32, value: 2 })
@@ -498,10 +499,10 @@ const workshopStep = 13;
                 this.setState(toStateName)
                 if (eventSource && baseEventType)
                     eventSource.raiseEvent(baseEventType, { message: { dataType: DataType.LocalizedText, value: `${eventSource.getDisplayName()} ${toStateName.toLowerCase()}` } })
-                return { statusCode: StatusCodes.Good}
+                return { statusCode: StatusCodes.Good }
             } else {
-                return {statusCode: StatusCodes.BadInvalidState}
-            } 
+                return { statusCode: StatusCodes.BadInvalidState }
+            }
         }
         if (workshopStep < 11) return
 
@@ -514,16 +515,16 @@ const workshopStep = 13;
         const wastePumpFalseStateName = wastePump.targetValue.falseState.readValue().value.value.text
         wastePump.targetValue.on("value_changed", (dataValue: DataValueT<boolean, DataType.Boolean>) => {
             wastePump.currentValue.setValueFromSource(dataValue.value)
-            const valueName = dataValue.value.value?wastePumpTrueStateName:wastePumpFalseStateName
-            wastePump.raiseEvent(baseEventType, { message: { dataType: DataType.LocalizedText, value: `${wastePump.getDisplayName()} turned ${valueName}`} })
+            const valueName = dataValue.value.value ? wastePumpTrueStateName : wastePumpFalseStateName
+            wastePump.raiseEvent(baseEventType, { message: { dataType: DataType.LocalizedText, value: `${wastePump.getDisplayName()} turned ${valueName}` } })
         })
         if (workshopStep < 12) return
 
         //---------------------------------------------------------------
-        // Step 12: Attach LADSDeviceHelper to implememt standard behavior 
+        // Step 12: Attach LADSDeviceHelper to implememt standard behavior
         // for event propagation and device level state-machines
         //---------------------------------------------------------------
-        const deviceHelper = new LADSDeviceHelper(luminescenceReaderDevice, {initializationTime: 2000, shutdownTime: 2000, raiseEvents: true})
+        const deviceHelper = new LADSDeviceHelper(luminescenceReaderDevice, { initializationTime: 2000, shutdownTime: 2000, raiseEvents: true })
         if (workshopStep < 13) return
 
         //---------------------------------------------------------------

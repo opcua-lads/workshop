@@ -11,8 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^20.2.3",
-    "node-opcua": "^2.103.0",
-    "node-opcua-nodeset-di": "^2.103.0",
+    "node-opcua": "2.136.0",
+    "node-opcua-nodeset-di": "2.134.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }
