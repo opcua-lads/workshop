@@ -232,8 +232,6 @@ const workshopStep = 13;
         } else {
             // Get the range for the supplied value from the targetValue that was populated by the nodeset file
             const range = targetValue.euRange.readValue().value.value;
-            // workaround for node-opcua bug
-            (targetValue as any)._timestamped_set_func = undefined
             // bind a setter / getter to the variable, do validations and return status-code
             targetValue.bindVariable({
                 set: (variantValue: Variant): StatusCode => {
