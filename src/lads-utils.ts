@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2023 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
+ * Copyright (c) 2023 - 2024 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -31,31 +31,25 @@ import {
     UAFiniteStateMachine,
     UAState,
     BaseNode,
-    roundToFloat2,
     sameNodeId,
     ObjectIds,
     makeNodeId,
     NodeIdLike,
     UAVariable,
-    UAAliasNameCategory,
-    UAAliasName,
-    UAProperty
-} from "node-opcua"
+    UAAliasNameCategory} from "node-opcua"
 import { 
     LADSDevice, 
     LADSDeviceState, 
     LADSFunction, 
     LADSBaseControlFunction,
     LADSFunctionalState, 
-    LADSFunctionalUnit, 
     MachineryItemState, 
     MachineryOperationMode,
     LADSAnalogScalarSensorFunction,
     LADSAnalogControlFunction,
     LADSCoverFunction,
     LADSAnalogControlFunctionWithTotalizer,
-    LADSFunctionalUnitSet
-} from "./lads-interfaces"
+    LADSFunctionalUnit} from "./lads-interfaces"
 import { EnumDeviceHealth } from "node-opcua-nodeset-di"
 
 export enum DIObjectIds {
@@ -66,6 +60,13 @@ export enum DIObjectIds {
 // Convenience functions
 //---------------------------------------------------------------
 export async function sleepMilliSeconds(ms: number): Promise<void> { return new Promise((resolve) => setTimeout(resolve, ms)) }
+
+export function getProperty<T>(property: T | null, propertyName: string): T {
+    if (!property) {
+        throw new Error(`Failed to get ${propertyName}`);
+    }
+    return property as T
+}
 
 export function getLADSNamespace(addressSpace: IAddressSpace): INamespace {
     return addressSpace.getNamespace('http://opcfoundation.org/UA/LADS/')
@@ -102,6 +103,21 @@ export function getLADSNode(addressSpace: IAddressSpace, id: number): BaseNode |
     return namespace.findNode(makeNodeId(id, namespace.index))
 }
 
+export function getChildObjects(parent: UAObject): UAObject[] {
+    const children: UAObject[] = []
+    if (!parent) return children
+    const addressSpace = parent.addressSpace
+    const hasChildReferencesType = addressSpace.findReferenceType(coerceNodeId(ReferenceTypeIds.HasChild))
+    assert(hasChildReferencesType)
+    const nodes = parent.findReferencesExAsObject(hasChildReferencesType)
+    nodes.forEach((node: UAObject) => {
+        if (node.nodeClass === NodeClass.Object) {
+            children.push(node)
+        }
+    })
+    return children
+}
+
 export function getLADSFunctionalUnits(device: LADSDevice): LADSFunctionalUnit[] {
     const functionalUnits: LADSFunctionalUnit[] = []
     if (!device) return functionalUnits
@@ -126,6 +142,8 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
     const functions: LADSFunction[] = []
     if (!parent) return functions
     if (!parent.functionSet) return functions
+    //const notifierFlags = EventNotifierFlags.SubscribeToEvents
+    const notifierFlags = 1
     const addressSpace = parent.addressSpace
     const functionSet = <UAObject><unknown>parent.functionSet
     const functionType = getLADSObjectType(addressSpace, "FunctionType")
@@ -135,8 +153,8 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
     assert(hasNotifierType)
     if (addHasNotifierReferences) {
         parent.addReference({referenceType: hasNotifierType, nodeId:functionSet.nodeId})
-        parent.setEventNotifier(1)
-        functionSet.setEventNotifier(1)
+        parent.setEventNotifier(notifierFlags)
+        functionSet.setEventNotifier(notifierFlags)
     }
     const nodes = functionSet.findReferencesExAsObject(hasChildReferencesType)
     const notifierReferences = parent.findReferencesAsObject(hasNotifierType)
@@ -146,7 +164,7 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
                 const ladsFunction = <LADSFunction>node
                 if (addHasNotifierReferences) {
                     if (!(notifierReferences.includes(ladsFunction))) {
-                        ladsFunction.setEventNotifier(1)
+                        ladsFunction.setEventNotifier(notifierFlags)
                         functionSet.addReference({referenceType: hasNotifierType, nodeId:ladsFunction})
                     }
                 }
@@ -160,6 +178,34 @@ export function getLADSFunctions(parent: LADSFunctionalUnit | LADSFunction, recu
     })
     return functions
 }
+
+export interface LADSKeyVariable {key: string, variable: UAVariable}
+export function getLADSSupportedProperties(functionalUnit: LADSFunctionalUnit): LADSKeyVariable[] {
+    const result: LADSKeyVariable[] = []
+    const supportedPropertiesSet = functionalUnit?.supportedPropertiesSet
+    if (supportedPropertiesSet) {
+        const organizesType = functionalUnit.addressSpace.findReferenceType(ReferenceTypeIds.Organizes)
+        const properties =  getChildObjects(<UAObject><unknown>supportedPropertiesSet)
+        properties.forEach((property) => {
+            const key = property.browseName.name
+            const references = property.findReferencesAsObject(organizesType)
+            if (references.length > 0) {
+                const variable = references[0] as UAVariable
+                result.push({key: key, variable: variable})
+            }
+        })
+    }
+    return result
+}
+
+//---------------------------------------------------------------
+// Aliases support
+//---------------------------------------------------------------
+
+
+//---------------------------------------------------------------
+// Aliases support
+//---------------------------------------------------------------
 
 export function getAliasName(node: BaseNode): string {
     const nodes = getParents(node, DIObjectIds.deviceSet)
@@ -311,18 +357,39 @@ export function promoteToFiniteStateMachine(stateMachine: UAFiniteStateMachine):
 
 export class LADSFiniteStateMachineHelper {
     stateMachine: UAStateMachineEx
+    parentStateMachineHelper?: LADSFiniteStateMachineHelper
 
-    constructor(stateMachine: UAFiniteStateMachine) {
+    constructor(stateMachine: UAFiniteStateMachine, parentStateMachineHelper?: LADSFiniteStateMachineHelper) {
         this.stateMachine = promoteToStateMachine(stateMachine)
         this.stateMachine.currentState.on("value_changed", this.onCurrentStateChanged.bind(this))
-    } 
+        this.parentStateMachineHelper = parentStateMachineHelper
+    }
+    
+    setEffectiveDisplayName(states: UAState[]) {
+        const effectiveDisplayName = this.stateMachine.currentState.effectiveDisplayName
+        if (effectiveDisplayName) {
+            const names = states.map((state) => state.displayName[0].text)
+            const name = names.join(".")
+            effectiveDisplayName.setValueFromSource({dataType: DataType.LocalizedText, value: name})
+        }
+        if (this.parentStateMachineHelper) {
+            const parentState = this.parentStateMachineHelper.stateMachine.currentStateNode
+            if (parentState) {
+                states.unshift(parentState)
+                this.parentStateMachineHelper.setEffectiveDisplayName(states)
+            }
+        }
+    }
 
     async onCurrentStateChanged(dataValue: DataValueT<LocalizedText, DataType.LocalizedText>) {
         const stateName = dataValue.value.value.text
+        assert(stateName)
         const states = this.stateMachine.getStates()
         const state = states.find((value: UAState) => (stateName?.includes(value.browseName.name?value.browseName.name:"")))
         if(state) {
+            console.log(stateName, state.browseName.name)
             this.stateMachine.currentState.id.setValueFromSource({value: state.nodeId, dataType: DataType.NodeId})
+            this.setEffectiveDisplayName([state])
         }
     }
 }
@@ -487,7 +554,7 @@ export class LADSDeviceHelper {
         return functionalUnitsRunnning
     }
 
-    async onFunctionalUnitStateChanged(functionalUnit: LADSFunctionalUnit, stateMachine: UAStateMachineEx, dataValue: DataValueT<LocalizedText, DataType.LocalizedText>) { 
+    async onFunctionalUnitStateChanged(functionalUnit: UAObject, stateMachine: UAStateMachineEx, dataValue: DataValueT<LocalizedText, DataType.LocalizedText>) { 
         const state = dataValue.value.value.text
         if (!state) return
         this.raiseEvent(`${functionalUnit.getDisplayName()} state changed to ${state} ..`)

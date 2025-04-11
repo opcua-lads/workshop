@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2023 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
+ * Copyright (c) 2023 - 2024 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
  * Copyright (c) 2023 SPECTARIS - Deutscher Industrieverband für optische, medizinische und mechatronische Technologien e.V. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -17,6 +17,7 @@ import {
     DataValue,
     DataValueT,
     LocalizedText,
+    LogLevel,
     OPCUAServer,
     ObjectTypeIds,
     ReferenceTypeIds,
@@ -29,6 +30,7 @@ import {
     VariantArrayType,
     VariantLike,
     coerceNodeId,
+    setLogLevel,
 } from "node-opcua"
 import { UADevice } from "node-opcua-nodeset-di"
 
@@ -37,6 +39,7 @@ import {
     addAliases,
     constructNameNodeIdExtensionObject,
     getLADSObjectType,
+    getLADSSupportedProperties,
     promoteToFiniteStateMachine,
     sleepMilliSeconds,
 } from "./lads-utils"
@@ -61,6 +64,11 @@ const workshopStep = 13;
 // main
 //---------------------------------------------------------------
 (async () => {
+    //---------------------------------------------------------------
+    // Step 0: adjust node-opcua warning level
+    //---------------------------------------------------------------
+    setLogLevel(LogLevel.Error)
+
     //---------------------------------------------------------------
     // Step 1: load the required OPC UA nodesets and start the server
     //---------------------------------------------------------------
@@ -187,6 +195,8 @@ const workshopStep = 13;
         let currentTemperature = 25.0
         let temperatureControllerIsOn = true
         const damping = 0.8
+        // initialize targetTemoerature in server with internal value
+        temperatureController.targetValue.setValueFromSource({dataType: DataType.Double, value: targetTemperature})
 
         // second step: periodically calulate values and update their OPC UA peer variables
         const verbose = false
@@ -221,12 +231,13 @@ const workshopStep = 13;
             targetValue.on("value_changed", (dataValue) => { targetTemperature = dataValue.value.value })
         } else {
             // Get the range for the supplied value from the targetValue that was populated by the nodeset file
-            const range = targetValue.euRange.readValue().value.value
+            const range = targetValue.euRange.readValue().value.value;
+            // workaround for node-opcua bug
+            // (targetValue as any)._timestamped_set_func = undefined
             // bind a setter / getter to the variable, do validations and return status-code
             targetValue.bindVariable({
                 set: (variantValue: Variant): StatusCode => {
                     const value: number = variantValue.value
-
                     if (range && ((value > range.high) || (value < range.low))) {
                         // value clamped to euRange
                         const clampedValue = (value > range.high) ? range.high : range.low
@@ -240,7 +251,7 @@ const workshopStep = 13;
                         return StatusCodes.Good
                     }
                 },
-                get: (): Variant => { return new Variant({ dataType: DataType.Double, value: targetTemperature }) }
+                get: (): Variant => new Variant({dataType: DataType.Double, value: targetTemperature}) 
             })
         }
 
@@ -362,6 +373,27 @@ const workshopStep = 13;
                 activeProgram?.currentProgramTemplate?.setValueFromSource({
                     dataType: DataType.ExtensionObject, 
                     value: value,
+                })
+            }
+
+            // scan supported properties
+            const properties = inputArguments[1]
+            if (properties?.arrayType === VariantArrayType.Array) {
+                const keyVariables = getLADSSupportedProperties(functionalUnit)
+                const keyValues = properties.value as Variant[]
+                keyValues?.forEach((item) =>{
+                    try {
+                        const keyValue: {key: string, value: string} = <any>item
+                        const property = keyVariables.find(keyVariable => (keyVariable.key == keyValue.key))
+                        if (property) {
+                            const variable = property.variable
+                            const dataType = variable.dataTypeObj
+                            variable.setValueFromSource({dataType: dataType.browseName.name , value: keyValue.value})
+                        }
+                    }
+                    catch(err) {
+                        console.log(err)
+                    }
                 })
             }
     

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2023 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
+ * Copyright (c) 2023 - 2024 Dr. Matthias Arnold, AixEngineers, Aachen, Germany.
  * Copyright (c) 2023 SPECTARIS - Deutscher Industrieverband für optische, medizinische und mechatronische Technologien e.V. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -27,7 +27,7 @@ import { UADevice, UAFunctionalGroup, UALockingServices } from "node-opcua-nodes
 // Interfaces for LADS devices
 //---------------------------------------------------------------
 export interface LADSDevice extends UADevice {
-    functionalUnitSet: LADSFunctionalUnitSet
+    functionalUnitSet: LADSFunctionalUnitSet | UAObject
     deviceState: LADSDeviceStateMachine
     machineryItemState?: UAFiniteStateMachine
     machineryOperationMode?: MachineryOperationModeStateMachine
@@ -53,15 +53,21 @@ export interface LADSFunctionalUnitSet  {
 //---------------------------------------------------------------
 // Interfaces for LADS functional unit
 //---------------------------------------------------------------
+export interface LADSSupportedProperty extends UAObject {}
+export interface LADSSupportedPropertiesSet {
+    [key: string]: LADSSupportedProperty
+}
+
 export interface LADSFunctionalUnit extends UAObject {
-    functionSet: LADSFunctionSet
+    functionSet: LADSFunctionSet | UAObject
     programManager: {
-        programTemplateSet: LADSProgramTemplateSet
+        programTemplateSet: LADSProgramTemplateSet | UAObject
         activeProgram: LADSActiveProgram
-        resultSet: LADSResultSet
+        resultSet: LADSResultSet | UAObject
     }
     functionalUnitState: LADSFunctionalUnitStateMachine
     lock?: UALockingServices
+    supportedPropertiesSet?: LADSSupportedPropertiesSet
 }
 
 export interface LADSFunctionSet {
@@ -142,6 +148,19 @@ export interface LADSControlFunctionStateMachine extends LADSFunctionalStateMach
 }
 
 // RunningStateMachine
+export enum LADSRunnnigState {
+    Starting = 'Starting',
+    Executing = 'Executing',
+    Suspending = 'Suspending',
+    Suspended = 'Suspended',
+    Unsuspending = 'Unsuspending',
+    Holding = 'Holding',
+    Held = 'Held',
+    Unholding = 'Unholding',
+    Completing = 'Completing',
+    Completed = 'Completed',
+}
+
 export interface LADSRunnnigStateMachine extends UAFiniteStateMachine {
     suspend: UAMethod
     unsuspend: UAMethod
