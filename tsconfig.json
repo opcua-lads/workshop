@@ -9,7 +9,7 @@
         ],
         "outDir": "out",
         "moduleResolution": "node",
-        "strictNullChecks": true,
+        "strictNullChecks": false,
         "sourceMap": true,
         "baseUrl": "."
     },
